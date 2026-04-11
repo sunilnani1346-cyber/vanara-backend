@@ -8,6 +8,9 @@ const crypto = require("crypto");
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+  res.send("Vanara Backend Running 🚀");
+});
 
 // ✅ SECURE KEYS FROM ENV
 const razorpay = new Razorpay({
