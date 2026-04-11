@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>VANARA Admin Panel</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f7fb;
+  padding:20px;
+}
+h1{
+  text-align:center;
+  margin-bottom:30px;
+}
+.search-box{
+  max-width:400px;
+  margin:0 auto 20px auto;
+  display:flex;
+}
+.search-box input{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:white;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+th, td{
+  padding:12px;
+  border-bottom:1px solid #ddd;
+  text-align:center;
+}
+th{
+  background:#16a34a;
+  color:white;
+}
+tr:hover{
+  background:#f1f1f1;
+}
+.status{
+  padding:5px 10px;
+  border-radius:10px;
+  color:white;
+  font-size:12px;
+}
+.confirmed{background:green;}
+.pending{background:orange;}
+.cancelled{background:red;}
+@media(max-width:768px){
+  table, thead, tbody, th, td, tr{
+    display:block;
+  }
+  th, td{
+    text-align:left;
+    padding:8px;
+  }
+  th{
+    background:#16a34a;
+    color:white;
+  }
+  tr{
+    margin-bottom:15px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>📦 VANARA Orders</h1>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Search by Name or Phone...">
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+      <th>Pincode</th>
+      <th>Qty</th>
+      <th>Amount</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody id="ordersTable"></tbody>
+</table>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDuYbsb-wF11tPXtoXnExcMVEfNR5A1Bfw",
+  authDomain: "vanara-b0bf4.firebaseapp.com",
+  projectId: "vanara-b0bf4",
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const table = document.getElementById("ordersTable");
+const searchInput = document.getElementById("searchInput");
+
+// Load orders live
+let ordersData = [];
+
+db.collection("orders").orderBy("createdAt","desc")
+.onSnapshot((snapshot) => {
+  ordersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  displayOrders(ordersData);
+});
+
+// Display orders function
+function displayOrders(data){
+  table.innerHTML = "";
+  data.forEach(order => {
+    const statusClass = order.status === "Order Confirmed" ? "confirmed" :
+                        order.status === "Pending" ? "pending" :
+                        "cancelled";
+
+    table.innerHTML += `
+      <tr>
+        <td>${order.name}</td>
+        <td>${order.phone}</td>
+        <td>${order.address}</td>
+        <td>${order.city}</td>
+        <td>${order.state}</td>
+        <td>${order.country}</td>
+        <td>${order.pincode}</td>
+        <td>${order.qty}</td>
+        <td>₹${(order.amount).toLocaleString()}</td>
+        <td><span class="status ${statusClass}">${order.status}</span></td>
+      </tr>
+    `;
+  });
+}
+
+// Search filter
+searchInput.addEventListener("input", function(){
+  const query = this.value.toLowerCase();
+  const filtered = ordersData.filter(order => 
+    order.name.toLowerCase().includes(query) || 
+    order.phone.toLowerCase().includes(query)
+  );
+  displayOrders(filtered);
+});
+</script>
+
+</body>
+</html>
