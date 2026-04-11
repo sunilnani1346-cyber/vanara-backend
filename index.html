@@ -481,7 +481,7 @@ async function proceedToPayment(){
   try {
 
     // 🟢 STEP 1: CREATE ORDER FROM BACKEND
-    const res = await fetch("http://localhost:5000/create-order", {
+    const res = await fetch("https://vanara-backend.onrender.com/create-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -493,7 +493,7 @@ async function proceedToPayment(){
 
     // 🟢 STEP 2: OPEN RAZORPAY
     var options = {
-      key: "rzp_test_SauqAWGR04", // public key ok
+      key: "rzp_test_Sc875TmzmVQXHl", // public key ok
       amount: order.amount,
       currency: "INR",
       name: "VANARA",
@@ -503,7 +503,7 @@ async function proceedToPayment(){
       handler: async function (response){
 
         // 🟢 STEP 3: VERIFY PAYMENT (BACKEND)
-        const verifyRes = await fetch("http://localhost:5000/verify-payment", {
+        const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

@@ -8,14 +8,16 @@ const crypto = require("crypto");
 const app = express();
 app.use(cors());
 app.use(express.json());
+console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
+console.log("RAZORPAY_KEY_SECRET:", process.env.RAZORPAY_KEY_SECRET);
 app.get("/", (req, res) => {
   res.send("Vanara Backend Running 🚀");
 });
 
 // ✅ SECURE KEYS FROM ENV
 const razorpay = new Razorpay({
-  key_id: process.env.KEY_ID,
-  key_secret: process.env.KEY_SECRET
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
 // ✅ CREATE ORDER
@@ -44,7 +46,7 @@ app.post("/verify-payment", (req, res) => {
   const body = razorpay_order_id + "|" + razorpay_payment_id;
 
   const expectedSignature = crypto
-    .createHmac("sha256", process.env.KEY_SECRET)
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
     .update(body.toString())
     .digest("hex");
 
