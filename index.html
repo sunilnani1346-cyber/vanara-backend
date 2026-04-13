@@ -445,6 +445,9 @@ gtag('config', 'G-R03DT4CTCQ');
 function openCheckout(){
   document.getElementById("checkoutModal").style.display = "flex";
 }
+function toggleCart(){
+  alert("Cart feature coming soon");
+}
 
 // MODAL CLOSE
 function closeCheckout(){
@@ -461,6 +464,7 @@ window.onclick = function(e){
 
 // PAYMENT FUNCTION
 async function proceedToPayment(){
+  document.querySelector(".checkout-box button").innerText = "Processing...";
 
   const name = document.getElementById("name").value;
   const phone = document.getElementById("phone").value;
@@ -469,18 +473,32 @@ async function proceedToPayment(){
   const pincode = document.getElementById("pincode").value;
   const state = document.getElementById("state").value;
   const country = document.getElementById("country").value;
-  const qty = document.getElementById("qty").value;
+  const qty = parseInt(document.getElementById("qty").value);
+
+if(!qty || qty <= 0){
+  alert("Invalid quantity");
+  document.querySelector(".checkout-box button").innerText = "Save & Pay";
+  return;
+}
 
   if(!name || !phone || !address || !city || !pincode || !state || !country){
-    alert("Please fill all details");
-    return;
-  }
+  alert("Please fill all details");
+  document.querySelector(".checkout-box button").innerText = "Save & Pay";
+  return;
+}
+  const cleanedPhone = phone.replace(/\D/g, ""); // only digits
+
+if(cleanedPhone.length !== 10){
+  alert("Enter valid 10 digit phone number");
+  return;
+}
 
   const amount = qty * 499;
-
-  try {
+   
+ 
 
     // 🟢 STEP 1: CREATE ORDER FROM BACKEND
+  try {
     const res = await fetch("https://vanara-backend.onrender.com/create-order", {
       method: "POST",
       headers: {
@@ -490,116 +508,121 @@ async function proceedToPayment(){
     });
 
     const order = await res.json();
+    if(!order.id){
+  alert("Order creation failed");
+  return;
+}
 
     // 🟢 STEP 2: OPEN RAZORPAY
-    var options = {
-      key: "rzp_test_Sc875TmzmVQXHl", // public key ok
-      amount: order.amount,
-      currency: "INR",
-      name: "VANARA",
-      description: "High Protein Nutrition Mix",
-      order_id: order.id,
+var options = {
+  key: "rzp_live_SctSTXCaMANu9C",
+  amount: order.amount,
+  currency: "INR",
+  name: "VANARA",
+  description: "High Protein Nutrition Mix",
+  order_id: order.id,
 
-      handler: async function (response){
+  handler: async function (response){
 
-        // 🟢 STEP 3: VERIFY PAYMENT (BACKEND)
-        const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(response)
-        });
+    // 🔐 VERIFY FIRST
+    try{
+      const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(response)
+      });
 
-        const result = await verifyRes.json();
+      const result = await verifyRes.json();
 
-        if(result.status === "success"){
-
-          // 🟢 SAVE ORDER (ONLY AFTER VERIFY)
-          db.collection("orders").add({
-            name,
-            phone,
-            address,
-            city,
-            state,
-            country,
-            pincode,
-            qty,
-            amount,
-            paymentId: response.razorpay_payment_id,
-            status: "Order Confirmed",
-            createdAt: new Date()
-          })
-          .then(() => {
-
-            let adminMsg = `🚨 NEW ORDER ALERT 🚨%0A
-👤 Name: ${name}%0A
-📞 Phone: ${phone}%0A
-🏠 Address: ${address}, ${city}, ${state}, ${country}%0A
-📦 Pincode: ${pincode}%0A
-🔢 Qty: ${qty}%0A
-💰 Amount: ₹${amount}%0A
-🆔 Payment ID: ${response.razorpay_payment_id}`;
-
-            let adminURL = `https://wa.me/919866149830?text=${adminMsg}`;
-            window.open(adminURL, "_blank");
-
-            alert("✅ Payment Verified & Order Confirmed!");
-            closeCheckout();
-          });
-
-        } else {
-          alert("❌ Payment Verification Failed");
-        }
-      },
-
-      prefill: {
-        name: name,
-        contact: phone
-      },
-
-      theme: {
-        color: "#4E342E"
-      },
-
-      modal: {
-        ondismiss: function(){
-          alert("❌ Payment Cancelled");
-        }
+      if(result.status !== "success"){
+        alert("❌ Payment verification failed");
+        return;
       }
-    };
 
-    var rzp = new Razorpay(options);
+    } catch(err){
+      alert("❌ Verification error");
+      return;
+    }
 
-    rzp.on('payment.failed', function (){
-      alert("❌ Payment Failed\nTry again!");
-    });
+    // ✅ SAVE AFTER VERIFY
+    try {
+      await fetch("https://vanara-backend.onrender.com/save-order", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name,
+    phone: cleanedPhone,
+    address,
+    city,
+    state,
+    country,
+    pincode,
+    qty,
+    amount,
+    paymentId: response.razorpay_payment_id,
 
-    rzp.open();
+    // 🔥 IMPORTANT (add these)
+    razorpay_order_id: response.razorpay_order_id,
+    razorpay_payment_id: response.razorpay_payment_id,
+    razorpay_signature: response.razorpay_signature
+  })
+});
+    } catch (error) {
+      console.error("SAVE ERROR:", error);
+    }
 
-  } catch (error){
-    console.error(error);
-    alert("❌ Server Error");
+    // 🎉 SUCCESS
+    alert("✅ Order Confirmed!");
+
+    const message = `Hi ${name},\n
+Your VANARA order is confirmed ✅\n
+Qty: ${qty}\n
+Amount: ₹${amount}\n
+We will deliver soon 🚀`;
+
+    const whatsappURL = `https://wa.me/91${cleanedPhone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+
+    setTimeout(() => {
+      window.location.href = "/success.html";
+    }, 2000);
+  },
+
+  prefill: {
+    name: name,
+    contact: cleanedPhone   // ✅ FIX
+  },
+
+  theme: {
+    color: "#4E342E"
+  },
+
+  modal: {
+    ondismiss: function(){
+      alert("❌ Payment Cancelled");
+    }
   }
-}
-</script>
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDuYbsb-wF11tPXtoXnExcMVEfNR5A1Bfw", // 🔥 ikkada key petti
-  authDomain: "vanara-b0bf4.firebaseapp.com",
-  projectId: "vanara-b0bf4",
-  storageBucket: "vanara-b0bf4.firebasestorage.app",
-  messagingSenderId: "415085864833",
-  appId: "1:415085864833:web:d65c84e5e204232d7f2a80",
 };
 
-// init firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// 🔥 OPEN RAZORPAY
+var rzp = new Razorpay(options);
+
+rzp.on('payment.failed', function (){
+  alert("❌ Payment Failed\nTry again!");
+});
+
+rzp.open();
+
+}  catch (error){
+    console.error(error);
+    alert("❌ Server Error");
+    document.querySelector(".checkout-box button").innerText = "Save & Pay";
+}
+}
 </script>
 <div id="checkoutModal" class="checkout-modal">
   <div class="checkout-box">
@@ -607,7 +630,7 @@ const db = firebase.firestore();
     <h2>Enter Delivery Address</h2>
 
     <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="phone" placeholder="Phone Number">
+    <input type="tel" id="phone" placeholder="Enter 10 digit number" maxlength="10">
     <input type="text" id="address" placeholder="Address">
     <input type="text" id="city" placeholder="City">
     <input type="text" id="pincode" placeholder="Pincode">
