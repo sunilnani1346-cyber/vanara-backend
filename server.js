@@ -5,8 +5,7 @@ const Razorpay = require("razorpay");
 const cors = require("cors");
 const crypto = require("crypto");
 const admin = require("firebase-admin");
-
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
