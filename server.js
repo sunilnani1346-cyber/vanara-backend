@@ -8,7 +8,7 @@ const admin = require("firebase-admin");
 const serviceAccount = {
   type: "service_account",
   project_id: "vanara-b0bf4",
-  private_key: process.env.FIREBASE_KEY.replace(/\\n/g, '\n'),
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
   client_email: "firebase-adminsdk-fbsvc@vanara-b0bf4.iam.gserviceaccount.com",
 };
 admin.initializeApp({
