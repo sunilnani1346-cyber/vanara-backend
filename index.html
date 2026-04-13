@@ -522,10 +522,11 @@ var options = {
   description: "High Protein Nutrition Mix",
   order_id: order.id,
 
-  handler: async function (response){
+  handler: async function (response) {
 
-    // 🔐 VERIFY FIRST
-    try{
+    try {
+
+      // 🔐 VERIFY
       const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
         method: "POST",
         headers: {
@@ -536,65 +537,51 @@ var options = {
 
       const result = await verifyRes.json();
 
-      if(result.status !== "success"){
+      if (result.status !== "success") {
         alert("❌ Payment verification failed");
         return;
       }
 
-    } catch(err){
-      alert("❌ Verification error");
-      return;
-    }
+      // 💾 SAVE ORDER
+      const saveRes = await fetch("https://vanara-backend.onrender.com/save-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          phone: cleanedPhone,
+          address,
+          city,
+          state,
+          country,
+          pincode,
+          qty,
+          amount,
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature
+        })
+      });
 
-    // ✅ SAVE AFTER VERIFY
-    try {
-      await fetch("https://vanara-backend.onrender.com/save-order", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name,
-    phone: cleanedPhone,
-    address,
-    city,
-    state,
-    country,
-    pincode,
-    qty,
-    amount,
-    paymentId: response.razorpay_payment_id,
+      const saveResult = await saveRes.json();
 
-    // 🔥 IMPORTANT (add these)
-    razorpay_order_id: response.razorpay_order_id,
-    razorpay_payment_id: response.razorpay_payment_id,
-    razorpay_signature: response.razorpay_signature
-  })
-});
+      if (saveResult.status !== "success") {
+        alert("❌ Order save failed");
+        return;
+      }
+
+      alert("✅ Order Confirmed!");
+
     } catch (error) {
-      console.error("SAVE ERROR:", error);
+      console.error(error);
+      alert("❌ Server Error");
     }
-
-    // 🎉 SUCCESS
-    alert("✅ Order Confirmed!");
-
-    const message = `Hi ${name},\n
-Your VANARA order is confirmed ✅\n
-Qty: ${qty}\n
-Amount: ₹${amount}\n
-We will deliver soon 🚀`;
-
-    const whatsappURL = `https://wa.me/91${cleanedPhone}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, "_blank");
-
-    setTimeout(() => {
-      window.location.href = "/success.html";
-    }, 2000);
   },
 
   prefill: {
     name: name,
-    contact: cleanedPhone   // ✅ FIX
+    contact: cleanedPhone
   },
 
   theme: {
@@ -602,7 +589,7 @@ We will deliver soon 🚀`;
   },
 
   modal: {
-    ondismiss: function(){
+    ondismiss: function () {
       alert("❌ Payment Cancelled");
     }
   }
