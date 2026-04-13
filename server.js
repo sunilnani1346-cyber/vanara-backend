@@ -80,7 +80,7 @@ app.post("/save-order", async (req, res) => {
       createdAt: new Date()
     });
 
-    res.json({ status: "saved" });
+  res.json({ status: "success" });
 
   } catch (err) {
     res.status(500).json({ error: "failed" });
