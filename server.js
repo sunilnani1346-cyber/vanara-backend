@@ -5,8 +5,12 @@ const Razorpay = require("razorpay");
 const cors = require("cors");
 const crypto = require("crypto");
 const admin = require("firebase-admin");
-const serviceAccount = JSON.parse(process.env.FIREBASE_KEY);
-
+const serviceAccount = {
+  type: "service_account",
+  project_id: "vanara-b0bf4",
+  private_key: process.env.FIREBASE_KEY.replace(/\\n/g, '\n'),
+  client_email: "firebase-adminsdk-fbsvc@vanara-b0bf4.iam.gserviceaccount.com",
+};
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
