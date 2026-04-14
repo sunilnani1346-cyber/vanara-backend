@@ -5,14 +5,7 @@ const Razorpay = require("razorpay");
 const cors = require("cors");
 const crypto = require("crypto");
 const admin = require("firebase-admin");
-const serviceAccount = {
-  type: "service_account",
-  project_id: "vanara-b0bf4",
-  private_key: process.env.FIREBASE_PRIVATE_KEY
-  ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-  : undefined,
-  client_email: "firebase-adminsdk-fbsvc@vanara-b0bf4.iam.gserviceaccount.com",
-};
+const serviceAccount = require("./serviceaccountkey.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
@@ -52,27 +45,41 @@ app.post("/create-order", async (req, res) => {
   }
 });
 app.post("/save-order", async (req, res) => {
+  try {
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature
+    } = req.body;
+
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+
+    if (expectedSignature !== razorpay_signature) {
+      return res.status(400).json({ error: "Invalid payment" });
+    }
+
+    await db.collection("orders").add({
+      ...req.body,
+      status: "Confirmed",
+      createdAt: new Date()
+    });
+
+    res.json({ status: "success" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "failed" });
+  }
+});
+// ✅ VERIFY PAYMENT
+app.post("/save-order", async (req, res) => {
   console.log("BODY:", req.body);
 
-  const {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature
-  } = req.body;
-
-  // 🔐 VERIFY AGAIN (SERVER SIDE)
-  const body = razorpay_order_id + "|" + razorpay_payment_id;
-
-  const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-    .update(body.toString())
-    .digest("hex");
-
-  if (expectedSignature !== razorpay_signature) {
-    return res.status(400).json({ error: "Invalid payment" });
-  }
-
-  // ✅ SAVE ONLY IF VALID
   try {
     await db.collection("orders").add({
       ...req.body,
@@ -80,30 +87,13 @@ app.post("/save-order", async (req, res) => {
       createdAt: new Date()
     });
 
-  res.json({ status: "success" });
+    res.json({ status: "success" });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "failed" });
   }
 });
-// ✅ VERIFY PAYMENT
-app.post("/verify-payment", (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-
-  const body = razorpay_order_id + "|" + razorpay_payment_id;
-
-  const expectedSignature = crypto
-    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-    .update(body.toString())
-    .digest("hex");
-
-  if (expectedSignature === razorpay_signature) {
-    res.json({ status: "success" });
-  } else {
-    res.status(400).json({ status: "failed" });
-  }
-});
-
 // ✅ PORT from env
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
