@@ -51,6 +51,21 @@ app.post("/create-order", async (req, res) => {
     res.status(500).send("Error creating order");
   }
 });
+app.get("/test-save", async (req, res) => {
+  try {
+    await db.collection("orders").add({
+      name: "Test User",
+      phone: "9999999999",
+      status: "TEST",
+      createdAt: new Date()
+    });
+
+    res.send("Saved to Firebase ✅");
+  } catch (err) {
+    console.error(err);
+    res.send("Error saving ❌");
+  }
+});
 app.post("/save-order", async (req, res) => {
   console.log("BODY:", req.body);
 
