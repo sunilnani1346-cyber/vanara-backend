@@ -489,7 +489,8 @@ gtag('config', 'G-R03DT4CTCQ');
 <section class="hero">
   <div class="hero-text">
     <span class="hero-tag">🌿 Natural · High Protein · Pure</span>
-    <h1>Natural strength for <em></em> every genaration</h1>
+    <!-- FIX: Fixed typo "genaration" → "generation". Added text to <em> tag. -->
+    <h1>Natural strength for <em>every generation</em></h1>
     <p>From Nature to Strength — Premium nutrition mix crafted with the finest natural ingredients for every generation.</p>
     <div class="hero-cta">
       <button class="btn-hero-primary" onclick="openCheckout()">Buy Now — ₹499</button>
@@ -572,7 +573,8 @@ gtag('config', 'G-R03DT4CTCQ');
 <section id="products" class="product-section">
   <div style="text-align:center;">
     <span class="section-tag">Our Product</span>
-    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#1a1a1a;margin-bottom:16px;"></h2>
+    <!-- FIX: Added heading text that was missing -->
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#1a1a1a;margin-bottom:16px;">VANARA Nutrition Mix</h2>
     <p style="color:#888;font-size:1rem;max-width:500px;margin:0 auto;">Premium quality, all-natural blend for strength, stamina &amp; daily wellness.</p>
   </div>
   <div class="product-layout">
@@ -744,84 +746,120 @@ gtag('config', 'G-R03DT4CTCQ');
     <input type="text" id="pincode" placeholder="Pincode">
     <input type="text" id="state" placeholder="State">
     <input type="text" id="country" placeholder="Country" value="India">
-    <input type="number" id="qty" placeholder="Quantity" value="1" min="1" oninput="updateTotal()">
+    <!-- FIX: Added max="20" to prevent unreasonably large quantity -->
+    <input type="number" id="qty" placeholder="Quantity" value="1" min="1" max="20" oninput="updateTotal()">
     <button class="pay-btn" onclick="proceedToPayment()">🔒 Confirm &amp; Pay</button>
   </div>
 </div>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-function updateTotal(){
-  const qty=parseInt(document.getElementById("qty").value)||1;
-  document.getElementById("qty-display").textContent=qty;
-  document.getElementById("total-display").textContent="₹"+(qty*499);
+const PRICE_PER_UNIT = 499;
+
+function updateTotal() {
+  const qty = Math.min(parseInt(document.getElementById("qty").value) || 1, 20);
+  document.getElementById("qty-display").textContent = qty;
+  document.getElementById("total-display").textContent = "₹" + (qty * PRICE_PER_UNIT);
 }
-function openCheckout(){
-  document.getElementById("checkoutModal").style.display="flex";
+
+function openCheckout() {
+  document.getElementById("checkoutModal").style.display = "flex";
 }
-function closeCheckout(){
-  document.getElementById("checkoutModal").style.display="none";
+
+function closeCheckout() {
+  document.getElementById("checkoutModal").style.display = "none";
 }
-function toggleCart(){
+
+function toggleCart() {
   alert("Cart feature coming soon!");
 }
-window.onclick=function(e){
-  const modal=document.getElementById("checkoutModal");
-  if(e.target===modal)modal.style.display="none";
+
+window.onclick = function(e) {
+  const modal = document.getElementById("checkoutModal");
+  if (e.target === modal) modal.style.display = "none";
 }
-async function proceedToPayment(){
-  const btn=document.querySelector(".pay-btn");
-  btn.textContent="Processing...";
-  const name=document.getElementById("name").value;
-  const phone=document.getElementById("phone").value;
-  const address=document.getElementById("address").value;
-  const city=document.getElementById("city").value;
-  const pincode=document.getElementById("pincode").value;
-  const state=document.getElementById("state").value;
-  const country=document.getElementById("country").value;
-  const qty=parseInt(document.getElementById("qty").value);
-  if(!qty||qty<=0){alert("Invalid quantity");btn.textContent="🔒 Confirm & Pay";return;}
-  if(!name||!phone||!address||!city||!pincode||!state||!country){alert("Please fill all details");btn.textContent="🔒 Confirm & Pay";return;}
-  const cleanedPhone=phone.replace(/\D/g,"");
-  if(cleanedPhone.length!==10){alert("Enter valid 10 digit phone number");btn.textContent="🔒 Confirm & Pay";return;}
-  const amount=qty*499;
-  try{
-    const res=await fetch("https://vanara-backend.onrender.com/create-order",{
-      method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({amount})
+
+async function proceedToPayment() {
+  const btn = document.querySelector(".pay-btn");
+  btn.textContent = "Processing...";
+
+  const name    = document.getElementById("name").value.trim();
+  const phone   = document.getElementById("phone").value.trim();
+  const address = document.getElementById("address").value.trim();
+  const city    = document.getElementById("city").value.trim();
+  const pincode = document.getElementById("pincode").value.trim();
+  const state   = document.getElementById("state").value.trim();
+  const country = document.getElementById("country").value.trim();
+
+  // FIX: Quantity capped at 20 to prevent abuse
+  const qty = Math.min(parseInt(document.getElementById("qty").value) || 1, 20);
+
+  if (qty <= 0) { alert("Invalid quantity"); btn.textContent = "🔒 Confirm & Pay"; return; }
+  if (!name || !phone || !address || !city || !pincode || !state || !country) {
+    alert("Please fill all details"); btn.textContent = "🔒 Confirm & Pay"; return;
+  }
+
+  const cleanedPhone = phone.replace(/\D/g, "");
+  if (cleanedPhone.length !== 10) {
+    alert("Enter valid 10 digit phone number"); btn.textContent = "🔒 Confirm & Pay"; return;
+  }
+
+  try {
+    // Step 1: Create order — send qty, backend calculates amount
+    const res = await fetch("https://vanara-backend.onrender.com/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ qty })   // FIX: send qty, not amount — backend computes amount
     });
-    const order=await res.json();
-    if(!order.id){alert("Order creation failed");btn.textContent="🔒 Confirm & Pay";return;}
-    var options={
-      key:"rzp_live_SctSTXCaMANu9C",amount:order.amount,currency:"INR",
-      name:"VANARA",description:"High Protein Nutrition Mix",order_id:order.id,
-      handler:async function(response){
-        try{
-          const verifyRes=await fetch("https://vanara-backend.onrender.com/verify-payment",{
-            method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(response)
+    const order = await res.json();
+    if (!order.id) { alert("Order creation failed"); btn.textContent = "🔒 Confirm & Pay"; return; }
+
+    var options = {
+      key: "rzp_live_SctSTXCaMANu9C",
+      amount: order.amount,
+      currency: "INR",
+      name: "VANARA",
+      description: "High Protein Nutrition Mix",
+      order_id: order.id,
+      handler: async function(response) {
+        try {
+          // Step 2: Verify payment signature
+          const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(response)
           });
-          const result=await verifyRes.json();
-          if(result.status!=="success"){alert("❌ Payment verification failed");return;}
-          const saveRes=await fetch("https://vanara-backend.onrender.com/save-order",{
-            method:"POST",headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({name,phone:cleanedPhone,address,city,state,country,pincode,qty,amount,
-              razorpay_order_id:response.razorpay_order_id,
-              razorpay_payment_id:response.razorpay_payment_id,
-              razorpay_signature:response.razorpay_signature})
+          const result = await verifyRes.json();
+          if (result.status !== "success") { alert("❌ Payment verification failed"); return; }
+
+          // Step 3: Save order
+          const saveRes = await fetch("https://vanara-backend.onrender.com/save-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name, phone: cleanedPhone, address, city, state, country, pincode, qty,
+              amount: order.amount / 100,
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature
+            })
           });
-          const saveResult=await saveRes.json();
-          if(saveResult.status!=="success"){alert("❌ Order save failed");return;}
+          const saveResult = await saveRes.json();
+          if (saveResult.status !== "success") { alert("❌ Order save failed"); return; }
+
           alert("✅ Order Confirmed!");
-          window.location.href="success.html";
-        }catch(err){console.error(err);alert("❌ Server Error");}
+          window.location.href = "success.html";
+        } catch(err) { console.error(err); alert("❌ Server Error"); }
       },
-      prefill:{name:name,contact:cleanedPhone},
-      theme:{color:"#4E342E"},
-      modal:{ondismiss:function(){alert("❌ Payment Cancelled");btn.textContent="🔒 Confirm & Pay";}}
+      prefill: { name: name, contact: cleanedPhone },
+      theme: { color: "#4E342E" },
+      modal: { ondismiss: function() { alert("❌ Payment Cancelled"); btn.textContent = "🔒 Confirm & Pay"; } }
     };
-    var rzp=new Razorpay(options);
-    rzp.on('payment.failed',function(){alert("❌ Payment Failed\nTry again!");btn.textContent="🔒 Confirm & Pay";});
+
+    var rzp = new Razorpay(options);
+    rzp.on('payment.failed', function() { alert("❌ Payment Failed\nTry again!"); btn.textContent = "🔒 Confirm & Pay"; });
     rzp.open();
-  }catch(err){console.error(err);alert("❌ Server Error");btn.textContent="🔒 Confirm & Pay";}
+  } catch(err) { console.error(err); alert("❌ Server Error"); btn.textContent = "🔒 Confirm & Pay"; }
 }
 </script>
 </body>
