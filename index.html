@@ -674,6 +674,10 @@ gtag('config', 'G-R03DT4CTCQ');
       <div class="gallery-overlay"></div>
     </div>
     <div class="gallery-item">
+      <img src="images/pack5.png" alt="VANARA Pack 5">
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-item">
       <img src="images/pack4.jpg" alt="VANARA Pack 4">
       <div class="gallery-overlay"></div>
     </div>
@@ -823,13 +827,6 @@ async function proceedToPayment() {
       order_id: order.id,
       handler: async function(response) {
         try {
-          localStorage.setItem("last_order", JSON.stringify({
-  name, phone, address, city, state, country, pincode, qty,
-  amount: order.amount / 100,
-  razorpay_order_id: response.razorpay_order_id,
-  razorpay_payment_id: response.razorpay_payment_id,
-  razorpay_signature: response.razorpay_signature
-}));
           // Step 2: Verify payment signature
           const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
             method: "POST",
