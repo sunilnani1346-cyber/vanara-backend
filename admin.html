@@ -2,171 +2,251 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANARA Admin Panel</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VANARA Admin</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f5f7fb;
-  padding:24px 20px;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  background:#f0f2f5;
+  min-height:100vh;
 }
 
-.topbar{
+/* ── TOP NAV ── */
+.topnav{
+  background:#4E342E;
+  padding:14px 16px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-bottom:1.5rem;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 2px 10px rgba(0,0,0,0.2);
 }
-
-.topbar h1{
-  font-size:20px;
-  font-weight:600;
-  color:#222;
+.topnav-left{display:flex;align-items:center;gap:10px;}
+.topnav-logo{
+  width:34px;height:34px;border-radius:50%;
+  background:#D4A853;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:14px;color:#4E342E;
 }
-
-.last-updated{
-  font-size:12px;
-  color:#999;
+.topnav h1{color:white;font-size:17px;font-weight:700;}
+.topnav-right{display:flex;flex-direction:column;align-items:flex-end;}
+.live-dot{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;color:#86efac;font-weight:500;
 }
+.live-dot::before{
+  content:'';width:7px;height:7px;border-radius:50%;
+  background:#22c55e;
+  animation:pulse 1.5s infinite;
+}
+.last-upd{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px;}
 
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+/* ── METRICS ── */
 .metrics{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:12px;
-  margin-bottom:1.5rem;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:14px 12px 0;
 }
-
 .metric{
   background:white;
-  border-radius:12px;
+  border-radius:14px;
   padding:14px 16px;
   border:1px solid #eee;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
 }
-
-.metric-label{
-  font-size:12px;
-  color:#888;
-  margin-bottom:4px;
-}
-
-.metric-val{
-  font-size:22px;
-  font-weight:600;
-  color:#222;
-}
-
+.metric-label{font-size:11px;color:#999;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:5px;}
+.metric-val{font-size:26px;font-weight:700;color:#222;line-height:1;}
 .metric-val.green{color:#16a34a;}
 .metric-val.amber{color:#d97706;}
 .metric-val.red{color:#dc2626;}
+.metric-val.brown{color:#4E342E;}
+.metric.wide{grid-column:span 2;}
 
+/* ── CONTROLS ── */
 .controls{
+  padding:12px 12px 0;
   display:flex;
-  gap:10px;
+  gap:8px;
   flex-wrap:wrap;
-  margin-bottom:1rem;
 }
-
 .controls input,
 .controls select{
-  padding:9px 12px;
-  border:1px solid #ddd;
-  border-radius:8px;
+  flex:1;
+  min-width:140px;
+  padding:11px 13px;
+  border:1.5px solid #e0e0e0;
+  border-radius:10px;
   font-size:14px;
   background:white;
   outline:none;
+  -webkit-appearance:none;
+  appearance:none;
+  color:#222;
 }
-
-.controls input{flex:1;min-width:180px;}
 .controls input:focus,
-.controls select:focus{border-color:#16a34a;}
+.controls select:focus{border-color:#4E342E;}
 
-.tbl-wrap{
-  overflow-x:auto;
+/* ── ORDERS LIST (card layout on mobile) ── */
+.orders-section{padding:12px;}
+
+.order-card{
+  background:white;
   border-radius:14px;
   border:1px solid #eee;
-  background:white;
-  box-shadow:0 4px 20px rgba(0,0,0,0.07);
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:13.5px;
-  table-layout:fixed;
-}
-
-th,td{
-  padding:11px 13px;
-  border-bottom:1px solid #f0f0f0;
-  text-align:left;
-  white-space:nowrap;
+  margin-bottom:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
   overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-thead tr{background:#f9fafb;}
-
-th{
-  font-size:12px;
-  font-weight:600;
-  color:#555;
-  cursor:pointer;
-  user-select:none;
+.card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px 10px;
+  border-bottom:1px solid #f5f5f5;
 }
+.card-name{font-size:15px;font-weight:700;color:#1a1a1a;}
+.card-phone{font-size:12px;color:#888;margin-top:2px;}
 
-th:hover{color:#16a34a;}
+.card-body{
+  padding:10px 14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 12px;
+}
+.card-field-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;}
+.card-field-val{font-size:13px;color:#333;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover{background:#f9fafb;}
+.card-bottom{
+  padding:10px 14px;
+  background:#fafafa;
+  border-top:1px solid #f0f0f0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.card-amount{font-size:16px;font-weight:700;color:#4E342E;}
+.card-qty{font-size:12px;color:#888;}
 
+/* ── BADGES ── */
 .badge{
   display:inline-block;
-  padding:3px 10px;
+  padding:4px 12px;
   border-radius:99px;
   font-size:11px;
-  font-weight:600;
+  font-weight:700;
+  letter-spacing:0.02em;
 }
-
 .badge-confirmed{background:#dcfce7;color:#166534;}
 .badge-pending{background:#fef3c7;color:#92400e;}
 .badge-cancelled{background:#fee2e2;color:#991b1b;}
 
-.row-count{
-  font-size:12px;
-  color:#aaa;
-  margin-top:8px;
-  text-align:right;
-}
-
-.empty{
+/* ── EMPTY / LOADING ── */
+.empty-state{
   text-align:center;
-  padding:2.5rem;
+  padding:40px 20px;
   color:#bbb;
   font-size:14px;
 }
+.empty-icon{font-size:2.5rem;margin-bottom:10px;}
 
-@media(max-width:600px){
-  .topbar h1{font-size:17px;}
-  .metric-val{font-size:18px;}
+/* ── ROW COUNT ── */
+.row-count{
+  font-size:11px;
+  color:#bbb;
+  text-align:center;
+  padding:8px 0 16px;
+}
+
+/* ── DESKTOP TABLE (768px+) ── */
+@media(min-width:768px){
+  body{padding:0;}
+
+  .topnav{padding:16px 24px;}
+  .topnav h1{font-size:20px;}
+
+  .metrics{
+    grid-template-columns:repeat(5,1fr);
+    padding:20px 24px 0;
+    gap:14px;
+  }
+  .metric.wide{grid-column:span 1;}
+
+  .controls{padding:16px 24px 0;}
+
+  .orders-section{padding:14px 24px;}
+
+  /* Hide card layout, show table */
+  .order-card{display:none;}
+
+  .tbl-wrap{
+    display:block;
+    background:white;
+    border-radius:14px;
+    border:1px solid #eee;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06);
+    overflow-x:auto;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+    table-layout:fixed;
+  }
+  th,td{
+    padding:11px 14px;
+    border-bottom:1px solid #f0f0f0;
+    text-align:left;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  thead tr{background:#f9fafb;}
+  th{font-size:12px;font-weight:600;color:#555;cursor:pointer;user-select:none;}
+  th:hover{color:#4E342E;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#fdf6ee;}
+
+  .row-count{text-align:right;padding:8px 0 20px;}
+}
+
+@media(min-width:768px){
+  /* on desktop show table, hide cards */
+  #cardList{display:none;}
+  .tbl-wrap{display:block !important;}
+}
+@media(max-width:767px){
+  /* on mobile show cards, hide table */
+  .tbl-wrap{display:none !important;}
+  #cardList{display:block;}
 }
 </style>
 </head>
-
 <body>
 
-<div class="topbar">
-  <h1>VANARA Orders</h1>
-  <div class="last-updated" id="lastUpdated">Connecting…</div>
+<!-- TOP NAV -->
+<div class="topnav">
+  <div class="topnav-left">
+    <div class="topnav-logo">V</div>
+    <h1>VANARA Orders</h1>
+  </div>
+  <div class="topnav-right">
+    <div class="live-dot">Live</div>
+    <div class="last-upd" id="lastUpdated">Connecting…</div>
+  </div>
 </div>
 
+<!-- METRICS -->
 <div class="metrics">
   <div class="metric">
-    <div class="metric-label">Total orders</div>
+    <div class="metric-label">Total</div>
     <div class="metric-val" id="m-total">—</div>
   </div>
   <div class="metric">
@@ -181,64 +261,76 @@ tbody tr:hover{background:#f9fafb;}
     <div class="metric-label">Cancelled</div>
     <div class="metric-val red" id="m-cancelled">—</div>
   </div>
-  <div class="metric">
-    <div class="metric-label">Total revenue</div>
-    <div class="metric-val" id="m-revenue">—</div>
+  <div class="metric wide">
+    <div class="metric-label">Total Revenue</div>
+    <div class="metric-val brown" id="m-revenue">—</div>
   </div>
 </div>
 
+<!-- CONTROLS -->
 <div class="controls">
-  <input type="text" id="searchInput" placeholder="Search by name or phone…">
+  <input type="search" id="searchInput" placeholder="🔍  Search name or phone…">
   <select id="statusFilter">
-    <option value="">All statuses</option>
-    <option value="Order Confirmed">Confirmed</option>
-    <option value="Pending">Pending</option>
-    <option value="Cancelled">Cancelled</option>
+    <option value="">All Statuses</option>
+    <option value="Order Confirmed">✅ Confirmed</option>
+    <option value="Pending">⏳ Pending</option>
+    <option value="Cancelled">❌ Cancelled</option>
   </select>
 </div>
 
-<div class="tbl-wrap">
-  <table>
-    <colgroup>
-      <col style="width:13%"><col style="width:11%"><col style="width:18%">
-      <col style="width:9%"><col style="width:8%"><col style="width:8%">
-      <col style="width:8%"><col style="width:5%"><col style="width:10%"><col style="width:10%">
-    </colgroup>
-    <thead>
-      <tr>
-        <th data-col="name">Name ↕</th>
-        <th>Phone</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Country</th>
-        <th>Pincode</th>
-        <th data-col="qty">Qty ↕</th>
-        <th data-col="amount">Amount ↕</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="ordersTable">
-      <tr><td colspan="10" class="empty">Connecting to Firebase…</td></tr>
-    </tbody>
-  </table>
+<!-- MOBILE CARD LIST -->
+<div class="orders-section">
+  <div id="cardList">
+    <div class="empty-state">
+      <div class="empty-icon">🔄</div>
+      Connecting to Firebase…
+    </div>
+  </div>
 </div>
 
-<div class="row-count" id="rowCount"></div>
+<!-- DESKTOP TABLE -->
+<div class="orders-section" style="padding-top:0;">
+  <div class="tbl-wrap" style="display:none;">
+    <table>
+      <colgroup>
+        <col style="width:13%"><col style="width:11%"><col style="width:18%">
+        <col style="width:9%"><col style="width:8%"><col style="width:7%">
+        <col style="width:7%"><col style="width:5%"><col style="width:10%"><col style="width:12%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th data-col="name">Name ↕</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Country</th>
+          <th>Pincode</th>
+          <th data-col="qty">Qty ↕</th>
+          <th data-col="amount">Amount ↕</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTable">
+        <tr><td colspan="10" style="text-align:center;padding:2rem;color:#bbb;">Connecting…</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row-count" id="rowCount"></div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
 <script>
 const firebaseConfig={
   apiKey:"AIzaSyDuYbsb-wF11tPXtoXnExcMVEfNR5A1Bfw",
   authDomain:"vanara-b0bf4.firebaseapp.com",
   projectId:"vanara-b0bf4"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
+const cardList=document.getElementById('cardList');
 const tbody=document.getElementById('ordersTable');
 const searchInput=document.getElementById('searchInput');
 const statusFilter=document.getElementById('statusFilter');
@@ -251,9 +343,12 @@ db.collection("orders").orderBy("createdAt","desc").onSnapshot(snap=>{
   allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
   updateMetrics(allOrders);
   render();
-  document.getElementById('lastUpdated').textContent='Updated '+new Date().toLocaleTimeString();
+  const now=new Date();
+  document.getElementById('lastUpdated').textContent=
+    'Updated '+now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 },()=>{
-  tbody.innerHTML='<tr><td colspan="10" class="empty">Could not connect to Firebase.</td></tr>';
+  cardList.innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div>Could not connect to Firebase.</div>';
+  tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:2rem;color:#dc2626;">Connection failed.</td></tr>';
 });
 
 function updateMetrics(data){
@@ -265,6 +360,12 @@ function updateMetrics(data){
   document.getElementById('m-revenue').textContent='₹'+rev.toLocaleString('en-IN');
 }
 
+function badgeClass(status){
+  if(status==='Order Confirmed') return 'confirmed';
+  if(status==='Pending') return 'pending';
+  return 'cancelled';
+}
+
 function render(){
   const q=searchInput.value.toLowerCase();
   const sf=statusFilter.value;
@@ -273,6 +374,7 @@ function render(){
     const ms=!sf||o.status===sf;
     return mq&&ms;
   });
+
   if(sortCol){
     data=[...data].sort((a,b)=>{
       let av=a[sortCol],bv=b[sortCol];
@@ -281,13 +383,52 @@ function render(){
       return av<bv?-sortDir:av>bv?sortDir:0;
     });
   }
+
+  document.getElementById('rowCount').textContent=
+    data.length?`Showing ${data.length} of ${allOrders.length} orders`:'';
+
   if(!data.length){
-    tbody.innerHTML='<tr><td colspan="10" class="empty">No orders found.</td></tr>';
-    document.getElementById('rowCount').textContent='';
+    cardList.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div>No orders found.</div>';
+    tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:2rem;color:#bbb;">No orders found.</td></tr>';
     return;
   }
+
+  /* ── MOBILE CARDS ── */
+  cardList.innerHTML=data.map(o=>{
+    const sc=badgeClass(o.status);
+    const addr=[o.address,o.city,o.state].filter(Boolean).join(', ');
+    return`<div class="order-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">${o.name||'—'}</div>
+          <div class="card-phone">📞 ${o.phone||'—'}</div>
+        </div>
+        <span class="badge badge-${sc}">${o.status||'—'}</span>
+      </div>
+      <div class="card-body">
+        <div style="grid-column:span 2;">
+          <div class="card-field-label">Address</div>
+          <div class="card-field-val" style="white-space:normal;font-size:12px;color:#555;">${addr||'—'}</div>
+        </div>
+        <div>
+          <div class="card-field-label">Pincode</div>
+          <div class="card-field-val">${o.pincode||'—'}</div>
+        </div>
+        <div>
+          <div class="card-field-label">Country</div>
+          <div class="card-field-val">${o.country||'—'}</div>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-amount">₹${Number(o.amount||0).toLocaleString('en-IN')}</div>
+        <div class="card-qty">Qty: <strong>${o.qty||'—'}</strong></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  /* ── DESKTOP TABLE ── */
   tbody.innerHTML=data.map(o=>{
-    const sc=o.status==='Order Confirmed'?'confirmed':o.status==='Pending'?'pending':'cancelled';
+    const sc=badgeClass(o.status);
     return`<tr>
       <td title="${o.name||''}">${o.name||'—'}</td>
       <td>${o.phone||'—'}</td>
@@ -301,7 +442,6 @@ function render(){
       <td><span class="badge badge-${sc}">${o.status||'—'}</span></td>
     </tr>`;
   }).join('');
-  document.getElementById('rowCount').textContent=`Showing ${data.length} of ${allOrders.length} orders`;
 }
 
 searchInput.addEventListener('input',render);
@@ -312,13 +452,13 @@ document.querySelectorAll('th[data-col]').forEach(th=>{
     const col=th.dataset.col;
     if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
     document.querySelectorAll('th[data-col]').forEach(t=>{
-      t.textContent=t.dataset.col.charAt(0).toUpperCase()+t.dataset.col.slice(1)+' ↕';
+      const c=t.dataset.col;
+      t.textContent=c.charAt(0).toUpperCase()+c.slice(1)+' ↕';
     });
     th.textContent=col.charAt(0).toUpperCase()+col.slice(1)+(sortDir===1?' ↑':' ↓');
     render();
   });
 });
 </script>
-
 </body>
-</html> 
+</html>

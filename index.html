@@ -443,6 +443,10 @@ footer .footer-top{
 
   .footer-top{flex-direction:column;align-items:center;text-align:center;}
   .footer-links{flex-wrap:wrap;justify-content:center;}
+
+  /* Lab section mobile */
+  #lab-certified .lab-inner{flex-direction:column;}
+  #nutrition .serving-btns{gap:8px;}
 }
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-R03DT4CTCQ"></script>
@@ -473,6 +477,7 @@ gtag('config', 'G-R03DT4CTCQ');
     <a href="#about">About</a>
     <a href="#products">Products</a>
     <a href="#benefits">Benefits</a>
+    <a href="#nutrition">Nutrition</a>
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-right">
@@ -489,7 +494,6 @@ gtag('config', 'G-R03DT4CTCQ');
 <section class="hero">
   <div class="hero-text">
     <span class="hero-tag">🌿 Natural · High Protein · Pure</span>
-    <!-- FIX: Fixed typo "genaration" → "generation". Added text to <em> tag. -->
     <h1>Natural strength for <em>every generation</em></h1>
     <p>From Nature to Strength — Premium nutrition mix crafted with the finest natural ingredients for every generation.</p>
     <div class="hero-cta">
@@ -573,7 +577,6 @@ gtag('config', 'G-R03DT4CTCQ');
 <section id="products" class="product-section">
   <div style="text-align:center;">
     <span class="section-tag">Our Product</span>
-    <!-- FIX: Added heading text that was missing -->
     <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#1a1a1a;margin-bottom:16px;">VANARA Nutrition Mix</h2>
     <p style="color:#888;font-size:1rem;max-width:500px;margin:0 auto;">Premium quality, all-natural blend for strength, stamina &amp; daily wellness.</p>
   </div>
@@ -684,6 +687,159 @@ gtag('config', 'G-R03DT4CTCQ');
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════════════
+     NEW SECTION 1 — FSSAI CERTIFIED & LAB TESTED
+     ══════════════════════════════════════════════════ -->
+<section id="lab-certified" class="section" style="background:#fff;">
+  <span class="section-tag">Quality Assurance</span>
+  <h2>FSSAI Certified &amp; Lab Tested</h2>
+  <p class="section-sub">Every batch tested by Care Labs — an NABL Accredited, ISO 45001:2018 Certified Laboratory recognized by the Govt. of India.</p>
+
+  <div style="display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;margin-top:50px;">
+
+    <!-- Trust Badges -->
+    <div style="display:flex;flex-direction:column;gap:16px;max-width:320px;">
+      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
+        <span style="font-size:2rem;">🏛️</span>
+        <div style="text-align:left;">
+          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">FSSAI Approved</div>
+          <div style="font-size:0.82rem;color:#777;margin-top:2px;">Food Safety Standards Authority of India</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
+        <span style="font-size:2rem;">🔬</span>
+        <div style="text-align:left;">
+          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">NABL Accredited Lab</div>
+          <div style="font-size:0.82rem;color:#777;margin-top:2px;">Care Labs — TC 12742, Hyderabad</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
+        <span style="font-size:2rem;">✅</span>
+        <div style="text-align:left;">
+          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">ISO 45001:2018 Certified</div>
+          <div style="font-size:0.82rem;color:#777;margin-top:2px;">International quality &amp; safety standards</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
+        <span style="font-size:2rem;">🌿</span>
+        <div style="text-align:left;">
+          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">No Chemicals / Preservatives</div>
+          <div style="font-size:0.82rem;color:#777;margin-top:2px;">Lab confirmed — 100% natural formula</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lab Report Photo -->
+    <div style="position:relative;flex-shrink:0;">
+      <div style="border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(78,52,46,0.18);border:3px solid #D4A853;max-width:340px;">
+        <img src="images/labreport.PNG" alt="Care Labs FSSAI Test Report — VANARA Nutrition Mix"
+             style="width:100%;display:block;">
+      </div>
+      <div style="position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+                  background:linear-gradient(135deg,#4E342E,#6F4E37);color:white;
+                  padding:10px 26px;border-radius:30px;white-space:nowrap;
+                  font-size:0.78rem;font-weight:700;letter-spacing:0.07em;
+                  box-shadow:0 6px 20px rgba(78,52,46,0.35);">
+        ✔ LAB VERIFIED — MARCH 2026
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;background:#f0fdf4;border-radius:16px;padding:20px 24px;border:1px solid rgba(22,163,74,0.2);">
+  <span style="font-size:2rem;">🏛️</span>
+  <div style="text-align:left;">
+    <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">FSSAI Registered</div>
+    <div style="font-size:0.82rem;color:#16a34a;margin-top:2px;font-weight:600;">Reg No: 23626031001983</div>
+    <div style="font-size:0.75rem;color:#777;margin-top:2px;">Valid Upto: 16-04-2027 · Govt of Telangana</div>
+  </div>
+</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════
+     NEW SECTION 2 — NUTRITION CALCULATOR
+     ══════════════════════════════════════════════════ -->
+<section id="nutrition" class="section" style="background:linear-gradient(135deg,#fdf6ee,#f5ede0);">
+  <span class="section-tag">Nutrition Facts</span>
+  <h2>Nutrition Calculator</h2>
+  <p class="section-sub">Select your serving size and see exact nutritional values — based on our official FSSAI lab report.</p>
+
+  <!-- Per 100g highlight stats -->
+  <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:30px;margin-bottom:44px;">
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">49.6g</div>
+      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Protein</div>
+    </div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">11.6g</div>
+      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Fat</div>
+    </div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">30.4g</div>
+      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Carbs</div>
+    </div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">2.5g</div>
+      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Sugars</div>
+    </div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
+      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">424</div>
+      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Kcal</div>
+    </div>
+    <div style="background:#f0fdf4;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(22,163,74,0.2);min-width:90px;display:flex;align-items:center;justify-content:center;">
+      <div style="font-size:0.72rem;color:#16a34a;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;line-height:1.4;">Per<br>100g</div>
+    </div>
+  </div>
+
+  <!-- Calculator Card -->
+  <div style="max-width:700px;margin:0 auto;">
+    <div style="background:white;border-radius:24px;padding:36px;box-shadow:0 10px 40px rgba(78,52,46,0.08);border:1px solid rgba(78,52,46,0.08);">
+
+      <p style="font-weight:700;font-size:0.88rem;color:#4E342E;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.07em;">👇 Choose Your Serving Size:</p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;">
+        <button onclick="calcServing(20)" id="sb-20"
+          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
+                 background:#4E342E;color:white;font-family:'DM Sans',sans-serif;
+                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">20g</button>
+        <button onclick="calcServing(25)" id="sb-25"
+          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
+                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
+                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">25g</button>
+        <button onclick="calcServing(30)" id="sb-30"
+          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
+                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
+                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">30g</button>
+        <button onclick="calcServing(40)" id="sb-40"
+          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
+                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
+                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">40g</button>
+        <button onclick="calcServing(50)" id="sb-50"
+          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
+                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
+                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">50g</button>
+      </div>
+
+      <!-- Nutrition Table -->
+      <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;" id="nutrition-table">
+          <thead>
+            <tr style="background:#4E342E;color:white;">
+              <th style="padding:12px 16px;text-align:left;border-radius:10px 0 0 0;font-weight:600;">Nutrient</th>
+              <th style="padding:12px 16px;text-align:center;font-weight:600;">Per 100g</th>
+              <th style="padding:12px 16px;text-align:center;border-radius:0 10px 0 0;font-weight:600;" id="th-serving">Per 20g Serving</th>
+            </tr>
+          </thead>
+          <tbody id="nutrition-tbody">
+          </tbody>
+        </table>
+      </div>
+
+      <p style="font-size:0.73rem;color:#bbb;margin-top:16px;text-align:center;">
+        * Values based on FSSAI-certified Care Labs Test Report · Ref: CL/C/F/0290/03/26-001/26 · Dated 14.03.2026
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- ABOUT -->
 <section id="about" class="section">
   <span class="section-tag">Our Story</span>
@@ -724,6 +880,7 @@ gtag('config', 'G-R03DT4CTCQ');
       <a href="#about">About</a>
       <a href="#products">Products</a>
       <a href="#benefits">Benefits</a>
+      <a href="#nutrition">Nutrition</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
@@ -750,7 +907,6 @@ gtag('config', 'G-R03DT4CTCQ');
     <input type="text" id="pincode" placeholder="Pincode">
     <input type="text" id="state" placeholder="State">
     <input type="text" id="country" placeholder="Country" value="India">
-    <!-- FIX: Added max="20" to prevent unreasonably large quantity -->
     <input type="number" id="qty" placeholder="Quantity" value="1" min="1" max="20" oninput="updateTotal()">
     <button class="pay-btn" onclick="proceedToPayment()">🔒 Confirm &amp; Pay</button>
   </div>
@@ -794,8 +950,6 @@ async function proceedToPayment() {
   const pincode = document.getElementById("pincode").value.trim();
   const state   = document.getElementById("state").value.trim();
   const country = document.getElementById("country").value.trim();
-
-  // FIX: Quantity capped at 20 to prevent abuse
   const qty = Math.min(parseInt(document.getElementById("qty").value) || 1, 20);
 
   if (qty <= 0) { alert("Invalid quantity"); btn.textContent = "🔒 Confirm & Pay"; return; }
@@ -809,11 +963,10 @@ async function proceedToPayment() {
   }
 
   try {
-    // Step 1: Create order — send qty, backend calculates amount
     const res = await fetch("https://vanara-backend.onrender.com/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ qty })   // FIX: send qty, not amount — backend computes amount
+      body: JSON.stringify({ qty })
     });
     const order = await res.json();
     if (!order.id) { alert("Order creation failed"); btn.textContent = "🔒 Confirm & Pay"; return; }
@@ -827,7 +980,6 @@ async function proceedToPayment() {
       order_id: order.id,
       handler: async function(response) {
         try {
-          // Step 2: Verify payment signature
           const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -836,7 +988,6 @@ async function proceedToPayment() {
           const result = await verifyRes.json();
           if (result.status !== "success") { alert("❌ Payment verification failed"); return; }
 
-          // Step 3: Save order
           const saveRes = await fetch("https://vanara-backend.onrender.com/save-order", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -865,6 +1016,59 @@ async function proceedToPayment() {
     rzp.open();
   } catch(err) { console.error(err); alert("❌ Server Error"); btn.textContent = "🔒 Confirm & Pay"; }
 }
+
+/* ── NUTRITION CALCULATOR ── */
+(function(){
+  var nutrients = [
+    { name:"💪 Protein",      unit:"g",    per100:45, highlight:true  },
+    { name:"Fat",             unit:"g",    per100:11.58, highlight:false },
+    { name:"Carbohydrates",   unit:"g",    per100:30.39, highlight:false },
+    { name:"Total Sugars",    unit:"g",    per100:2.53,  highlight:false },
+    { name:"Energy",          unit:"Kcal", per100:424.0, highlight:false },
+    {name:"fiber",            unit:"g",    per100:11,    highlight:false }
+  ];
+
+  function round2(n){ return Math.round(n * 100) / 100; }
+
+  function buildTable(serving){
+    var tbody = document.getElementById("nutrition-tbody");
+    if(!tbody) return;
+    var rows = "";
+    for(var i=0;i<nutrients.length;i++){
+      var n = nutrients[i];
+      var val = round2(n.per100 * serving / 100);
+      var rowBg = n.highlight ? "background:#fdf6ee;" : (i%2===0?"background:#fafafa;":"background:#fff;");
+      var cellStyle = n.highlight ? "font-weight:700;color:#4E342E;" : "color:#333;";
+      rows += '<tr style="'+rowBg+'">'
+        + '<td style="padding:12px 16px;border-bottom:1px solid #f0ede8;'+cellStyle+'">'+n.name+'</td>'
+        + '<td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f0ede8;color:#999;">'+n.per100+' '+n.unit+'</td>'
+        + '<td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f0ede8;'+cellStyle+'font-size:1rem;">'+val+' '+n.unit+'</td>'
+        + '</tr>';
+    }
+    tbody.innerHTML = rows;
+    var th = document.getElementById("th-serving");
+    if(th) th.textContent = "Per "+serving+"g Serving";
+  }
+
+  window.calcServing = function(s){
+    var ids = [20,25,30,40,50];
+    for(var i=0;i<ids.length;i++){
+      var btn = document.getElementById("sb-"+ids[i]);
+      if(!btn) continue;
+      if(ids[i]===s){
+        btn.style.background="#4E342E";
+        btn.style.color="white";
+      } else {
+        btn.style.background="transparent";
+        btn.style.color="#4E342E";
+      }
+    }
+    buildTable(s);
+  };
+
+  // Initialize with 20g
+  buildTable(20);
+})();
 </script>
 </body>
 </html>
