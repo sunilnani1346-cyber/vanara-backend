@@ -504,16 +504,40 @@ body{
     <div class="metric wide"><div class="metric-label">Top Customer Revenue</div><div class="metric-val green" id="c-top">—</div></div>
   </div>
 
+  <!-- Add Manual Customer -->
+  <div class="add-form">
+    <div class="add-form-header">➕ Add Offline Customer</div>
+    <div class="add-form-body">
+      <div class="field"><label>Name</label><input type="text" id="mc-name" placeholder="e.g. Ravi Kumar"></div>
+      <div class="field"><label>Phone</label><input type="text" id="mc-phone" placeholder="9876543210"></div>
+      <div class="field"><label>Amount Paid (₹)</label><input type="number" id="mc-amount" placeholder="0"></div>
+      <div class="field"><label>City</label><input type="text" id="mc-city" placeholder="Hyderabad"></div>
+      <div class="field"><label>State</label><input type="text" id="mc-state" placeholder="Telangana"></div>
+      <div class="field"><label>Pincode</label><input type="text" id="mc-pincode" placeholder="500001"></div>
+      <div class="field" style="grid-column:span 3"><label>Address</label><input type="text" id="mc-address" placeholder="Full address"></div>
+      <div class="field" style="grid-column:span 3"><label>Notes</label><input type="text" id="mc-notes" placeholder="e.g. WhatsApp order, COD, Instagram DM"></div>
+      <button class="btn-add" onclick="addManualCustomer()">Save Customer</button>
+    </div>
+  </div>
+
   <div class="filters">
     <input type="search" id="custSearch" placeholder="🔍  Search customer…">
   </div>
 
   <div class="section-title">
-    Customers (from Orders)
+    From Orders (Firebase)
     <span class="section-count" id="cust-count">0</span>
   </div>
   <div id="custList">
     <div class="empty"><div class="empty-icon">👥</div>Loading customer data…</div>
+  </div>
+
+  <div class="section-title" style="margin-top:16px">
+    Manually Added
+    <span class="section-count" id="mcust-count">0</span>
+  </div>
+  <div id="mcustList">
+    <div class="empty"><div class="empty-icon">📋</div>No manual customers yet.</div>
   </div>
 </div>
 
@@ -552,7 +576,8 @@ const db=firebase.firestore();
 
 // ─── STATE ───
 let allOrders=[];
-let expenses=JSON.parse(localStorage.getItem('vanara_expenses')||'[]');
+let expenses=[];
+let manualCustomers=JSON.parse(localStorage.getItem('vanara_mcustomers')||'[]');
 let sortCol='',sortDir=1;
 
 // ─── TABS ───
@@ -698,8 +723,13 @@ document.querySelectorAll('th[data-col]').forEach(th=>{
   });
 });
 
-// ─── EXPENSES ───
-function saveExpenses(){localStorage.setItem('vanara_expenses',JSON.stringify(expenses));}
+// ─── EXPENSES (Firebase) ───
+db.collection("expenses").orderBy("createdAt","desc").onSnapshot(snap=>{
+  expenses=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderExpenses();
+  updateExpenseMetrics();
+  updateSummaryMetrics();
+});
 
 function addExpense(){
   const desc=document.getElementById('exp-desc').value.trim();
@@ -708,23 +738,21 @@ function addExpense(){
   const date=document.getElementById('exp-date').value||todayStr();
   const notes=document.getElementById('exp-notes').value.trim();
   if(!desc||!amount){alert('Description and Amount required!');return;}
-  expenses.unshift({id:Date.now(),desc,cat,amount,date,notes});
-  saveExpenses();
-  document.getElementById('exp-desc').value='';
-  document.getElementById('exp-amount').value='';
-  document.getElementById('exp-notes').value='';
-  renderExpenses();
-  updateExpenseMetrics();
-  updateSummaryMetrics();
+  const btn=document.querySelector('.btn-add');
+  btn.textContent='Saving…';btn.disabled=true;
+  db.collection("expenses").add({desc,cat,amount,date,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+    .then(()=>{
+      document.getElementById('exp-desc').value='';
+      document.getElementById('exp-amount').value='';
+      document.getElementById('exp-notes').value='';
+      btn.textContent='Add Expense';btn.disabled=false;
+    })
+    .catch(e=>{alert('Save failed: '+e.message);btn.textContent='Add Expense';btn.disabled=false;});
 }
 
 function delExpense(id){
   if(!confirm('Delete this expense?'))return;
-  expenses=expenses.filter(e=>e.id!==id);
-  saveExpenses();
-  renderExpenses();
-  updateExpenseMetrics();
-  updateSummaryMetrics();
+  db.collection("expenses").doc(id).delete();
 }
 
 function updateExpenseMetrics(){
@@ -769,8 +797,68 @@ function renderExpenses(){
 
 document.getElementById('expSearch').addEventListener('input',renderExpenses);
 document.getElementById('expCatFilter').addEventListener('change',renderExpenses);
-renderExpenses();
-updateExpenseMetrics();
+
+// ─── MANUAL CUSTOMERS ───
+function saveManualCustomers(){localStorage.setItem('vanara_mcustomers',JSON.stringify(manualCustomers));}
+
+function addManualCustomer(){
+  const name=document.getElementById('mc-name').value.trim();
+  const phone=document.getElementById('mc-phone').value.trim();
+  const amount=parseFloat(document.getElementById('mc-amount').value)||0;
+  const city=document.getElementById('mc-city').value.trim();
+  const state=document.getElementById('mc-state').value.trim();
+  const pincode=document.getElementById('mc-pincode').value.trim();
+  const address=document.getElementById('mc-address').value.trim();
+  const notes=document.getElementById('mc-notes').value.trim();
+  if(!name){alert('Name required!');return;}
+  manualCustomers.unshift({id:Date.now(),name,phone,amount,city,state,pincode,address,notes,addedOn:todayStr()});
+  saveManualCustomers();
+  ['mc-name','mc-phone','mc-amount','mc-city','mc-state','mc-pincode','mc-address','mc-notes'].forEach(id=>document.getElementById(id).value='');
+  renderManualCustomers();
+}
+
+function delManualCustomer(id){
+  if(!confirm('Delete this customer?'))return;
+  manualCustomers=manualCustomers.filter(c=>c.id!==id);
+  saveManualCustomers();
+  renderManualCustomers();
+}
+
+function renderManualCustomers(){
+  const q=document.getElementById('custSearch').value.toLowerCase();
+  const data=manualCustomers.filter(c=>
+    !q||(c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q)
+  );
+  document.getElementById('mcust-count').textContent=data.length;
+  if(!data.length){
+    document.getElementById('mcustList').innerHTML='<div class="empty"><div class="empty-icon">📋</div>No manual customers yet.</div>';
+    return;
+  }
+  document.getElementById('mcustList').innerHTML=data.map(c=>{
+    const initials=(c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const addr=[c.address,c.city,c.state,c.pincode].filter(Boolean).join(', ');
+    return`<div class="cust-card">
+      <div class="cust-top">
+        <div class="cust-avatar" style="background:var(--amber)">${initials}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="cust-name">${c.name}</div>
+            <span class="badge" style="background:#fef3c7;color:#92400e">Offline</span>
+          </div>
+          <div class="cust-phone">📞 ${c.phone||'—'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          ${c.amount?`<div style="font-size:15px;font-weight:700;color:var(--brown)">${fmt(c.amount)}</div>`:''}
+          <button class="del-btn" onclick="delManualCustomer(${c.id})">🗑</button>
+        </div>
+      </div>
+      ${addr||c.notes?`<div class="cust-body">
+        ${addr?`<div style="grid-column:span 2"><div class="cf-label">Address</div><div class="cf-val" style="white-space:normal;font-size:12px">${addr}</div></div>`:''}
+        ${c.notes?`<div style="grid-column:span 2"><div class="cf-label">Notes</div><div class="cf-val" style="font-size:12px">${c.notes}</div></div>`:''}
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
 
 // ─── CUSTOMERS ───
 function updateCustomerMetrics(){
@@ -842,7 +930,8 @@ function renderCustomers(){
   }).join('');
 }
 
-document.getElementById('custSearch').addEventListener('input',renderCustomers);
+document.getElementById('custSearch').addEventListener('input',()=>{renderCustomers();renderManualCustomers();});
+renderManualCustomers();
 
 // ─── SUMMARY ───
 function updateSummaryMetrics(){
