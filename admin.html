@@ -344,10 +344,77 @@ body{
   #cardList{display:block;}
   #expList{display:block;}
 }
+
+/* ── LOGIN ── */
+#loginScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--brown-dark);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.login-box{
+  background:var(--surface);
+  border-radius:20px;
+  padding:32px 28px;
+  width:100%;max-width:360px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  text-align:center;
+}
+.login-logo{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--brown);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:800;color:var(--gold);
+  margin:0 auto 12px;
+}
+.login-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:24px;}
+.login-field{
+  width:100%;padding:13px 16px;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;color:var(--text);
+  background:var(--surface2);
+  outline:none;text-align:center;
+  letter-spacing:3px;
+  margin-bottom:12px;
+  transition:border-color 0.15s;
+}
+.login-field:focus{border-color:var(--brown);}
+.login-btn{
+  width:100%;padding:13px;
+  background:var(--brown);color:#fff;
+  border:none;border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;font-weight:700;
+  cursor:pointer;transition:background 0.15s;
+  margin-bottom:8px;
+}
+.login-btn:hover{background:var(--brown-light);}
+.login-err{
+  font-size:12px;color:var(--red);
+  min-height:18px;margin-top:4px;
+}
+#appShell{display:none;}
 </style>
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">V</div>
+    <div class="login-title">VANARA Admin</div>
+    <div class="login-sub">Enter password to continue</div>
+    <input class="login-field" type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="login-btn" onclick="checkLogin()">Login →</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appShell">
 <!-- NAV -->
 <div class="nav">
   <div class="nav-brand">
@@ -561,10 +628,33 @@ body{
   <div id="recentExp"></div>
 </div>
 
+</div><!-- /appShell -->
+
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
+// ─── LOGIN ───
+const ADMIN_PASS = 'vanara2024';
+function checkLogin(){
+  const val = document.getElementById('loginPass').value;
+  if(val === ADMIN_PASS){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appShell').style.display='block';
+    sessionStorage.setItem('vanara_auth','1');
+  } else {
+    document.getElementById('loginErr').textContent='Wrong password. Try again.';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
+    setTimeout(()=>document.getElementById('loginErr').textContent='',2500);
+  }
+}
+// auto-login if already authenticated this session
+if(sessionStorage.getItem('vanara_auth')==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appShell').style.display='block';
+}
+
 // ─── FIREBASE ───
 const firebaseConfig={
   apiKey:"AIzaSyDuYbsb-wF11tPXtoXnExcMVEfNR5A1Bfw",
