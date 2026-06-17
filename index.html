@@ -4,40 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VANARA | High Protein Nutrition Mix</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 :root{
-  --brown:#4E342E;
-  --brown-light:#6F4E37;
-  --green:#16a34a;
-  --cream:#FFFDD0;
-  --gold:#D4A853;
-  --dark:#0f0f0f;
-  --off-white:#faf9f7;
-  --text-muted:#888;
+  --brown:#4E342E;--brown-light:#6F4E37;--green:#16a34a;
+  --gold:#D4A853;--dark:#0f0f0f;--off-white:#faf9f7;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--off-white);color:#111;overflow-x:hidden;}
 
-/* ── ANNOUNCEMENT BAR ── */
-.announce-bar{
-  background:var(--brown);color:white;
-  text-align:center;padding:10px;
-  font-size:0.82rem;letter-spacing:0.08em;
-  font-weight:500;
-}
+/* ── ANNOUNCE ── */
+.announce-bar{background:var(--brown);color:white;text-align:center;padding:10px;font-size:0.82rem;letter-spacing:0.08em;font-weight:500;position:relative;z-index:100;}
 .announce-bar span{color:var(--gold);}
 
 /* ── NAV ── */
-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:0 6%;height:70px;
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(0,0,0,0.07);
-  position:sticky;top:0;z-index:1000;
-}
+nav{display:flex;justify-content:space-between;align-items:center;padding:0 6%;height:70px;background:rgba(255,255,255,0.95);backdrop-filter:blur(24px);border-bottom:1px solid rgba(0,0,0,0.07);position:sticky;top:0;z-index:1000;transition:box-shadow 0.3s;}
+nav.scrolled{box-shadow:0 4px 30px rgba(78,52,46,0.12);}
 .nav-left{display:flex;align-items:center;gap:32px;}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
 .hamburger span{width:24px;height:2px;background:#333;border-radius:2px;transition:0.3s;}
@@ -45,427 +28,402 @@ nav{
 .logo img{width:44px;height:44px;border-radius:50%;object-fit:contain;border:2px solid var(--green);padding:2px;background:white;}
 .logo-text{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--brown);font-weight:700;letter-spacing:0.05em;}
 .nav-links-center{display:flex;gap:28px;}
-.nav-links-center a{text-decoration:none;color:#333;font-size:0.9rem;font-weight:500;letter-spacing:0.02em;transition:color 0.2s;}
+.nav-links-center a{text-decoration:none;color:#333;font-size:0.9rem;font-weight:500;transition:color 0.2s;position:relative;}
+.nav-links-center a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--brown);transition:width 0.3s;border-radius:2px;}
 .nav-links-center a:hover{color:var(--brown);}
+.nav-links-center a:hover::after{width:100%;}
 .nav-right{display:flex;align-items:center;gap:20px;}
 .search-wrap{position:relative;}
-.search-wrap input{
-  padding:9px 16px 9px 36px;border-radius:25px;
-  border:1.5px solid #e8e8e8;outline:none;
-  background:#f5f5f5;font-size:0.85rem;font-family:'DM Sans',sans-serif;
-  transition:border-color 0.2s;width:180px;
-}
-.search-wrap input:focus{border-color:var(--brown);background:white;}
+.search-wrap input{padding:9px 16px 9px 36px;border-radius:25px;border:1.5px solid #e8e8e8;outline:none;background:#f5f5f5;font-size:0.85rem;font-family:'DM Sans',sans-serif;transition:all 0.3s;width:180px;}
+.search-wrap input:focus{border-color:var(--brown);background:white;width:220px;}
 .search-wrap::before{content:"⌕";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:1rem;color:#999;}
-.cart-btn{
-  position:relative;cursor:pointer;
-  background:var(--brown);color:white;
-  border:none;border-radius:25px;
-  padding:9px 18px;font-family:'DM Sans',sans-serif;
-  font-size:0.85rem;font-weight:500;
-  display:flex;align-items:center;gap:8px;transition:background 0.2s;
-}
-.cart-btn:hover{background:var(--brown-light);}
-#cart-count{
-  background:var(--gold);color:white;border-radius:50%;
-  width:18px;height:18px;font-size:11px;
-  display:flex;align-items:center;justify-content:center;font-weight:700;
-}
+.cart-btn{cursor:pointer;background:var(--brown);color:white;border:none;border-radius:25px;padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px;transition:all 0.3s;}
+.cart-btn:hover{background:var(--brown-light);transform:translateY(-1px);box-shadow:0 6px 20px rgba(78,52,46,0.3);}
+#cart-count{background:var(--gold);color:white;border-radius:50%;width:18px;height:18px;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:700;}
 
-/* ── HERO ── */
+/* ════════════════════════════════════════
+   HERO — CSS 3D POUCH
+════════════════════════════════════════ */
 .hero{
   min-height:92vh;
   display:grid;
-  grid-template-columns:40% 60%;
+  grid-template-columns:45% 55%;
   align-items:center;
   overflow:hidden;
-  background:linear-gradient(to right,#D8C3A5 60%,#e6d3b8 100%);
+  background:linear-gradient(135deg,#D8C3A5 0%,#c9b08e 50%,#e8d5ba 100%);
+  position:relative;
+}
+/* Ambient light blob */
+.hero::before{
+  content:'';position:absolute;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,168,83,0.18) 0%,transparent 70%);
+  right:-100px;top:50%;transform:translateY(-50%);
+  pointer-events:none;
 }
 .hero-text{
-  animation:fadeLeft 0.9s ease both;
   padding:70px 40px 70px 8%;
   display:flex;flex-direction:column;justify-content:center;
+  position:relative;z-index:2;
+  animation:fadeLeft 0.9s ease both;
 }
-.hero-tag{
-  display:inline-block;
-  background:rgba(22,163,74,0.1);color:var(--green);
-  padding:6px 16px;border-radius:20px;
-  font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
-  margin-bottom:20px;border:1px solid rgba(22,163,74,0.2);
-}
-.hero-text h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2.4rem,5vw,4rem);
-  font-weight:900;line-height:1.1;
-  color:#1a1a1a;margin-bottom:16px;
-}
-.hero-text h1 em{
-  color:var(--brown);font-style:normal;display:block;
-}
-.hero-text p{
-  font-size:1.05rem;color:#666;
-  line-height:1.7;max-width:420px;margin-bottom:36px;
-}
+.hero-tag{display:inline-block;background:rgba(22,163,74,0.12);color:var(--green);padding:6px 16px;border-radius:20px;font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;border:1px solid rgba(22,163,74,0.25);width:fit-content;}
+.hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.1;color:#1a1a1a;margin-bottom:16px;}
+.hero-text h1 em{color:var(--brown);font-style:normal;display:block;}
+.hero-text p{font-size:1.05rem;color:#5a4a3a;line-height:1.7;max-width:400px;margin-bottom:36px;}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
-.btn-hero-primary{
-  background:var(--brown);color:white;
-  padding:14px 32px;border-radius:40px;
-  border:none;font-family:'DM Sans',sans-serif;
-  font-size:0.95rem;font-weight:600;cursor:pointer;
-  box-shadow:0 8px 30px rgba(78,52,46,0.3);
-  transition:all 0.3s;letter-spacing:0.02em;
-}
-.btn-hero-primary:hover{background:var(--brown-light);transform:translateY(-2px);box-shadow:0 12px 40px rgba(78,52,46,0.4);}
-.btn-hero-secondary{
-  background:transparent;color:var(--brown);
-  padding:14px 32px;border-radius:40px;
-  border:2px solid var(--brown);
-  font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;
-  cursor:pointer;text-decoration:none;display:inline-block;
-  transition:all 0.3s;
-}
-.btn-hero-secondary:hover{background:var(--brown);color:white;}
-.hero-stats{
-  display:flex;gap:30px;margin-top:32px;flex-wrap:wrap;
-}
-.stat{text-align:center;}
+.btn-primary{background:var(--brown);color:white;padding:14px 32px;border-radius:40px;border:none;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(78,52,46,0.35);transition:all 0.3s;letter-spacing:0.02em;position:relative;overflow:hidden;}
+.btn-primary::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.2);border-radius:50%;transform:translate(-50%,-50%);transition:width 0.5s,height 0.5s;}
+.btn-primary:hover::after{width:300px;height:300px;}
+.btn-primary:hover{background:var(--brown-light);transform:translateY(-2px);box-shadow:0 14px 40px rgba(78,52,46,0.45);}
+.btn-secondary{background:transparent;color:var(--brown);padding:14px 32px;border-radius:40px;border:2px solid var(--brown);font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s;}
+.btn-secondary:hover{background:var(--brown);color:white;}
+.hero-stats{display:flex;gap:30px;margin-top:32px;flex-wrap:wrap;}
 .stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--brown);}
-.stat-label{font-size:0.75rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;}
+.stat-label{font-size:0.72rem;color:#888;text-transform:uppercase;letter-spacing:0.06em;}
 
-/* ── HERO IMAGE ── */
-.hero-image{
+/* ── 3D POUCH SCENE ── */
+.hero-3d{
   position:relative;
+  display:flex;justify-content:center;align-items:center;
+  height:100%;min-height:92vh;
+  perspective:1200px;
   animation:fadeRight 0.9s ease both;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  height:100%;
+  z-index:2;
 }
-.hero-image img.hero-bg-img{
-  width:2000px;
-  max-width:none;
+
+/* Scene wrapper that rotates on mouse */
+.scene{
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.08s linear;
+  cursor:grab;
+}
+.scene:active{cursor:grabbing;}
+
+/* The actual pouch */
+.pouch-wrap{
+  position:relative;
+  transform-style:preserve-3d;
+  animation:pouchFloat 4s ease-in-out infinite;
+}
+.pouch-img{
+  width:340px;
   height:auto;
-  object-fit:contain;
   display:block;
-  transform:translateX(40px);
-  mix-blend-mode:darken;
-  filter:brightness(1.08) contrast(1.05) saturate(1.05);
-  -webkit-mask-image:linear-gradient(to left,black 60%,transparent 100%),linear-gradient(to top,black 75%,transparent 100%);
-  mask-image:linear-gradient(to left,black 60%,transparent 100%),linear-gradient(to top,black 75%,transparent 100%);
-  -webkit-mask-composite:destination-in;
-  mask-composite:intersect;
-  -webkit-mask-repeat:no-repeat;
-  mask-repeat:no-repeat;
+  filter:drop-shadow(-20px 40px 60px rgba(78,52,46,0.35)) drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+  transform-origin:center bottom;
+  transition:filter 0.3s;
+}
+@keyframes pouchFloat{
+  0%,100%{transform:translateY(0px) rotateZ(0deg);}
+  33%{transform:translateY(-18px) rotateZ(1deg);}
+  66%{transform:translateY(-10px) rotateZ(-0.5deg);}
+}
+
+/* Glow ring behind pouch */
+.pouch-glow{
+  position:absolute;
+  width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,168,83,0.22) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:-1;
+  animation:glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.8;}
+  50%{transform:translate(-50%,-50%) scale(1.15);opacity:1;}
+}
+
+/* Shadow on floor */
+.pouch-shadow{
+  position:absolute;
+  bottom:-30px;left:50%;
+  transform:translateX(-50%);
+  width:220px;height:30px;
+  background:radial-gradient(ellipse,rgba(78,52,46,0.25) 0%,transparent 70%);
+  border-radius:50%;
+  animation:shadowAnim 4s ease-in-out infinite;
+}
+@keyframes shadowAnim{
+  0%,100%{transform:translateX(-50%) scaleX(1);opacity:0.6;}
+  33%{transform:translateX(-50%) scaleX(0.75);opacity:0.3;}
+  66%{transform:translateX(-50%) scaleX(0.85);opacity:0.4;}
+}
+
+/* Floating info badges around pouch */
+.badge{
+  position:absolute;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(16px);
+  border-radius:50px;
+  padding:9px 16px;
+  font-size:12px;font-weight:700;
+  color:var(--brown);
+  box-shadow:0 8px 32px rgba(78,52,46,0.18);
+  border:1px solid rgba(78,52,46,0.1);
+  white-space:nowrap;
+  display:flex;align-items:center;gap:7px;
+  z-index:10;
+  animation:badgeFloat var(--dur,3s) ease-in-out infinite;
+  animation-delay:var(--delay,0s);
+}
+@keyframes badgeFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.badge-1{top:12%;right:-20px;--delay:0s;--dur:3.2s;}
+.badge-2{top:32%;left:-30px;--delay:0.7s;--dur:3.8s;}
+.badge-3{bottom:30%;right:-15px;--delay:1.4s;--dur:3.4s;}
+.badge-4{bottom:14%;left:-20px;--delay:2.1s;--dur:3.6s;}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+.badge-dot.gold{background:var(--gold);}
+.badge-dot.red{background:#e74c3c;}
+
+/* Offer badge on pouch */
+.offer-badge{
+  position:absolute;
+  top:10px;right:10px;
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:white;width:72px;height:72px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:0.72rem;font-weight:800;text-align:center;line-height:1.2;
+  box-shadow:0 6px 20px rgba(231,76,60,0.45);
+  animation:offerPulse 2s ease-in-out infinite;
+  z-index:5;
+}
+@keyframes offerPulse{
+  0%,100%{transform:scale(1) rotate(0deg);}
+  50%{transform:scale(1.08) rotate(3deg);}
 }
 
 /* ── MARQUEE ── */
-.marquee-strip{
-  background:var(--brown);color:white;
-  padding:14px 0;overflow:hidden;
-}
-.marquee-inner{
-  display:flex;gap:40px;width:max-content;
-  animation:marquee 20s linear infinite;
-}
-.marquee-item{
-  display:flex;align-items:center;gap:10px;
-  white-space:nowrap;font-size:0.85rem;font-weight:500;letter-spacing:0.05em;
-}
+.marquee-strip{background:var(--brown);color:white;padding:14px 0;overflow:hidden;}
+.marquee-inner{display:flex;gap:40px;width:max-content;animation:marquee 22s linear infinite;}
+.marquee-item{display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:0.85rem;font-weight:500;letter-spacing:0.05em;}
 .marquee-dot{color:var(--gold);font-size:1.2rem;}
 
-/* ── SECTION BASE ── */
-.section{padding:90px 8%;text-align:center;}
-.section-tag{
-  display:inline-block;color:var(--brown);
-  font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;
-  margin-bottom:12px;
-}
-.section h2{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(2rem,4vw,3rem);font-weight:800;
-  color:#1a1a1a;margin-bottom:16px;
-}
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+/* ── SECTIONS ── */
+.section{padding:90px 8%;text-align:center;position:relative;z-index:1;}
+.section-tag{display:inline-block;color:var(--brown);font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px;}
+.section h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#1a1a1a;margin-bottom:16px;}
 .section-sub{color:#888;font-size:1rem;max-width:560px;margin:0 auto 50px;}
 
-/* ── WHY VANARA ── */
-.why-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:24px;margin-top:50px;
-}
-.why-card{
-  background:#D8C3A5;border-radius:24px;padding:32px 24px;
-  border:1px solid #f0ede8;
-  transition:all 0.35s;text-align:left;
-  position:relative;overflow:hidden;
-}
-.why-card::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:4px;
-  background:linear-gradient(90deg,var(--brown),var(--gold));
-  transform:scaleX(0);transform-origin:left;transition:transform 0.35s;
-}
-.why-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(78,52,46,0.1);}
+/* ── WHY CARDS ── */
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:50px;}
+.why-card{background:#D8C3A5;border-radius:24px;padding:32px 24px;border:1px solid rgba(78,52,46,0.08);transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);text-align:left;position:relative;overflow:hidden;cursor:default;}
+.why-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--brown),var(--gold));transform:scaleX(0);transform-origin:left;transition:transform 0.35s;}
+.why-card:hover{transform:perspective(600px) rotateX(-4deg) rotateY(4deg) translateY(-10px);box-shadow:0 30px 60px rgba(78,52,46,0.15);}
 .why-card:hover::before{transform:scaleX(1);}
 .why-icon{font-size:2rem;margin-bottom:16px;display:block;}
 .why-card h3{font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:10px;}
 .why-card p{font-size:0.88rem;color:#777;line-height:1.6;}
-.clean-tag{
-  margin-top:50px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;
-}
-.clean-pill{
-  background:#f5f0ea;color:var(--brown);
-  padding:8px 18px;border-radius:20px;
-  font-size:0.78rem;font-weight:600;letter-spacing:0.05em;
-  border:1px solid rgba(78,52,46,0.15);
-}
+.clean-tag{margin-top:50px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+.clean-pill{background:#f5f0ea;color:var(--brown);padding:8px 18px;border-radius:20px;font-size:0.78rem;font-weight:600;letter-spacing:0.05em;border:1px solid rgba(78,52,46,0.15);transition:all 0.3s;cursor:default;}
+.clean-pill:hover{background:var(--brown);color:white;transform:translateY(-2px);}
 
-/* ── PRODUCT ── */
+/* ── PRODUCT SECTION ── */
 .product-section{background:linear-gradient(135deg,#DCDCDC,#f5ede0);padding:90px 8%;}
-.product-layout{
-  display:flex;align-items:center;justify-content:center;
-  gap:60px;flex-wrap:wrap;margin-top:50px;
-}
+.product-layout{display:flex;align-items:center;justify-content:center;gap:60px;flex-wrap:wrap;margin-top:50px;}
 .product-image-wrap{position:relative;flex-shrink:0;}
-.product-ring{
-  width:250px;height:250px;border-radius:50%;
-  background:#966F33;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 30px 80px rgba(78,52,46,0.15);
-  position:relative;
-}
-.product-ring img{width:250px;height:250px;object-fit:contain;filter:drop-shadow(0 15px 30px rgba(0,0,0,0.1));}
-.product-badge-off{
-  position:absolute;top:-10px;right:-10px;
-  background:linear-gradient(135deg,#e74c3c,#c0392b);
-  color:white;width:80px;height:80px;border-radius:50%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-size:0.75rem;font-weight:800;box-shadow:0 5px 20px rgba(239,68,68,0.4);
-  text-align:center;line-height:1.2;
-}
+.product-ring{width:280px;height:280px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#b8864e,#966F33 60%,#7a5928);display:flex;align-items:center;justify-content:center;box-shadow:0 30px 80px rgba(78,52,46,0.25),inset 0 -20px 40px rgba(0,0,0,0.15);position:relative;animation:productFloat 4s ease-in-out infinite;}
+.product-ring::before{content:'';position:absolute;inset:-12px;border-radius:50%;background:conic-gradient(from 0deg,transparent 60%,rgba(212,168,83,0.35) 75%,transparent 85%);animation:ringRotate 4s linear infinite;}
+@keyframes productFloat{0%,100%{transform:translateY(0) rotateY(0deg);}25%{transform:translateY(-16px) rotateY(8deg);}75%{transform:translateY(-8px) rotateY(-8deg);}}
+@keyframes ringRotate{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.product-ring img{width:240px;height:240px;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.2));position:relative;z-index:1;}
+.orbit-wrapper{position:absolute;inset:-60px;animation:orbitSpin 10s linear infinite;pointer-events:none;}
+.orbit-dot{position:absolute;width:42px;height:42px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 16px rgba(78,52,46,0.2);}
+.orbit-dot:nth-child(1){top:0;left:50%;transform:translateX(-50%);}
+.orbit-dot:nth-child(2){bottom:0;left:50%;transform:translateX(-50%);}
+.orbit-dot:nth-child(3){left:0;top:50%;transform:translateY(-50%);}
+.orbit-dot:nth-child(4){right:0;top:50%;transform:translateY(-50%);}
+@keyframes orbitSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.product-badge-off{position:absolute;top:-10px;right:-10px;background:linear-gradient(135deg,#e74c3c,#c0392b);color:white;width:80px;height:80px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;box-shadow:0 5px 20px rgba(239,68,68,0.4);text-align:center;line-height:1.2;animation:badgePulse 2s ease-in-out infinite;}
+@keyframes badgePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
 .product-info{max-width:480px;text-align:left;}
-.product-info h3{
-  font-family:'Playfair Display',serif;
-  font-size:1.8rem;font-weight:800;color:#1a1a1a;margin-bottom:12px;
-}
+.product-info h3{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:#1a1a1a;margin-bottom:12px;}
 .product-info p{color:#666;font-size:0.95rem;line-height:1.7;margin-bottom:24px;}
 .price-row{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
 .price-new{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:800;color:var(--brown);}
 .price-old{font-size:1.1rem;color:#bbb;text-decoration:line-through;}
 .product-features{list-style:none;margin-bottom:28px;}
-.product-features li{
-  display:flex;align-items:center;gap:10px;
-  font-size:0.9rem;color:#555;padding:6px 0;
-  border-bottom:1px solid #f0ede8;
-}
+.product-features li{display:flex;align-items:center;gap:10px;font-size:0.9rem;color:#555;padding:8px 0;border-bottom:1px solid #f0ede8;transition:padding-left 0.2s;}
+.product-features li:hover{padding-left:6px;}
 .product-features li::before{content:'✓';color:var(--green);font-weight:700;}
-.buy-btn{
-  background:var(--brown);color:white;
-  padding:16px 40px;border-radius:40px;border:none;
-  font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;
-  cursor:pointer;box-shadow:0 8px 30px rgba(78,52,46,0.3);
-  transition:all 0.3s;width:100%;letter-spacing:0.03em;
-}
+.buy-btn{background:var(--brown);color:white;padding:16px 40px;border-radius:40px;border:none;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 8px 30px rgba(78,52,46,0.3);transition:all 0.3s;width:100%;letter-spacing:0.03em;position:relative;overflow:hidden;}
+.buy-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);transition:left 0.5s;}
+.buy-btn:hover::before{left:100%;}
 .buy-btn:hover{background:var(--brown-light);transform:translateY(-2px);box-shadow:0 14px 40px rgba(78,52,46,0.4);}
 
+/* ── INGREDIENTS ── */
+#ingredients{background:#0f0a06;padding:80px 0 60px;}
+#ingredients .section-tag{color:rgba(212,168,83,0.7);}
+#ingredients h2{color:#D4A853;font-family:'Playfair Display',serif;}
+#ingredients .section-sub{color:rgba(255,255,255,0.4);}
+.ing-intro{text-align:center;padding:0 8% 10px;}
+.macro-strip{display:flex;justify-content:center;background:#150e08;border-top:1px solid rgba(212,168,83,0.1);border-bottom:1px solid rgba(212,168,83,0.1);margin-bottom:32px;}
+.macro-item{flex:1;max-width:130px;padding:16px 8px;text-align:center;border-right:1px solid rgba(212,168,83,0.08);}
+.macro-item:last-child{border-right:none;}
+.macro-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#D4A853;}
+.macro-label{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;}
+.ingredients-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;padding:0 5% 16px;}
+.ing-card{background:linear-gradient(145deg,#1e1108,#160c05);border:1px solid rgba(212,168,83,0.12);border-radius:16px;padding:18px 14px;cursor:pointer;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);position:relative;overflow:hidden;}
+.ing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ing-accent),transparent);opacity:0;transition:opacity 0.3s;}
+.ing-card:hover{transform:translateY(-8px) scale(1.02);border-color:var(--ing-accent);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+.ing-card:hover::before{opacity:1;}
+.ing-card.active{border-color:var(--ing-accent);background:linear-gradient(145deg,#2a1a08,#1e1108);transform:translateY(-4px);}
+.ing-emoji{font-size:32px;display:block;margin-bottom:10px;text-align:center;}
+.ing-name{font-size:13px;font-weight:600;color:#fff;text-align:center;line-height:1.3;margin-bottom:4px;}
+.ing-type{font-size:10px;color:rgba(255,255,255,0.35);text-align:center;text-transform:uppercase;letter-spacing:0.06em;}
+.ing-bar{margin-top:10px;height:3px;border-radius:2px;background:rgba(255,255,255,0.08);}
+.ing-bar-fill{height:100%;border-radius:2px;background:var(--ing-accent);}
+.detail-panel{margin:0 5% 24px;background:linear-gradient(145deg,#1e1108,#150c05);border:1px solid rgba(212,168,83,0.2);border-radius:20px;padding:24px;display:none;animation:panelIn 0.35s ease;}
+.detail-panel.show{display:block;}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.detail-header{display:flex;align-items:center;gap:16px;margin-bottom:18px;}
+.detail-big-emoji{font-size:48px;}
+.detail-title{font-family:'Playfair Display',serif;font-size:22px;color:#D4A853;}
+.detail-subtitle{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;}
+.benefits-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.benefit-row{display:flex;align-items:flex-start;gap:10px;background:rgba(212,168,83,0.05);border-radius:10px;padding:10px 12px;border-left:2px solid rgba(212,168,83,0.3);}
+.benefit-icon-sm{font-size:16px;flex-shrink:0;margin-top:1px;}
+.benefit-text-sm{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.5;}
+.n-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.n-chip{background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.2);color:#D4A853;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;}
+.close-detail{float:right;background:rgba(255,255,255,0.07);border:none;color:rgba(255,255,255,0.5);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;transition:all 0.2s;}
+.close-detail:hover{background:rgba(255,255,255,0.15);color:#fff;}
+.how-to-strip{background:#120d06;border-top:1px solid rgba(212,168,83,0.1);padding:28px 5%;}
+.how-title{font-size:11px;color:rgba(212,168,83,0.5);text-transform:uppercase;letter-spacing:0.1em;text-align:center;margin-bottom:16px;}
+.how-steps{display:flex;gap:12px;}
+.how-step{flex:1;background:rgba(212,168,83,0.05);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid rgba(212,168,83,0.08);}
+.how-step-icon{font-size:24px;display:block;margin-bottom:8px;}
+.how-step-title{font-size:11px;font-weight:700;color:#D4A853;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em;}
+.how-step-desc{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5;}
+
 /* ── BENEFITS ── */
-.benefits-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:20px;margin-top:50px;
-}
-.benefit-card{
-  background:white;border-radius:20px;padding:28px;
-  border:1px solid #f0ede8;transition:all 0.3s;
-  display:flex;align-items:flex-start;gap:16px;text-align:left;
-}
-.benefit-card:hover{transform:translateY(-5px);box-shadow:0 16px 50px rgba(78,52,46,0.08);}
-.benefit-icon{
-  width:52px;height:52px;flex-shrink:0;border-radius:14px;
-  background:linear-gradient(135deg,var(--brown),var(--brown-light));
-  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
-}
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:50px;}
+.benefit-card{background:white;border-radius:20px;padding:28px;border:1px solid #f0ede8;transition:all 0.4s;display:flex;align-items:flex-start;gap:16px;text-align:left;}
+.benefit-card:hover{transform:translateY(-8px) rotateX(2deg);box-shadow:0 20px 60px rgba(78,52,46,0.12);border-color:rgba(78,52,46,0.2);}
+.benefit-icon{width:52px;height:52px;flex-shrink:0;border-radius:14px;background:linear-gradient(135deg,var(--brown),var(--brown-light));display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:transform 0.3s;}
+.benefit-card:hover .benefit-icon{transform:scale(1.1) rotate(-5deg);}
 .benefit-text h4{font-size:0.95rem;font-weight:700;color:#1a1a1a;margin-bottom:6px;}
 .benefit-text p{font-size:0.82rem;color:#888;line-height:1.5;}
 
 /* ── GALLERY ── */
-.gallery-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:16px;margin-top:50px;
-}
-.gallery-item{border-radius:20px;overflow:hidden;aspect-ratio:1;position:relative;}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:50px;}
+.gallery-item{border-radius:20px;overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer;transition:transform 0.4s;}
+.gallery-item:hover{transform:perspective(500px) rotateY(-6deg) scale(1.04);}
 .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s;}
-.gallery-overlay{
-  position:absolute;inset:0;background:rgba(78,52,46,0);
-  transition:background 0.3s;display:flex;align-items:center;justify-content:center;
-}
-.gallery-item:hover .gallery-overlay{background:rgba(78,52,46,0.3);}
+.gallery-overlay{position:absolute;inset:0;background:rgba(78,52,46,0);transition:background 0.3s;}
+.gallery-item:hover .gallery-overlay{background:rgba(78,52,46,0.25);}
 .gallery-item:hover img{transform:scale(1.08);}
 
+/* ── LAB ── */
+.lab-row-item{display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);transition:all 0.3s;}
+.lab-row-item:hover{transform:translateX(6px);}
+
+/* ── NUTRITION TABLE ── */
+.serving-btn{padding:10px 22px;border-radius:30px;border:2px solid var(--brown);background:transparent;color:var(--brown);font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.serving-btn.active,.serving-btn:hover{background:var(--brown);color:white;transform:translateY(-2px);}
+
 /* ── ABOUT ── */
-.about-inner{
-  max-width:800px;margin:0 auto;
-  background:white;border-radius:32px;padding:60px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.06);
-  border:1px solid #f0ede8;
-}
+.about-inner{max-width:800px;margin:0 auto;background:white;border-radius:32px;padding:60px;box-shadow:0 20px 60px rgba(0,0,0,0.06);border:1px solid #f0ede8;transition:box-shadow 0.3s;}
+.about-inner:hover{box-shadow:0 30px 80px rgba(78,52,46,0.1);}
 .about-inner p{font-size:1.05rem;color:#555;line-height:1.8;}
 
 /* ── CONTACT ── */
-.contact-cards{
-  display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:40px;
-}
-.contact-card{
-  background:white;border-radius:20px;padding:28px 36px;
-  border:1px solid #f0ede8;
-  display:flex;align-items:center;gap:16px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.04);
-  transition:box-shadow 0.3s;
-}
-.contact-card:hover{box-shadow:0 12px 40px rgba(78,52,46,0.1);}
-.contact-icon{font-size:2rem;}
+.contact-cards{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:40px;}
+.contact-card{background:white;border-radius:20px;padding:28px 36px;border:1px solid #f0ede8;display:flex;align-items:center;gap:16px;box-shadow:0 5px 20px rgba(0,0,0,0.04);transition:all 0.3s;}
+.contact-card:hover{box-shadow:0 16px 50px rgba(78,52,46,0.12);transform:translateY(-4px);}
+.contact-icon{font-size:2rem;transition:transform 0.3s;}
+.contact-card:hover .contact-icon{transform:scale(1.15);}
 .contact-info small{color:#999;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.05em;}
 .contact-info strong{display:block;font-size:0.95rem;color:#1a1a1a;margin-top:2px;}
 
 /* ── FOOTER ── */
-footer{
-  background:var(--dark);color:#888;
-  text-align:center;padding:32px 8%;
-  font-size:0.85rem;
-}
-footer .footer-top{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:20px;flex-wrap:wrap;gap:16px;
-}
+footer{background:var(--dark);color:#888;text-align:center;padding:32px 8%;font-size:0.85rem;}
+footer .footer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:16px;}
 .footer-logo{font-family:'Playfair Display',serif;color:white;font-size:1.4rem;font-weight:700;}
 .footer-links{display:flex;gap:20px;}
 .footer-links a{color:#888;text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
 .footer-links a:hover{color:white;}
 .footer-bottom{border-top:1px solid #222;padding-top:20px;}
 
-/* ── CHECKOUT MODAL ── */
-.checkout-modal{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);
-  display:none;justify-content:center;align-items:center;z-index:9999;
-  padding:20px;
-}
-.checkout-box{
-  background:white;padding:36px;border-radius:24px;
-  width:100%;max-width:420px;max-height:90vh;overflow-y:auto;
-  box-shadow:0 30px 80px rgba(0,0,0,0.2);
-  animation:slideUp 0.3s ease;
-}
+/* ── WHATSAPP FLOAT ── */
+.wa-float{position:fixed;bottom:28px;right:28px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:1.8rem;text-decoration:none;box-shadow:0 8px 30px rgba(37,211,102,0.4);z-index:9000;animation:waBounce 2.5s ease-in-out infinite;}
+.wa-float:hover{transform:scale(1.12);}
+@keyframes waBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+
+/* ── MODAL ── */
+.checkout-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;}
+.checkout-box{background:white;padding:36px;border-radius:24px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,0.2);animation:slideUp 0.3s ease;}
 .checkout-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
 .checkout-header h2{font-family:'Playfair Display',serif;font-size:1.4rem;color:#1a1a1a;}
-.close-btn{cursor:pointer;color:#888;background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-.checkout-box input{
-  width:100%;padding:13px 16px;border-radius:12px;
-  border:1.5px solid #e8e8e8;outline:none;
-  font-family:'DM Sans',sans-serif;font-size:0.9rem;margin-bottom:12px;
-  transition:border-color 0.2s;
-}
+.close-btn{cursor:pointer;color:#888;background:#f5f5f5;border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:background 0.2s;}
+.close-btn:hover{background:#e8e8e8;}
+.checkout-box input{width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid #e8e8e8;outline:none;font-family:'DM Sans',sans-serif;font-size:0.9rem;margin-bottom:12px;transition:border-color 0.2s;}
 .checkout-box input:focus{border-color:var(--brown);}
-.checkout-box .pay-btn{
-  width:100%;background:var(--brown);color:white;
-  padding:15px;border-radius:14px;border:none;
-  font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;
-  cursor:pointer;margin-top:8px;transition:background 0.2s;letter-spacing:0.03em;
-}
-.checkout-box .pay-btn:hover{background:var(--brown-light);}
-.order-summary{
-  background:#fdf6ee;border-radius:14px;padding:16px;
-  margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;
-}
+.checkout-box .pay-btn{width:100%;background:var(--brown);color:white;padding:15px;border-radius:14px;border:none;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;margin-top:8px;transition:all 0.3s;}
+.checkout-box .pay-btn:hover{background:var(--brown-light);transform:translateY(-1px);}
+.order-summary{background:#fdf6ee;border-radius:14px;padding:16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
 .order-summary span{font-size:0.85rem;color:#888;}
 .order-summary strong{font-size:1rem;color:var(--brown);font-weight:700;}
 
-/* ── ANIMATIONS ── */
+/* ── KEYFRAMES ── */
 @keyframes fadeLeft{from{opacity:0;transform:translateX(-40px);}to{opacity:1;transform:translateX(0);}}
 @keyframes fadeRight{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
 @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
 @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-/* ── MOBILE ── */
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-text{padding:50px 6% 30px;text-align:center;align-items:center;}
+  .hero-3d{min-height:50vh;padding:20px 0 40px;}
+  .badge{display:none;}
+  .pouch-img{width:260px;}
+}
 @media(max-width:768px){
   nav{padding:0 5%;height:62px;}
   .hamburger{display:flex;}
-  .nav-links-center{display:none;}
-  .search-wrap{display:none;}
+  .nav-links-center,.search-wrap{display:none;}
   .cart-btn span:not(#cart-count){display:none;}
   .cart-btn{padding:9px 14px;}
-
-  .hero{
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:space-between;
-    padding:20px 5%;
-    min-height:60vh;
-    gap:10px;
-  }
-  .hero-text{
-    flex:1;
-    padding:0;
-    text-align:left;
-  }
-  .hero-text h1{font-size:1.2rem;}
-  .hero-text p{font-size:0.7rem;margin-bottom:15px;}
-  .hero-cta{gap:8px;}
-  .btn-hero-primary,.btn-hero-secondary{padding:8px 16px;font-size:0.7rem;}
-  .hero-stats{display:none;}
-  .hero-tag{font-size:0.6rem;padding:4px 10px;margin-bottom:10px;}
-
-  .hero-image{
-    flex:1;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:visible;
-  }
-  .hero-image img.hero-bg-img{
-    width:100%;
-    max-width:1500px;
-    transform:translateX(40px);
-  }
-
-  .why-grid{grid-template-columns:1fr;}
-  .benefits-grid{grid-template-columns:1fr;}
+  .why-grid,.benefits-grid{grid-template-columns:1fr;}
   .gallery-grid{grid-template-columns:repeat(2,1fr);}
-
   .product-layout{flex-direction:column;text-align:center;}
-  .product-ring{width:280px;height:280px;}
-  .product-ring img{width:210px;height:210px;}
+  .product-ring{width:240px;height:240px;}
+  .product-ring img{width:200px;height:200px;}
   .product-info{max-width:100%;}
-  .product-info h3{text-align:center;}
-  .price-row{justify-content:center;}
+  .product-info h3,.price-row{text-align:center;justify-content:center;}
   .product-features{text-align:left;}
-
-  .about-inner{padding:36px 24px;}
-
+  .about-inner{padding:32px 20px;}
   .footer-top{flex-direction:column;align-items:center;text-align:center;}
   .footer-links{flex-wrap:wrap;justify-content:center;}
-
-  /* Lab section mobile */
-  #lab-certified .lab-inner{flex-direction:column;}
-  #nutrition .serving-btns{gap:8px;}
+  .how-steps{flex-direction:column;}
+  .macro-strip{flex-wrap:wrap;}
+  .macro-item{min-width:80px;}
+  .hero-stats{justify-content:center;}
 }
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-R03DT4CTCQ"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-R03DT4CTCQ');
-</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R03DT4CTCQ');</script>
 </head>
 <body>
 
-<!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar">
   🎉 Launching Offer — <span>20% OFF</span> on first order! Use code <span>VANARA20</span> &nbsp;|&nbsp; Free shipping above ₹499
 </div>
 
-<!-- NAV -->
-<nav>
+<nav id="main-nav">
   <div class="nav-left">
     <div class="hamburger"><span></span><span></span><span></span></div>
     <a href="#" class="logo">
@@ -476,420 +434,289 @@ gtag('config', 'G-R03DT4CTCQ');
   <div class="nav-links-center">
     <a href="#about">About</a>
     <a href="#products">Products</a>
+    <a href="#ingredients">Ingredients</a>
     <a href="#benefits">Benefits</a>
     <a href="#nutrition">Nutrition</a>
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-right">
-    <div class="search-wrap">
-      <input type="text" placeholder="Search...">
-    </div>
-    <button class="cart-btn" onclick="toggleCart()">
-      🛒 <span>Cart</span> <span id="cart-count">0</span>
-    </button>
+    <div class="search-wrap"><input type="text" placeholder="Search..."></div>
+    <button class="cart-btn" onclick="toggleCart()">🛒 <span>Cart</span> <span id="cart-count">0</span></button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
+<!-- ═══ HERO — REAL POUCH 3D ═══ -->
+<section class="hero" id="hero">
   <div class="hero-text">
     <span class="hero-tag">🌿 Natural · High Protein · Pure</span>
     <h1>Natural strength for <em>every generation</em></h1>
-    <p>From Nature to Strength — Premium nutrition mix crafted with the finest natural ingredients for every generation.</p>
+    <p>Ancient nutrition powered by modern protein science — 45g protein per 100g, zero chemicals, 9 superfoods.</p>
     <div class="hero-cta">
-      <button class="btn-hero-primary" onclick="openCheckout()">Buy Now — ₹499</button>
-      <a href="#products" class="btn-hero-secondary">Explore More</a>
+      <button class="btn-primary" onclick="openCheckout()">Buy Now — ₹499</button>
+      <a href="#products" class="btn-secondary">Explore More</a>
     </div>
     <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Natural</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">0</div>
-        <div class="stat-label">Chemicals</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">High</div>
-        <div class="stat-label">Protein</div>
-      </div>
+      <div class="stat"><div class="stat-num">45g</div><div class="stat-label">Protein/100g</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Chemicals</div></div>
+      <div class="stat"><div class="stat-num">9</div><div class="stat-label">Superfoods</div></div>
+      <div class="stat"><div class="stat-num">FSSAI</div><div class="stat-label">Certified</div></div>
     </div>
   </div>
-  <div class="hero-image">
-    <img class="hero-bg-img" src="images/bg.jpg" alt="VANARA Nutrition Mix">
+
+  <!-- 3D POUCH -->
+  <div class="hero-3d" id="hero3d">
+    <div class="scene" id="scene">
+      <div class="pouch-wrap" id="pouchWrap">
+        <div class="pouch-glow"></div>
+        <img class="pouch-img" src="images/pack1.png" alt="VANARA Nutrition Mix" id="pouchImg">
+        <div class="offer-badge"><span>20%</span><span>OFF</span></div>
+        <div class="pouch-shadow"></div>
+      </div>
+
+      <!-- Floating badges around pouch -->
+      <div class="badge badge-1"><div class="badge-dot"></div>45g Protein/100g</div>
+      <div class="badge badge-2"><div class="badge-dot gold"></div>FSSAI Certified</div>
+      <div class="badge badge-3"><div class="badge-dot"></div>9 Superfoods</div>
+      <div class="badge badge-4"><div class="badge-dot red"></div>20% Launch Offer</div>
+    </div>
   </div>
 </section>
 
-<!-- MARQUEE -->
+<!-- ═══ MARQUEE ═══ -->
 <div class="marquee-strip">
   <div class="marquee-inner">
-    <div class="marquee-item"><span class="marquee-dot">✦</span> HIGH PROTEIN</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> 45G PROTEIN PER 100G</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> NO CHEMICALS</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> NATURAL INGREDIENTS</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> NO PRESERVATIVES</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> GUT FRIENDLY</div>
-    <div class="marquee-item"><span class="marquee-dot">✦</span> BOOSTS ENERGY</div>
-    <div class="marquee-item"><span class="marquee-dot">✦</span> HIGH PROTEIN</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> RICH CHOCOLATE FLAVOR</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> FSSAI CERTIFIED</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> 9 SUPERFOODS</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> 45G PROTEIN PER 100G</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> NO CHEMICALS</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> NATURAL INGREDIENTS</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> NO PRESERVATIVES</div>
     <div class="marquee-item"><span class="marquee-dot">✦</span> GUT FRIENDLY</div>
-    <div class="marquee-item"><span class="marquee-dot">✦</span> BOOSTS ENERGY</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> RICH CHOCOLATE FLAVOR</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> FSSAI CERTIFIED</div>
+    <div class="marquee-item"><span class="marquee-dot">✦</span> 9 SUPERFOODS</div>
   </div>
 </div>
 
-<!-- WHY VANARA -->
+<!-- ═══ WHY VANARA ═══ -->
 <section class="section">
-  <span class="section-tag">Why Choose Us</span>
-  <h2>Why Choose VANARA</h2>
-  <p class="section-sub">We don't just sell — we genuinely care about your daily nutrition and long-term health.</p>
+  <span class="section-tag reveal">Why Choose Us</span>
+  <h2 class="reveal">Why Choose VANARA</h2>
+  <p class="section-sub reveal">We don't just sell — we genuinely care about your daily nutrition and long-term health.</p>
   <div class="why-grid">
-    <div class="why-card">
-      <span class="why-icon">🎯</span>
-      <h3>Purpose Driven</h3>
-      <p>VANARA is not made to just sell — it's made to genuinely improve your daily nutrition and wellbeing.</p>
-    </div>
-    <div class="why-card">
-      <span class="why-icon">⚡</span>
-      <h3>Powerful Blend</h3>
-      <p>Most products focus on just one thing. VANARA combines high protein and essential nutrition in one blend.</p>
-    </div>
-    <div class="why-card">
-      <span class="why-icon">🌅</span>
-      <h3>Easy Daily Use</h3>
-      <p>Fits effortlessly into your daily routine — mix with milk, oats, or smoothies in seconds.</p>
-    </div>
-    <div class="why-card">
-      <span class="why-icon">🔄</span>
-      <h3>Simple &amp; Consistent</h3>
-      <p>Designed to be easy, quick, and consistent — so you never skip your nutrition.</p>
-    </div>
+    <div class="why-card reveal"><span class="why-icon">🎯</span><h3>Purpose Driven</h3><p>VANARA is not made to just sell — it's made to genuinely improve your daily nutrition and wellbeing.</p></div>
+    <div class="why-card reveal"><span class="why-icon">⚡</span><h3>Powerful Blend</h3><p>9 superfoods combined — peanut, soy, seeds, nuts, sattu, cocoa in one perfect blend.</p></div>
+    <div class="why-card reveal"><span class="why-icon">🌅</span><h3>Easy Daily Use</h3><p>Mix with milk, oats, yogurt or smoothies in seconds — fits effortlessly into your daily routine.</p></div>
+    <div class="why-card reveal"><span class="why-icon">🏺</span><h3>Ancient Wisdom</h3><p>VANARA = Strong, Energetic. VEDA = Ancient knowledge. Science meets tradition in every scoop.</p></div>
   </div>
-  <div class="clean-tag">
+  <div class="clean-tag reveal">
     <span class="clean-pill">NO CHEMICALS</span>
     <span class="clean-pill">NO PRESERVATIVES</span>
-    <span class="clean-pill">NO REFINED SUGARS</span>
-    <span class="clean-pill">NATURAL INGREDIENTS</span>
+    <span class="clean-pill">ZERO REFINED SUGAR</span>
+    <span class="clean-pill">HIGH FIBER</span>
+    <span class="clean-pill">LOW SUGAR</span>
   </div>
 </section>
 
-<!-- PRODUCT -->
+<!-- ═══ PRODUCT ═══ -->
 <section id="products" class="product-section">
   <div style="text-align:center;">
-    <span class="section-tag">Our Product</span>
-    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#1a1a1a;margin-bottom:16px;">VANARA Nutrition Mix</h2>
-    <p style="color:#888;font-size:1rem;max-width:500px;margin:0 auto;">Premium quality, all-natural blend for strength, stamina &amp; daily wellness.</p>
+    <span class="section-tag reveal">Our Product</span>
+    <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#1a1a1a;margin-bottom:16px;">VANARA Nutrition Mix</h2>
+    <p class="reveal" style="color:#888;font-size:1rem;max-width:500px;margin:0 auto;">Premium quality, all-natural blend for strength, stamina &amp; daily wellness.</p>
   </div>
   <div class="product-layout">
-    <div class="product-image-wrap">
+    <div class="product-image-wrap reveal-left">
       <div class="product-ring">
+        <div class="orbit-wrapper">
+          <div class="orbit-dot">💪</div>
+          <div class="orbit-dot">🌿</div>
+          <div class="orbit-dot">⚡</div>
+          <div class="orbit-dot">✅</div>
+        </div>
         <img src="images/pack1.png" alt="VANARA Pack">
         <div class="product-badge-off"><span>20%</span><span>OFF</span></div>
       </div>
     </div>
-    <div class="product-info">
+    <div class="product-info reveal-right">
       <h3>VANARA Natural Protein Nutrition Mix</h3>
-      <p>A powerful blend of natural proteins and essential nutrients crafted to support your strength, stamina, and everyday health — for all generations.</p>
+      <p>Rich Chocolate Flavor — 9 natural superfoods in one powerful blend crafted to support strength, stamina, and everyday health for all generations.</p>
       <div class="price-row">
         <span class="price-new">₹499</span>
         <span class="price-old">₹699</span>
         <span style="background:#dcfce7;color:#16a34a;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;">Save ₹200</span>
       </div>
       <ul class="product-features">
-        <li>High protein per serving</li>
-        <li>Zero chemicals &amp; preservatives</li>
-        <li>Gut-friendly natural formula</li>
-        <li>Mix with milk, oats or smoothies</li>
-        <li>Suitable for all age groups</li>
+        <li>45g protein per 100g — NABL lab certified</li>
+        <li>9 superfoods: peanut, soy, almonds, cashews, pumpkin &amp; sunflower seeds, sattu, cocoa, jaggery</li>
+        <li>Zero chemicals, preservatives &amp; refined sugar</li>
+        <li>Rich Chocolate flavor — 400g, ~13 servings</li>
+        <li>Suitable for all age groups &amp; families</li>
+        <li>FSSAI Approved · NABL Lab Tested · ISO Certified</li>
       </ul>
       <button class="buy-btn" onclick="openCheckout()">🛒 Buy Now — ₹499</button>
     </div>
   </div>
 </section>
 
-<!-- BENEFITS -->
+<!-- ═══ INGREDIENTS ═══ -->
+<section id="ingredients">
+  <div class="ing-intro">
+    <span class="section-tag reveal">Inside Every Pack</span>
+    <h2 class="reveal" style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:800;margin-bottom:12px;">9 Power Ingredients</h2>
+    <p class="section-sub reveal" style="margin-bottom:0;">Tap any ingredient to discover its benefits</p>
+  </div>
+  <div class="macro-strip">
+    <div class="macro-item"><div class="macro-val">45g</div><div class="macro-label">Protein</div></div>
+    <div class="macro-item"><div class="macro-val">11g</div><div class="macro-label">Fiber</div></div>
+    <div class="macro-item"><div class="macro-val">424</div><div class="macro-label">Kcal</div></div>
+    <div class="macro-item"><div class="macro-val">2.4g</div><div class="macro-label">Sugars</div></div>
+    <div class="macro-item"><div class="macro-val">30g</div><div class="macro-label">Serving</div></div>
+    <div class="macro-item"><div class="macro-val">400g</div><div class="macro-label">Net Wt</div></div>
+  </div>
+  <div class="ingredients-grid" id="ing-grid"></div>
+  <div class="detail-panel" id="ing-detail"></div>
+  <div class="how-to-strip">
+    <div class="how-title">How to use Vanara</div>
+    <div class="how-steps">
+      <div class="how-step"><span class="how-step-icon">🥛</span><div class="how-step-title">Mix</div><div class="how-step-desc">1 scoop (30g) with 250ml water or chilled milk. Shake well until smooth.</div></div>
+      <div class="how-step"><span class="how-step-icon">🥣</span><div class="how-step-title">Boost</div><div class="how-step-desc">Sprinkle over oats, yogurt, or blend into your favorite fruit smoothie.</div></div>
+      <div class="how-step"><span class="how-step-icon">📅</span><div class="how-step-title">Routine</div><div class="how-step-desc">1–2 servings daily as part of a balanced diet for best results.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BENEFITS ═══ -->
 <section id="benefits" class="section">
-  <span class="section-tag">Benefits</span>
-  <h2>Key Benefits</h2>
-  <p class="section-sub">Everything your body needs, packed into one powerful daily mix.</p>
+  <span class="section-tag reveal">Benefits</span>
+  <h2 class="reveal">Key Benefits</h2>
+  <p class="section-sub reveal">Everything your body needs, packed into one powerful daily mix.</p>
   <div class="benefits-grid">
-    <div class="benefit-card">
-      <div class="benefit-icon">💪</div>
-      <div class="benefit-text">
-        <h4>High Protein Nutrition</h4>
-        <p>Delivers premium protein to support muscle recovery and daily strength requirements.</p>
-      </div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">⚡</div>
-      <div class="benefit-text">
-        <h4>Boosts Energy</h4>
-        <p>Natural energy-boosting compounds to keep you active and energized all day.</p>
-      </div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🏋️</div>
-      <div class="benefit-text">
-        <h4>Muscle Growth Support</h4>
-        <p>Essential amino acids and nutrients to fuel lean muscle growth naturally.</p>
-      </div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🌿</div>
-      <div class="benefit-text">
-        <h4>Supports Daily Nutrition</h4>
-        <p>A complete nutritional companion — fills daily gaps with vitamins and minerals.</p>
-      </div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🫁</div>
-      <div class="benefit-text">
-        <h4>Improves Digestion</h4>
-        <p>Natural digestive enzymes and fiber support healthy, smooth digestion.</p>
-      </div>
-    </div>
-    <div class="benefit-card">
-      <div class="benefit-icon">🦠</div>
-      <div class="benefit-text">
-        <h4>Gut-Friendly Formula</h4>
-        <p>Crafted to be gentle on your gut — no artificial additives or harsh chemicals.</p>
-      </div>
-    </div>
+    <div class="benefit-card reveal"><div class="benefit-icon">💪</div><div class="benefit-text"><h4>High Protein Nutrition</h4><p>45g protein per 100g from 4 plant sources + milk — complete amino acid profile for muscle support.</p></div></div>
+    <div class="benefit-card reveal"><div class="benefit-icon">⚡</div><div class="benefit-text"><h4>Boosts Energy</h4><p>Sattu + complex carbs provide slow-release energy — no sugar spikes, no crashes.</p></div></div>
+    <div class="benefit-card reveal"><div class="benefit-icon">🏋️</div><div class="benefit-text"><h4>Muscle Growth Support</h4><p>Essential amino acids from soy, peanut and nut blend fuel lean muscle growth naturally.</p></div></div>
+    <div class="benefit-card reveal"><div class="benefit-icon">🌿</div><div class="benefit-text"><h4>Supports Daily Nutrition</h4><p>9 superfoods in one scoop — vitamins, minerals, fiber, healthy fats all covered.</p></div></div>
+    <div class="benefit-card reveal"><div class="benefit-icon">🫁</div><div class="benefit-text"><h4>Improves Digestion</h4><p>11g dietary fiber per 100g — gut-friendly formula with natural digestive support.</p></div></div>
+    <div class="benefit-card reveal"><div class="benefit-icon">🧠</div><div class="benefit-text"><h4>Brain &amp; Mood Support</h4><p>Cocoa theobromine + cashew copper + almond Vitamin E support focus, mood and cognitive health.</p></div></div>
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="section" style="background:linear-gradient(135deg,#fdf6ee,#f5ede0);border-radius:0;">
-  <span class="section-tag">Gallery</span>
-  <h2>Our Gallery</h2>
-  <p class="section-sub">A closer look at VANARA's natural goodness.</p>
+<!-- ═══ GALLERY ═══ -->
+<section class="section" style="background:linear-gradient(135deg,#fdf6ee,#f5ede0);">
+  <span class="section-tag reveal">Gallery</span>
+  <h2 class="reveal">Our Gallery</h2>
+  <p class="section-sub reveal">A closer look at VANARA's natural goodness.</p>
   <div class="gallery-grid">
-    <div class="gallery-item">
-      <img src="images/pack1.png" alt="VANARA Pack 1">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item">
-      <img src="images/pack2.png" alt="VANARA Pack 2">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item">
-      <img src="images/pack3.png" alt="VANARA Pack 3">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item">
-      <img src="images/pack5.png" alt="VANARA Pack 5">
-      <div class="gallery-overlay"></div>
-    </div>
-    <div class="gallery-item">
-      <img src="images/pack4.jpg" alt="VANARA Pack 4">
-      <div class="gallery-overlay"></div>
-    </div>
+    <div class="gallery-item reveal"><img src="images/pack1.png" alt="VANARA Pack 1"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal"><img src="images/pack2.png" alt="VANARA Pack 2"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal"><img src="images/pack3.png" alt="VANARA Pack 3"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal"><img src="images/pack5.png" alt="VANARA Pack 5"><div class="gallery-overlay"></div></div>
+    <div class="gallery-item reveal"><img src="images/pack4.jpg" alt="VANARA Pack 4"><div class="gallery-overlay"></div></div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     NEW SECTION 1 — FSSAI CERTIFIED & LAB TESTED
-     ══════════════════════════════════════════════════ -->
+<!-- ═══ LAB CERTIFIED ═══ -->
 <section id="lab-certified" class="section" style="background:#fff;">
-  <span class="section-tag">Quality Assurance</span>
-  <h2>FSSAI Certified &amp; Lab Tested</h2>
-  <p class="section-sub">Every batch tested by Care Labs — an NABL Accredited, ISO 45001:2018 Certified Laboratory recognized by the Govt. of India.</p>
-
+  <span class="section-tag reveal">Quality Assurance</span>
+  <h2 class="reveal">FSSAI Certified &amp; Lab Tested</h2>
+  <p class="section-sub reveal">Every batch tested by Care Labs — NABL Accredited, ISO 45001:2018 Certified, Govt. of India recognized.</p>
   <div style="display:flex;align-items:center;justify-content:center;gap:48px;flex-wrap:wrap;margin-top:50px;">
-
-    <!-- Trust Badges -->
-    <div style="display:flex;flex-direction:column;gap:16px;max-width:320px;">
-      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
-        <span style="font-size:2rem;">🏛️</span>
-        <div style="text-align:left;">
-          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">FSSAI Approved</div>
-          <div style="font-size:0.82rem;color:#777;margin-top:2px;">Food Safety Standards Authority of India</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
-        <span style="font-size:2rem;">🔬</span>
-        <div style="text-align:left;">
-          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">NABL Accredited Lab</div>
-          <div style="font-size:0.82rem;color:#777;margin-top:2px;">Care Labs — TC 12742, Hyderabad</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
-        <span style="font-size:2rem;">✅</span>
-        <div style="text-align:left;">
-          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">ISO 45001:2018 Certified</div>
-          <div style="font-size:0.82rem;color:#777;margin-top:2px;">International quality &amp; safety standards</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:16px;background:#f5f0ea;border-radius:16px;padding:20px 24px;border:1px solid rgba(78,52,46,0.1);">
-        <span style="font-size:2rem;">🌿</span>
-        <div style="text-align:left;">
-          <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">No Chemicals / Preservatives</div>
-          <div style="font-size:0.82rem;color:#777;margin-top:2px;">Lab confirmed — 100% natural formula</div>
-        </div>
-      </div>
+    <div class="reveal-left" style="display:flex;flex-direction:column;gap:16px;max-width:320px;">
+      <div class="lab-row-item"><span style="font-size:2rem;">🏛️</span><div style="text-align:left;"><div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">FSSAI Approved</div><div style="font-size:0.82rem;color:#777;margin-top:2px;">Food Safety Standards Authority of India</div></div></div>
+      <div class="lab-row-item"><span style="font-size:2rem;">🔬</span><div style="text-align:left;"><div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">NABL Accredited Lab</div><div style="font-size:0.82rem;color:#777;margin-top:2px;">Care Labs — TC 12742, Hyderabad</div></div></div>
+      <div class="lab-row-item"><span style="font-size:2rem;">✅</span><div style="text-align:left;"><div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">ISO 45001:2018 Certified</div><div style="font-size:0.82rem;color:#777;margin-top:2px;">International quality &amp; safety standards</div></div></div>
+      <div class="lab-row-item"><span style="font-size:2rem;">🌿</span><div style="text-align:left;"><div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">No Chemicals / Preservatives</div><div style="font-size:0.82rem;color:#777;margin-top:2px;">Lab confirmed — 100% natural formula</div></div></div>
     </div>
-
-    <!-- Lab Report Photo -->
-    <div style="position:relative;flex-shrink:0;">
-      <div style="border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(78,52,46,0.18);border:3px solid #D4A853;max-width:340px;">
-        <img src="images/labreport.PNG" alt="Care Labs FSSAI Test Report — VANARA Nutrition Mix"
-             style="width:100%;display:block;">
+    <div class="reveal" style="position:relative;flex-shrink:0;">
+      <div style="border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(78,52,46,0.18);border:3px solid #D4A853;max-width:340px;transition:transform 0.4s;" onmouseenter="this.style.transform='scale(1.02)'" onmouseleave="this.style.transform='scale(1)'">
+        <img src="images/labreport.PNG" alt="Lab Report" style="width:100%;display:block;">
       </div>
-      <div style="position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
-                  background:linear-gradient(135deg,#4E342E,#6F4E37);color:white;
-                  padding:10px 26px;border-radius:30px;white-space:nowrap;
-                  font-size:0.78rem;font-weight:700;letter-spacing:0.07em;
-                  box-shadow:0 6px 20px rgba(78,52,46,0.35);">
-        ✔ LAB VERIFIED — MARCH 2026
-      </div>
+      <div style="position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#4E342E,#6F4E37);color:white;padding:10px 26px;border-radius:30px;white-space:nowrap;font-size:0.78rem;font-weight:700;letter-spacing:0.07em;box-shadow:0 6px 20px rgba(78,52,46,0.35);">✔ LAB VERIFIED — MARCH 2026</div>
     </div>
-    <div style="display:flex;align-items:center;gap:16px;background:#f0fdf4;border-radius:16px;padding:20px 24px;border:1px solid rgba(22,163,74,0.2);">
-  <span style="font-size:2rem;">🏛️</span>
-  <div style="text-align:left;">
-    <div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">FSSAI Registered</div>
-    <div style="font-size:0.82rem;color:#16a34a;margin-top:2px;font-weight:600;">Reg No: 23626031001983</div>
-    <div style="font-size:0.75rem;color:#777;margin-top:2px;">Valid Upto: 16-04-2027 · Govt of Telangana</div>
-  </div>
-</div>
+    <div class="reveal-right" style="display:flex;align-items:center;gap:16px;background:#f0fdf4;border-radius:16px;padding:20px 24px;border:1px solid rgba(22,163,74,0.2);">
+      <span style="font-size:2rem;">🏛️</span>
+      <div style="text-align:left;"><div style="font-weight:700;font-size:0.95rem;color:#1a1a1a;">FSSAI Registered</div><div style="font-size:0.82rem;color:#16a34a;margin-top:2px;font-weight:600;">Reg No: 23626031001983</div><div style="font-size:0.75rem;color:#777;margin-top:2px;">Valid Upto: 16-04-2027 · Govt of Telangana</div></div>
+    </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════
-     NEW SECTION 2 — NUTRITION CALCULATOR
-     ══════════════════════════════════════════════════ -->
+<!-- ═══ NUTRITION ═══ -->
 <section id="nutrition" class="section" style="background:linear-gradient(135deg,#fdf6ee,#f5ede0);">
-  <span class="section-tag">Nutrition Facts</span>
-  <h2>Nutrition Calculator</h2>
-  <p class="section-sub">Select your serving size and see exact nutritional values — based on our official FSSAI lab report.</p>
-
-  <!-- Per 100g highlight stats -->
-  <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:30px;margin-bottom:44px;">
-    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">49.6g</div>
-      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Protein</div>
-    </div>
-    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">11.6g</div>
-      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Fat</div>
-    </div>
-    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">30.4g</div>
-      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Carbs</div>
-    </div>
-    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">2.5g</div>
-      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Sugars</div>
-    </div>
-    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;">
-      <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">424</div>
-      <div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Kcal</div>
-    </div>
-    <div style="background:#f0fdf4;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(22,163,74,0.2);min-width:90px;display:flex;align-items:center;justify-content:center;">
-      <div style="font-size:0.72rem;color:#16a34a;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;line-height:1.4;">Per<br>100g</div>
-    </div>
+  <span class="section-tag reveal">Nutrition Facts</span>
+  <h2 class="reveal">Nutrition Calculator</h2>
+  <p class="section-sub reveal">Select serving size — values from official FSSAI lab report.</p>
+  <div class="reveal" style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:30px;margin-bottom:44px;">
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;transition:all 0.3s;cursor:default;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 30px rgba(78,52,46,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''"><div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">45g</div><div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Protein</div></div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;transition:all 0.3s;cursor:default;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 30px rgba(78,52,46,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''"><div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">11.5g</div><div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Fat</div></div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;transition:all 0.3s;cursor:default;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 30px rgba(78,52,46,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''"><div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">30.3g</div><div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Carbs</div></div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;transition:all 0.3s;cursor:default;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 30px rgba(78,52,46,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''"><div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">2.4g</div><div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Sugars</div></div>
+    <div style="background:white;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(78,52,46,0.12);min-width:105px;transition:all 0.3s;cursor:default;" onmouseenter="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 30px rgba(78,52,46,0.1)'" onmouseleave="this.style.transform='';this.style.boxShadow=''"><div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:#4E342E;">424</div><div style="font-size:0.72rem;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">Kcal</div></div>
+    <div style="background:#f0fdf4;border-radius:16px;padding:16px 22px;text-align:center;border:1px solid rgba(22,163,74,0.2);min-width:90px;display:flex;align-items:center;justify-content:center;"><div style="font-size:0.72rem;color:#16a34a;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;line-height:1.4;">Per<br>100g</div></div>
   </div>
-
-  <!-- Calculator Card -->
-  <div style="max-width:700px;margin:0 auto;">
+  <div class="reveal" style="max-width:700px;margin:0 auto;">
     <div style="background:white;border-radius:24px;padding:36px;box-shadow:0 10px 40px rgba(78,52,46,0.08);border:1px solid rgba(78,52,46,0.08);">
-
       <p style="font-weight:700;font-size:0.88rem;color:#4E342E;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.07em;">👇 Choose Your Serving Size:</p>
-
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;">
-        <button onclick="calcServing(20)" id="sb-20"
-          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
-                 background:#4E342E;color:white;font-family:'DM Sans',sans-serif;
-                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">20g</button>
-        <button onclick="calcServing(25)" id="sb-25"
-          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
-                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
-                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">25g</button>
-        <button onclick="calcServing(30)" id="sb-30"
-          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
-                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
-                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">30g</button>
-        <button onclick="calcServing(40)" id="sb-40"
-          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
-                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
-                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">40g</button>
-        <button onclick="calcServing(50)" id="sb-50"
-          style="padding:10px 22px;border-radius:30px;border:2px solid #4E342E;
-                 background:transparent;color:#4E342E;font-family:'DM Sans',sans-serif;
-                 font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;">50g</button>
+        <button class="serving-btn active" onclick="calcServing(20,this)">20g</button>
+        <button class="serving-btn" onclick="calcServing(25,this)">25g</button>
+        <button class="serving-btn" onclick="calcServing(30,this)">30g</button>
+        <button class="serving-btn" onclick="calcServing(40,this)">40g</button>
+        <button class="serving-btn" onclick="calcServing(50,this)">50g</button>
       </div>
-
-      <!-- Nutrition Table -->
       <div style="overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;" id="nutrition-table">
-          <thead>
-            <tr style="background:#4E342E;color:white;">
-              <th style="padding:12px 16px;text-align:left;border-radius:10px 0 0 0;font-weight:600;">Nutrient</th>
-              <th style="padding:12px 16px;text-align:center;font-weight:600;">Per 100g</th>
-              <th style="padding:12px 16px;text-align:center;border-radius:0 10px 0 0;font-weight:600;" id="th-serving">Per 20g Serving</th>
-            </tr>
-          </thead>
-          <tbody id="nutrition-tbody">
-          </tbody>
+        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+          <thead><tr style="background:#4E342E;color:white;"><th style="padding:12px 16px;text-align:left;border-radius:10px 0 0 0;font-weight:600;">Nutrient</th><th style="padding:12px 16px;text-align:center;font-weight:600;">Per 100g</th><th style="padding:12px 16px;text-align:center;border-radius:0 10px 0 0;font-weight:600;" id="th-serving">Per 20g Serving</th></tr></thead>
+          <tbody id="nutrition-tbody"></tbody>
         </table>
       </div>
-
-      <p style="font-size:0.73rem;color:#bbb;margin-top:16px;text-align:center;">
-        * Values based on FSSAI-certified Care Labs Test Report · Ref: CL/C/F/0290/03/26-001/26 · Dated 14.03.2026
-      </p>
+      <p style="font-size:0.73rem;color:#bbb;margin-top:16px;text-align:center;">* Values based on FSSAI-certified Care Labs Test Report · Ref: CL/C/F/0290/03/26-001/26 · Dated 14.03.2026</p>
     </div>
   </div>
 </section>
 
-<!-- ABOUT -->
+<!-- ═══ ABOUT ═══ -->
 <section id="about" class="section">
-  <span class="section-tag">Our Story</span>
-  <h2>About VANARA</h2>
-  <div class="about-inner">
-    <p>VANARA high protein nutrition mix is made with natural ingredients to support strength, stamina, and overall health. Designed for all generations, our formula brings together the best of nature — pure, powerful, and purpose-built for your daily nutrition needs. No shortcuts, no chemicals — just honest nutrition from nature to you.</p>
+  <span class="section-tag reveal">Our Story</span>
+  <h2 class="reveal">About VANARA</h2>
+  <div class="about-inner reveal">
+    <p><strong style="color:var(--brown);">VANARA</strong> = Strong, Energetic. <strong style="color:var(--brown);">VEDA</strong> = Ancient knowledge.<br><br>
+    VANARA high protein nutrition mix is made with 9 natural superfoods — defatted peanut flour, soy flour, pumpkin seeds, sunflower seeds, almonds, cashews, sattu (roasted chana), cocoa powder, and natural jaggery sweetener.<br><br>
+    No shortcuts, no chemicals — just honest nutrition from nature to you. <em>"Ancient nutrition powered by modern protein science."</em></p>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ═══ CONTACT ═══ -->
 <section id="contact" class="section">
-  <span class="section-tag">Get in Touch</span>
-  <h2>Contact Us</h2>
-  <p class="section-sub">We'd love to hear from you. Reach out anytime.</p>
+  <span class="section-tag reveal">Get in Touch</span>
+  <h2 class="reveal">Contact Us</h2>
+  <p class="section-sub reveal">We'd love to hear from you. Reach out anytime.</p>
   <div class="contact-cards">
-    <div class="contact-card">
-      <div class="contact-icon">📞</div>
-      <div class="contact-info">
-        <small>Phone</small>
-        <strong>9866149830</strong>
-      </div>
-    </div>
-    <div class="contact-card">
-      <div class="contact-icon">📧</div>
-      <div class="contact-info">
-        <small>Email</small>
-        <strong>vanaraveda@email.com</strong>
-      </div>
-    </div>
+    <div class="contact-card reveal-left"><div class="contact-icon">📞</div><div class="contact-info"><small>Phone</small><strong>9866149830</strong></div></div>
+    <div class="contact-card reveal-right"><div class="contact-icon">📧</div><div class="contact-info"><small>Email</small><strong>vanaraveda@email.com</strong></div></div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-top">
     <div class="footer-logo">VANARA</div>
     <div class="footer-links">
-      <a href="#about">About</a>
-      <a href="#products">Products</a>
-      <a href="#benefits">Benefits</a>
-      <a href="#nutrition">Nutrition</a>
-      <a href="#contact">Contact</a>
+      <a href="#about">About</a><a href="#products">Products</a><a href="#ingredients">Ingredients</a>
+      <a href="#benefits">Benefits</a><a href="#nutrition">Nutrition</a><a href="#contact">Contact</a>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2026 VANARA · High Protein Nutrition Mix · Made with ❤️ from Nature</p>
-  </div>
+  <div class="footer-bottom"><p>© 2026 VANARA · High Protein Nutrition Mix · Made with ❤️ from Nature · FSSAI Reg: 23626031001983</p></div>
 </footer>
 
-<!-- CHECKOUT MODAL -->
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/919866149830?text=Hi%20VANARA%2C%20I%20want%20to%20know%20more%20about%20your%20product!" class="wa-float" target="_blank">💬</a>
+
+<!-- Checkout Modal -->
 <div id="checkoutModal" class="checkout-modal">
   <div class="checkout-box">
     <div class="checkout-header">
@@ -914,160 +741,228 @@ gtag('config', 'G-R03DT4CTCQ');
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-const PRICE_PER_UNIT = 499;
 
-function updateTotal() {
-  const qty = Math.min(parseInt(document.getElementById("qty").value) || 1, 20);
-  document.getElementById("qty-display").textContent = qty;
-  document.getElementById("total-display").textContent = "₹" + (qty * PRICE_PER_UNIT);
-}
-
-function openCheckout() {
-  document.getElementById("checkoutModal").style.display = "flex";
-}
-
-function closeCheckout() {
-  document.getElementById("checkoutModal").style.display = "none";
-}
-
-function toggleCart() {
-  alert("Cart feature coming soon!");
-}
-
-window.onclick = function(e) {
-  const modal = document.getElementById("checkoutModal");
-  if (e.target === modal) modal.style.display = "none";
-}
-
-async function proceedToPayment() {
-  const btn = document.querySelector(".pay-btn");
-  btn.textContent = "Processing...";
-
-  const name    = document.getElementById("name").value.trim();
-  const phone   = document.getElementById("phone").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const city    = document.getElementById("city").value.trim();
-  const pincode = document.getElementById("pincode").value.trim();
-  const state   = document.getElementById("state").value.trim();
-  const country = document.getElementById("country").value.trim();
-  const qty = Math.min(parseInt(document.getElementById("qty").value) || 1, 20);
-
-  if (qty <= 0) { alert("Invalid quantity"); btn.textContent = "🔒 Confirm & Pay"; return; }
-  if (!name || !phone || !address || !city || !pincode || !state || !country) {
-    alert("Please fill all details"); btn.textContent = "🔒 Confirm & Pay"; return;
-  }
-
-  const cleanedPhone = phone.replace(/\D/g, "");
-  if (cleanedPhone.length !== 10) {
-    alert("Enter valid 10 digit phone number"); btn.textContent = "🔒 Confirm & Pay"; return;
-  }
-
-  try {
-    const res = await fetch("https://vanara-backend.onrender.com/create-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ qty })
-    });
-    const order = await res.json();
-    if (!order.id) { alert("Order creation failed"); btn.textContent = "🔒 Confirm & Pay"; return; }
-
-    var options = {
-      key: "rzp_live_SctSTXCaMANu9C",
-      amount: order.amount,
-      currency: "INR",
-      name: "VANARA",
-      description: "High Protein Nutrition Mix",
-      order_id: order.id,
-      handler: async function(response) {
-        try {
-          const verifyRes = await fetch("https://vanara-backend.onrender.com/verify-payment", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response)
-          });
-          const result = await verifyRes.json();
-          if (result.status !== "success") { alert("❌ Payment verification failed"); return; }
-
-          const saveRes = await fetch("https://vanara-backend.onrender.com/save-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              name, phone: cleanedPhone, address, city, state, country, pincode, qty,
-              amount: order.amount / 100,
-              razorpay_order_id:   response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature:  response.razorpay_signature
-            })
-          });
-          const saveResult = await saveRes.json();
-          if (saveResult.status !== "success") { alert("❌ Order save failed"); return; }
-
-          alert("✅ Order Confirmed!");
-          window.location.href = "success.html";
-        } catch(err) { console.error(err); alert("❌ Server Error"); }
-      },
-      prefill: { name: name, contact: cleanedPhone },
-      theme: { color: "#4E342E" },
-      modal: { ondismiss: function() { alert("❌ Payment Cancelled"); btn.textContent = "🔒 Confirm & Pay"; } }
-    };
-
-    var rzp = new Razorpay(options);
-    rzp.on('payment.failed', function() { alert("❌ Payment Failed\nTry again!"); btn.textContent = "🔒 Confirm & Pay"; });
-    rzp.open();
-  } catch(err) { console.error(err); alert("❌ Server Error"); btn.textContent = "🔒 Confirm & Pay"; }
-}
-
-/* ── NUTRITION CALCULATOR ── */
+/* ══════════════════════════════════════
+   REAL POUCH 3D — CSS MOUSE FOLLOW
+══════════════════════════════════════ */
 (function(){
-  var nutrients = [
-    { name:"💪 Protein",      unit:"g",    per100:45, highlight:true  },
-    { name:"Fat",             unit:"g",    per100:11.58, highlight:false },
-    { name:"Carbohydrates",   unit:"g",    per100:30.39, highlight:false },
-    { name:"Total Sugars",    unit:"g",    per100:2.53,  highlight:false },
-    { name:"Energy",          unit:"Kcal", per100:424.0, highlight:false },
-    {name:"fiber",            unit:"g",    per100:11,    highlight:false }
-  ];
+  const hero = document.getElementById('hero3d');
+  const scene = document.getElementById('scene');
+  if(!hero || !scene) return;
 
-  function round2(n){ return Math.round(n * 100) / 100; }
+  let targetRX = 0, targetRY = 0;
+  let currentRX = 0, currentRY = 0;
+  let rafId;
 
-  function buildTable(serving){
-    var tbody = document.getElementById("nutrition-tbody");
-    if(!tbody) return;
-    var rows = "";
-    for(var i=0;i<nutrients.length;i++){
-      var n = nutrients[i];
-      var val = round2(n.per100 * serving / 100);
-      var rowBg = n.highlight ? "background:#fdf6ee;" : (i%2===0?"background:#fafafa;":"background:#fff;");
-      var cellStyle = n.highlight ? "font-weight:700;color:#4E342E;" : "color:#333;";
-      rows += '<tr style="'+rowBg+'">'
-        + '<td style="padding:12px 16px;border-bottom:1px solid #f0ede8;'+cellStyle+'">'+n.name+'</td>'
-        + '<td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f0ede8;color:#999;">'+n.per100+' '+n.unit+'</td>'
-        + '<td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f0ede8;'+cellStyle+'font-size:1rem;">'+val+' '+n.unit+'</td>'
-        + '</tr>';
-    }
-    tbody.innerHTML = rows;
-    var th = document.getElementById("th-serving");
-    if(th) th.textContent = "Per "+serving+"g Serving";
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / (rect.width / 2);
+    const dy = (e.clientY - cy) / (rect.height / 2);
+    targetRY = dx * 18;   // left-right tilt max 18deg
+    targetRX = -dy * 12;  // up-down tilt max 12deg
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    targetRX = 0;
+    targetRY = 0;
+  });
+
+  function loop() {
+    // Smooth lerp
+    currentRX += (targetRX - currentRX) * 0.07;
+    currentRY += (targetRY - currentRY) * 0.07;
+    scene.style.transform =
+      `perspective(1000px) rotateX(${currentRX}deg) rotateY(${currentRY}deg)`;
+    rafId = requestAnimationFrame(loop);
   }
+  loop();
 
-  window.calcServing = function(s){
-    var ids = [20,25,30,40,50];
-    for(var i=0;i<ids.length;i++){
-      var btn = document.getElementById("sb-"+ids[i]);
-      if(!btn) continue;
-      if(ids[i]===s){
-        btn.style.background="#4E342E";
-        btn.style.color="white";
-      } else {
-        btn.style.background="transparent";
-        btn.style.color="#4E342E";
-      }
-    }
-    buildTable(s);
+  // Touch support
+  hero.addEventListener('touchmove', (e) => {
+    const t = e.touches[0];
+    const rect = hero.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (t.clientX - cx) / (rect.width / 2);
+    const dy = (t.clientY - cy) / (rect.height / 2);
+    targetRY = dx * 14;
+    targetRX = -dy * 8;
+  }, {passive:true});
+  hero.addEventListener('touchend', () => { targetRX = 0; targetRY = 0; });
+})();
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════ */
+(function(){
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => obs.observe(el));
+})();
+
+/* NAV SCROLL SHADOW */
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ══════════════════════════════════════
+   INGREDIENTS
+══════════════════════════════════════ */
+const ingData = [
+  {id:'peanut',emoji:'🥜',name:'Defatted Peanut Flour',type:'Plant Protein Base',accent:'#E8A020',prot:72,
+   benefits:[{i:'💪',t:'Highest protein concentration — defatted for max protein per gram with minimal fat'},{i:'🏋️',t:'Rich in arginine — supports muscle pump and recovery after workouts'},{i:'❤️',t:'Lowers LDL cholesterol — heart-friendly plant protein source'},{i:'⚡',t:'Slow-digesting protein keeps you full and energized for hours'}],
+   chips:['~72% Protein','Low Fat','Arginine Rich','Heart Healthy']},
+  {id:'soy',emoji:'🫘',name:'Soy Flour',type:'Complete Plant Protein',accent:'#6EBF4A',prot:55,
+   benefits:[{i:'🌟',t:'Complete protein — all 9 essential amino acids in one plant source'},{i:'💪',t:'Isoflavones support muscle maintenance and bone density'},{i:'🧬',t:'Rich in glutamine — speeds up muscle repair post-exercise'},{i:'⚖️',t:'Supports healthy hormone balance and metabolism'}],
+   chips:['~55% Protein','All 9 EAAs','Isoflavones','Bone Support']},
+  {id:'pumpkin',emoji:'🎃',name:'Pumpkin Seeds',type:'Mineral Powerhouse',accent:'#F4A836',prot:30,
+   benefits:[{i:'🦴',t:'High magnesium — supports 300+ enzyme reactions in the body'},{i:'😴',t:'Tryptophan improves sleep quality and mood naturally'},{i:'🛡️',t:'Zinc boosts immunity and supports testosterone production'},{i:'💚',t:'Antioxidant-rich — fights inflammation and oxidative stress'}],
+   chips:['30% Protein','High Zinc','Magnesium','Tryptophan']},
+  {id:'sunflower',emoji:'🌻',name:'Sunflower Seeds',type:'Vitamin E Source',accent:'#F5C842',prot:21,
+   benefits:[{i:'✨',t:'Richest natural source of Vitamin E — antioxidant for skin and cells'},{i:'🧠',t:'High choline — supports brain function, memory and focus'},{i:'💛',t:'Linoleic acid supports heart health and inflammation control'},{i:'🦷',t:'Selenium supports thyroid function and immune health'}],
+   chips:['Vitamin E','Selenium','Healthy Fats','Brain Health']},
+  {id:'almonds',emoji:'🌰',name:'Almonds',type:'Nut Blend',accent:'#C87941',prot:21,
+   benefits:[{i:'🧠',t:'Highest Vitamin E nut — protects brain cells, improves memory'},{i:'🦴',t:'Calcium + Magnesium combo directly supports bone strength'},{i:'⚡',t:'Riboflavin (B2) converts food to energy — reduces fatigue'},{i:'❤️',t:'Monounsaturated fats reduce bad cholesterol — great for heart'}],
+   chips:['Vitamin E','Calcium','Riboflavin','Heart Healthy']},
+  {id:'cashews',emoji:'🫙',name:'Cashews',type:'Nut Blend',accent:'#D4A853',prot:18,
+   benefits:[{i:'🧠',t:'High copper content — essential for brain neurotransmitter production'},{i:'😊',t:'Tryptophan + magnesium reduces anxiety and improves mood'},{i:'💪',t:'Iron prevents fatigue, supports oxygen transport in blood'},{i:'🌟',t:'Healthy fats make fat-soluble vitamins more bioavailable'}],
+   chips:['Copper Rich','Iron','Mood Support','Healthy Fats']},
+  {id:'sattu',emoji:'🌾',name:'Sattu (Roasted Chana)',type:'Ancient Indian Superfood',accent:'#A0522D',prot:25,
+   benefits:[{i:'🏺',t:'Ancient Indian superfood — used for centuries for strength and stamina'},{i:'🌡️',t:'Natural cooling effect on the body — perfect for Indian summers'},{i:'🔋',t:'Complex carbs + protein gives sustained energy without spikes'},{i:'🫀',t:'High fiber supports gut health, digestion and blood sugar levels'}],
+   chips:['~25% Protein','High Fiber','Cooling','Slow Release']},
+  {id:'cocoa',emoji:'🍫',name:'Cocoa Powder',type:'Rich Chocolate Flavor',accent:'#6B3E26',prot:20,
+   benefits:[{i:'🧠',t:'Theobromine improves focus, mood and mental clarity naturally'},{i:'❤️',t:'Flavanols lower blood pressure and improve blood flow to heart and brain'},{i:'💪',t:'Magnesium in cocoa supports muscle relaxation and recovery'},{i:'😊',t:'Triggers serotonin release — the happiness hormone — naturally'}],
+   chips:['Flavanols','Theobromine','Magnesium','Mood Boost']},
+  {id:'jaggery',emoji:'🍯',name:'Jaggery',type:'Natural Sweetener — Zero Refined Sugar',accent:'#C8860A',prot:0,
+   benefits:[{i:'🚫',t:'Zero refined sugar — sweetness from natural unprocessed cane juice'},{i:'🩸',t:'Rich in iron — helps prevent anemia and improves hemoglobin levels'},{i:'🌿',t:'Retains natural minerals lost in refined sugar processing'},{i:'⚡',t:'Slower glycemic release compared to white sugar — no sugar crash'}],
+   chips:['No Refined Sugar','Iron Rich','Natural Minerals','Low GI']},
+];
+
+let activeIng = null;
+(function(){
+  const grid = document.getElementById('ing-grid');
+  grid.innerHTML = ingData.map(d => `
+    <div class="ing-card" id="ic-${d.id}" style="--ing-accent:${d.accent}" onclick="showIng('${d.id}')">
+      <span class="ing-emoji">${d.emoji}</span>
+      <div class="ing-name">${d.name}</div>
+      <div class="ing-type">${d.type}</div>
+      ${d.prot > 0 ? `<div class="ing-bar"><div class="ing-bar-fill" style="width:${Math.min(d.prot,72)/72*100}%;background:${d.accent}"></div></div>` : ''}
+    </div>`).join('');
+})();
+
+function showIng(id) {
+  const d = ingData.find(x => x.id === id);
+  const panel = document.getElementById('ing-detail');
+  if(activeIng === id){ panel.classList.remove('show'); document.getElementById('ic-'+id)?.classList.remove('active'); activeIng = null; return; }
+  if(activeIng) document.getElementById('ic-'+activeIng)?.classList.remove('active');
+  activeIng = id;
+  document.getElementById('ic-'+id)?.classList.add('active');
+  panel.innerHTML = `
+    <button class="close-detail" onclick="closeIng()">✕</button>
+    <div class="detail-header">
+      <div class="detail-big-emoji">${d.emoji}</div>
+      <div><div class="detail-title">${d.name}</div><div class="detail-subtitle">${d.type}</div></div>
+    </div>
+    <div class="benefits-list">${d.benefits.map(b=>`<div class="benefit-row"><span class="benefit-icon-sm">${b.i}</span><span class="benefit-text-sm">${b.t}</span></div>`).join('')}</div>
+    <div class="n-chips">${d.chips.map(c=>`<span class="n-chip">${c}</span>`).join('')}</div>`;
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function closeIng(){
+  document.getElementById('ing-detail').classList.remove('show');
+  if(activeIng) document.getElementById('ic-'+activeIng)?.classList.remove('active');
+  activeIng = null;
+}
+
+/* ══════════════════════════════════════
+   CART / CHECKOUT / RAZORPAY
+══════════════════════════════════════ */
+const PRICE = 499, OWNER_WA = "919866149830";
+function updateTotal(){const q=Math.min(parseInt(document.getElementById("qty").value)||1,20);document.getElementById("qty-display").textContent=q;document.getElementById("total-display").textContent="₹"+(q*PRICE);}
+function openCheckout(){document.getElementById("checkoutModal").style.display="flex";}
+function closeCheckout(){document.getElementById("checkoutModal").style.display="none";}
+function toggleCart(){alert("Cart feature coming soon!");}
+window.onclick=e=>{if(e.target===document.getElementById("checkoutModal"))closeCheckout();};
+
+function sendOwnerWA(n,ph,addr,city,st,pin,co,qty,amt,pid){
+  const m="🛒 *NEW VANARA ORDER!*\n━━━━━━━━━━━━━━━━━━━━\n👤 *Customer:* "+n+"\n📞 *Phone:* "+ph+"\n━━━━━━━━━━━━━━━━━━━━\n📦 *Qty:* "+qty+" pack(s)\n💰 *Amount:* ₹"+amt+"\n━━━━━━━━━━━━━━━━━━━━\n📍 *Address:*\n"+addr+"\n"+city+", "+st+" - "+pin+"\n"+co+"\n━━━━━━━━━━━━━━━━━━━━\n🔖 *Payment ID:* "+pid+"\n✅ *Status:* CONFIRMED";
+  window.open("https://wa.me/"+OWNER_WA+"?text="+encodeURIComponent(m),"_blank");
+}
+function sendCustomerWA(ph,n,qty,amt,pid){
+  const m="🌿 *Thank you for ordering VANARA!*\n\nNamaste "+n+" ji! 🙏\n\nYour order is *confirmed*.\n\n━━━━━━━━━━━━━━━━━━━━\n📦 VANARA Natural Protein Mix\n🛒 Qty: "+qty+" pack(s)\n💰 Amount: ₹"+amt+"\n🔖 Payment ID: "+pid+"\n━━━━━━━━━━━━━━━━━━━━\n\nDispatched within 1-2 business days 🚚\n\n📞 9866149830\n📧 vanaraveda@email.com\n\n💪 *Stay strong with VANARA!*\n🌿 Pure · Natural · Powerful";
+  window.open("https://wa.me/91"+ph+"?text="+encodeURIComponent(m),"_blank");
+}
+
+async function proceedToPayment(){
+  const btn=document.querySelector(".pay-btn");
+  btn.textContent="Processing...";
+  const n=document.getElementById("name").value.trim();
+  const ph=document.getElementById("phone").value.trim();
+  const addr=document.getElementById("address").value.trim();
+  const city=document.getElementById("city").value.trim();
+  const pin=document.getElementById("pincode").value.trim();
+  const st=document.getElementById("state").value.trim();
+  const co=document.getElementById("country").value.trim();
+  const qty=Math.min(parseInt(document.getElementById("qty").value)||1,20);
+  if(!n||!ph||!addr||!city||!pin||!st){alert("Please fill all details");btn.textContent="🔒 Confirm & Pay";return;}
+  const cp=ph.replace(/\D/g,"");
+  if(cp.length!==10){alert("Enter valid 10 digit phone number");btn.textContent="🔒 Confirm & Pay";return;}
+  try{
+    const res=await fetch("https://vanara-backend.onrender.com/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({qty})});
+    const order=await res.json();
+    if(!order.id){alert("Order creation failed");btn.textContent="🔒 Confirm & Pay";return;}
+    new Razorpay({
+      key:"rzp_live_SctSTXCaMANu9C",amount:order.amount,currency:"INR",
+      name:"VANARA",description:"High Protein Nutrition Mix",order_id:order.id,
+      handler:async function(response){
+        try{
+          const vr=await fetch("https://vanara-backend.onrender.com/verify-payment",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(response)});
+          const vres=await vr.json();
+          if(vres.status!=="success"){alert("❌ Payment verification failed");return;}
+          const sr=await fetch("https://vanara-backend.onrender.com/save-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:n,phone:cp,address:addr,city,state:st,country:co,pincode:pin,qty,amount:order.amount/100,razorpay_order_id:response.razorpay_order_id,razorpay_payment_id:response.razorpay_payment_id,razorpay_signature:response.razorpay_signature})});
+          const sres=await sr.json();
+          if(sres.status!=="success"){alert("❌ Order save failed");return;}
+          const amt=order.amount/100, pid=response.razorpay_payment_id;
+          sendOwnerWA(n,cp,addr,city,st,pin,co,qty,amt,pid);
+          setTimeout(()=>sendCustomerWA(cp,n,qty,amt,pid),2000);
+          setTimeout(()=>window.location.href="success.html",3500);
+        }catch(err){console.error(err);alert("❌ Server Error");}
+      },
+      prefill:{name:n,contact:cp},theme:{color:"#4E342E"},
+      modal:{ondismiss:()=>{alert("❌ Payment Cancelled");btn.textContent="🔒 Confirm & Pay";}}
+    }).open();
+  }catch(err){console.error(err);alert("❌ Server Error");btn.textContent="🔒 Confirm & Pay";}
+}
+
+/* ══════════════════════════════════════
+   NUTRITION CALCULATOR
+══════════════════════════════════════ */
+(function(){
+  const nuts=[
+    {name:"💪 Protein",unit:"g",per100:45,hi:true},
+    {name:"Total Fat",unit:"g",per100:11.5,hi:false},
+    {name:"Carbohydrates",unit:"g",per100:30.3,hi:false},
+    {name:"of which Sugars",unit:"g",per100:2.4,hi:false},
+    {name:"Dietary Fiber",unit:"g",per100:11,hi:false},
+    {name:"Energy",unit:"Kcal",per100:424,hi:false},
+  ];
+  function r2(n){return Math.round(n*100)/100;}
+  function build(s){
+    const tb=document.getElementById("nutrition-tbody");
+    if(!tb)return;
+    tb.innerHTML=nuts.map((n,i)=>`<tr style="${n.hi?"background:#fdf6ee;":i%2===0?"background:#fafafa;":"background:#fff;"}"><td style="padding:12px 16px;border-bottom:1px solid #f0ede8;${n.hi?"font-weight:700;color:#4E342E;":"color:#333;"}">${n.name}</td><td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f0ede8;color:#999;">${n.per100} ${n.unit}</td><td style="padding:12px 16px;text-align:center;border-bottom:1px solid #f0ede8;${n.hi?"font-weight:700;color:#4E342E;":"color:#333;"}">${r2(n.per100*s/100)} ${n.unit}</td></tr>`).join('');
+    const th=document.getElementById("th-serving");if(th)th.textContent="Per "+s+"g Serving";
+  }
+  window.calcServing=function(s,btn){
+    document.querySelectorAll('.serving-btn').forEach(b=>b.classList.remove('active'));
+    if(btn)btn.classList.add('active');build(s);
   };
-
-  // Initialize with 20g
-  buildTable(20);
+  build(20);
 })();
 </script>
 </body>

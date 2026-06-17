@@ -40,6 +40,7 @@ const PRICE_PER_UNIT = 499;
 
 // CREATE ORDER — qty తీసుకుని amount calculate చేస్తుంది
 app.post("/create-order", async (req, res) => {
+  console.log("📥 /create-order hit:", JSON.stringify(req.body));
   try {
     const qty = Math.min(parseInt(req.body.qty) || 1, 20);
     const amount = qty * PRICE_PER_UNIT;
@@ -50,15 +51,17 @@ app.post("/create-order", async (req, res) => {
       receipt: "order_" + Date.now()
     });
 
+    console.log("✅ /create-order success:", order.id);
     res.json(order);
   } catch (err) {
-    console.error("create-order error:", err);
+    console.error("❌ create-order error:", err);
     res.status(500).json({ error: "Order creation failed" });
   }
 });
 
 // VERIFY PAYMENT (separate endpoint)
 app.post("/verify-payment", async (req, res) => {
+  console.log("📥 /verify-payment hit:", JSON.stringify(req.body));
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
@@ -69,18 +72,21 @@ app.post("/verify-payment", async (req, res) => {
       .digest("hex");
 
     if (expectedSignature !== razorpay_signature) {
+      console.error("❌ /verify-payment signature mismatch. Expected:", expectedSignature, "Got:", razorpay_signature);
       return res.status(400).json({ status: "failed", error: "Invalid signature" });
     }
 
+    console.log("✅ /verify-payment success");
     res.json({ status: "success" });
   } catch (err) {
-    console.error("verify-payment error:", err);
+    console.error("❌ verify-payment error:", err);
     res.status(500).json({ status: "failed", error: "Verification error" });
   }
 });
 
 // SAVE ORDER — Firebase lo save cheyyi
 app.post("/save-order", async (req, res) => {
+  console.log("📥 /save-order hit. Body received:", JSON.stringify(req.body));
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
@@ -92,10 +98,13 @@ app.post("/save-order", async (req, res) => {
       .digest("hex");
 
     if (expectedSignature !== razorpay_signature) {
+      console.error("❌ /save-order signature mismatch. Expected:", expectedSignature, "Got:", razorpay_signature);
       return res.status(400).json({ error: "Invalid payment" });
     }
 
-    await db.collection("orders").add({
+    console.log("🔄 /save-order signature OK, writing to Firestore...");
+
+    const docRef = await db.collection("orders").add({
       name:               req.body.name,
       phone:              req.body.phone,
       address:            req.body.address,
@@ -112,10 +121,11 @@ app.post("/save-order", async (req, res) => {
       createdAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
+    console.log("✅ /save-order SAVED successfully. Doc ID:", docRef.id);
     res.json({ status: "success" });
   } catch (err) {
-    console.error("save-order error:", err);
-    res.status(500).json({ error: "Save failed" });
+    console.error("❌ save-order error (FULL):", err);
+    res.status(500).json({ error: "Save failed", details: err.message });
   }
 });
 
