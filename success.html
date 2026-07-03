@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Success</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family: Arial, sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  background:#f5f7fb;
+}
+
+.box{
+  background:white;
+  padding:40px 36px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,0.1);
+  max-width:420px;
+  width:90%;
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.icon-wrap{
+  width:72px;height:72px;
+  border-radius:50%;
+  background:#EAF3DE;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.25rem;
+  animation: popIn 0.6s cubic-bezier(.36,.07,.19,.97) both, pulse 2s ease 0.8s infinite;
+}
+
+@keyframes popIn{
+  0%{transform:scale(0.5);opacity:0}
+  70%{transform:scale(1.1)}
+  100%{transform:scale(1);opacity:1}
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,0.3)}
+  50%{box-shadow:0 0 0 12px rgba(22,163,74,0)}
+}
+
+.icon-wrap svg{width:36px;height:36px;}
+
+h1{
+  font-size:22px;
+  font-weight:600;
+  color:#16a34a;
+  margin-bottom:8px;
+}
+
+.sub{
+  font-size:15px;
+  color:#555;
+  margin-bottom:4px;
+}
+
+.brand{
+  font-size:18px;
+  font-weight:600;
+  color:#222;
+  margin-top:10px;
+}
+
+hr{
+  border:none;
+  border-top:1px solid #eee;
+  margin:1.25rem 0;
+}
+
+.steps{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:0;
+}
+
+.step{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  flex:1;
+}
+
+.step-dot{
+  width:28px;height:28px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;
+}
+
+.step-dot.done{background:#EAF3DE;color:#27500A;}
+.step-dot.pending{background:#f1f1f1;color:#999;border:1px solid #ddd;}
+
+.step-line{
+  flex:1;height:1px;
+  background:#ddd;
+  margin-top:-14px;
+  position:relative;top:-14px;
+}
+
+.step-label{font-size:11px;color:#aaa;}
+.step-label.done{color:#3B6D11;}
+
+a{
+  display:inline-block;
+  margin-top:1.25rem;
+  padding:10px 28px;
+  background:#4E342E;
+  color:white;
+  text-decoration:none;
+  border-radius:10px;
+  font-size:14px;
+  transition:opacity 0.15s;
+}
+
+a:hover{opacity:0.85;}
+
+.confetti-piece{
+  position:fixed;
+  width:8px;height:8px;
+  border-radius:2px;
+  pointer-events:none;
+  animation:confettiFall linear forwards;
+}
+
+@keyframes confettiFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="box">
+
+  <div class="icon-wrap">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 18l8 8L29 10" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <h1>Order Confirmed!</h1>
+  <p class="sub">Thank you for your order! Your package is on its way.</p>
+  <p class="brand">VANARA</p>
+
+  <hr>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-dot done">✓</div>
+      <div class="step-label done">Confirmed</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot pending">2</div>
+      <div class="step-label">Processing</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot pending">3</div>
+      <div class="step-label">Shipped</div>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-dot pending">4</div>
+      <div class="step-label">Delivered</div>
+    </div>
+  </div>
+
+  <a href="/">Go Back to Home</a>
+
+</div>
+
+<script>
+const colors=['#4E342E','#16a34a','#f59e0b','#3b82f6','#ec4899','#8b5cf6'];
+
+function spawnConfetti(){
+  for(let i=0;i<22;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='confetti-piece';
+      el.style.cssText=`
+        left:${Math.random()*100}%;
+        top:0px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-duration:${1.4+Math.random()*1}s;
+        animation-delay:${Math.random()*0.5}s;
+        width:${6+Math.random()*6}px;
+        height:${6+Math.random()*6}px;
+      `;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),2800);
+    },i*60);
+  }
+}
+
+setTimeout(spawnConfetti,600);
+</script>
+
+</body>
+</html>

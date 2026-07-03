@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VANARA Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --brown:#4E342E;
+  --brown-light:#6D4C41;
+  --brown-dark:#3E2723;
+  --gold:#D4A853;
+  --gold-light:#F5C842;
+  --bg:#F5F1EC;
+  --surface:#FFFFFF;
+  --surface2:#FAF7F4;
+  --border:#EDE8E3;
+  --text:#1A1210;
+  --text2:#6B5E58;
+  --text3:#A89C97;
+  --green:#16a34a;
+  --green-bg:#dcfce7;
+  --amber:#b45309;
+  --amber-bg:#fef3c7;
+  --red:#dc2626;
+  --red-bg:#fee2e2;
+  --blue:#1d4ed8;
+  --blue-bg:#dbeafe;
+  --radius:12px;
+  --radius-sm:8px;
+  --shadow:0 2px 12px rgba(78,52,46,0.08);
+  --shadow-md:0 4px 24px rgba(78,52,46,0.12);
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  min-height:100vh;
+  color:var(--text);
+}
+
+/* ── NAV ── */
+.nav{
+  background:var(--brown);
+  padding:0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:56px;
+  position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 16px rgba(0,0,0,0.25);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;color:var(--brown);
+  flex-shrink:0;
+}
+.nav-title{color:#fff;font-size:16px;font-weight:700;letter-spacing:-0.01em;}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.live-pill{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,0.1);
+  padding:4px 10px;border-radius:99px;
+  font-size:11px;color:#86efac;font-weight:600;
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#22c55e;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.last-upd{font-size:10px;color:rgba(255,255,255,0.45);}
+
+/* ── TABS ── */
+.tabs-bar{
+  background:var(--brown-dark);
+  display:flex;
+  padding:0 20px;
+  gap:2px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  padding:10px 16px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:600;
+  color:rgba(255,255,255,0.5);
+  border:none;background:none;cursor:pointer;
+  border-bottom:2px solid transparent;
+  white-space:nowrap;transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;
+}
+.tab-btn:hover{color:rgba(255,255,255,0.8);}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab-icon{font-size:14px;}
+
+/* ── PANEL ── */
+.panel{display:none;padding:16px 16px 80px;}
+.panel.active{display:block;}
+
+/* ── METRICS ── */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;margin-bottom:14px;
+}
+.metric{
+  background:var(--surface);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+}
+.metric-label{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+.metric-val{font-size:24px;font-weight:700;line-height:1;color:var(--text);}
+.metric-val.green{color:var(--green);}
+.metric-val.amber{color:var(--amber);}
+.metric-val.red{color:var(--red);}
+.metric-val.brown{color:var(--brown);}
+.metric-val.blue{color:var(--blue);}
+.metric-sub{font-size:10px;color:var(--text3);margin-top:3px;}
+.metric.wide{grid-column:span 2;}
+
+/* ── SEARCH / FILTER ── */
+.filters{
+  display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;
+}
+.filters input,.filters select{
+  flex:1;min-width:140px;
+  padding:10px 12px;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;background:var(--surface);color:var(--text);
+  outline:none;-webkit-appearance:none;appearance:none;
+}
+.filters input:focus,.filters select:focus{border-color:var(--brown);}
+
+/* ── CARDS ── */
+.order-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  transition:box-shadow 0.2s;
+}
+.order-card:hover{box-shadow:var(--shadow-md);}
+.card-top{
+  display:flex;align-items:flex-start;
+  justify-content:space-between;
+  padding:12px 14px 10px;
+  border-bottom:1px solid var(--border);
+}
+.card-name{font-size:15px;font-weight:700;color:var(--text);}
+.card-phone{font-size:12px;color:var(--text3);margin-top:2px;}
+.card-body{
+  padding:10px 14px;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;
+}
+.cf-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;}
+.cf-val{font-size:13px;color:var(--text2);font-weight:500;}
+.card-bottom{
+  padding:10px 14px;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-amount{font-size:16px;font-weight:700;color:var(--brown);}
+.card-qty{font-size:12px;color:var(--text3);}
+
+/* ── EXPENSE CARD ── */
+.exp-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.exp-top{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+}
+.exp-info{flex:1;}
+.exp-desc{font-size:14px;font-weight:600;color:var(--text);}
+.exp-meta{font-size:11px;color:var(--text3);margin-top:2px;}
+.exp-right{display:flex;align-items:center;gap:10px;}
+.exp-amount{font-size:16px;font-weight:700;color:var(--red);}
+.del-btn{
+  background:none;border:none;cursor:pointer;
+  color:var(--text3);font-size:16px;padding:4px;
+  line-height:1;border-radius:6px;
+  transition:all 0.15s;
+}
+.del-btn:hover{color:var(--red);background:var(--red-bg);}
+
+/* ── CUSTOMER CARD ── */
+.cust-card{
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.cust-top{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+}
+.cust-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--brown);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.cust-name{font-size:15px;font-weight:700;}
+.cust-phone{font-size:12px;color:var(--text3);margin-top:1px;}
+.cust-body{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;}
+.cust-orders{
+  padding:8px 14px;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+  font-size:12px;color:var(--text2);
+}
+.cust-order-row{
+  display:flex;justify-content:space-between;
+  padding:4px 0;border-bottom:1px dashed var(--border);
+  font-size:12px;
+}
+.cust-order-row:last-child{border-bottom:none;}
+
+/* ── ADD FORM ── */
+.add-form{
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow);
+  margin-bottom:14px;
+  overflow:hidden;
+}
+.add-form-header{
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;font-weight:700;color:var(--brown);
+  display:flex;align-items:center;gap:6px;
+}
+.add-form-body{padding:14px;display:flex;flex-direction:column;gap:10px;}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.04em;}
+.field input,.field select,.field textarea{
+  padding:10px 12px;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;color:var(--text);
+  background:var(--surface2);
+  outline:none;-webkit-appearance:none;appearance:none;
+  transition:border-color 0.15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--brown);background:var(--surface);
+}
+.field textarea{resize:vertical;min-height:60px;}
+.btn-add{
+  background:var(--brown);color:#fff;
+  border:none;border-radius:var(--radius-sm);
+  padding:11px 20px;font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  transition:background 0.15s;width:100%;
+}
+.btn-add:hover{background:var(--brown-light);}
+.btn-add:active{transform:scale(0.98);}
+
+/* ── BADGES ── */
+.badge{
+  display:inline-flex;align-items:center;
+  padding:3px 10px;border-radius:99px;
+  font-size:11px;font-weight:700;letter-spacing:0.02em;
+  white-space:nowrap;
+}
+.badge-confirmed{background:var(--green-bg);color:#166534;}
+.badge-pending{background:var(--amber-bg);color:#92400e;}
+.badge-cancelled{background:var(--red-bg);color:#991b1b;}
+.badge-blue{background:var(--blue-bg);color:#1e40af;}
+
+/* ── SECTION TITLE ── */
+.section-title{
+  font-size:11px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:0.06em;
+  margin:16px 0 8px;display:flex;align-items:center;
+  justify-content:space-between;
+}
+.section-count{
+  background:var(--brown);color:#fff;
+  font-size:10px;padding:2px 8px;border-radius:99px;
+}
+
+/* ── EMPTY ── */
+.empty{
+  text-align:center;padding:40px 20px;
+  color:var(--text3);font-size:13px;
+}
+.empty-icon{font-size:2.5rem;margin-bottom:10px;}
+
+/* ── ROW COUNT ── */
+.row-count{font-size:11px;color:var(--text3);text-align:center;padding:8px 0 4px;}
+
+/* ── DESKTOP TABLE ── */
+@media(min-width:768px){
+  .panel{padding:20px 24px 40px;}
+  .metrics{grid-template-columns:repeat(5,1fr);}
+  .metric.wide{grid-column:span 1;}
+  #cardList{display:none;}
+  .tbl-wrap{display:block!important;}
+  .tbl-wrap{
+    background:var(--surface);border-radius:var(--radius);
+    border:1px solid var(--border);box-shadow:var(--shadow-md);overflow-x:auto;
+  }
+  table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;}
+  th,td{padding:10px 14px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  thead tr{background:var(--surface2);}
+  th{font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;user-select:none;text-transform:uppercase;letter-spacing:0.05em;}
+  th:hover{color:var(--brown);}
+  tbody tr:hover{background:var(--surface2);}
+  tbody tr:last-child td{border-bottom:none;}
+  .add-form-body{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .add-form-body .btn-add{grid-column:span 3;}
+  .form-row-2{grid-template-columns:repeat(4,1fr);}
+}
+@media(max-width:767px){
+  .tbl-wrap{display:none!important;}
+  #cardList{display:block;}
+  #expList{display:block;}
+}
+
+/* ── LOGIN ── */
+#loginScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--brown-dark);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.login-box{
+  background:var(--surface);
+  border-radius:20px;
+  padding:32px 28px;
+  width:100%;max-width:360px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  text-align:center;
+}
+.login-logo{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--brown);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:800;color:var(--gold);
+  margin:0 auto 12px;
+}
+.login-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--text3);margin-bottom:24px;}
+.login-field{
+  width:100%;padding:13px 16px;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;color:var(--text);
+  background:var(--surface2);
+  outline:none;text-align:center;
+  letter-spacing:3px;
+  margin-bottom:12px;
+  transition:border-color 0.15s;
+}
+.login-field:focus{border-color:var(--brown);}
+.login-btn{
+  width:100%;padding:13px;
+  background:var(--brown);color:#fff;
+  border:none;border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;font-weight:700;
+  cursor:pointer;transition:background 0.15s;
+  margin-bottom:8px;
+}
+.login-btn:hover{background:var(--brown-light);}
+.login-err{
+  font-size:12px;color:var(--red);
+  min-height:18px;margin-top:4px;
+}
+#appShell{display:none;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">V</div>
+    <div class="login-title">VANARA Admin</div>
+    <div class="login-sub">Enter password to continue</div>
+    <input class="login-field" type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="login-btn" onclick="checkLogin()">Login →</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appShell">
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">V</div>
+    <span class="nav-title">VANARA Admin</span>
+  </div>
+  <div class="nav-right">
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+    <div class="last-upd" id="lastUpdated">Connecting…</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('orders',this)"><span class="tab-icon">📦</span> Orders</button>
+  <button class="tab-btn" onclick="switchTab('expenses',this)"><span class="tab-icon">💸</span> Expenses</button>
+  <button class="tab-btn" onclick="switchTab('customers',this)"><span class="tab-icon">👥</span> Customers</button>
+  <button class="tab-btn" onclick="switchTab('summary',this)"><span class="tab-icon">📊</span> Summary</button>
+</div>
+
+<!-- ═══════════════ ORDERS TAB ═══════════════ -->
+<div class="panel active" id="tab-orders">
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Total Orders</div><div class="metric-val" id="m-total">—</div></div>
+    <div class="metric"><div class="metric-label">Confirmed</div><div class="metric-val green" id="m-confirmed">—</div></div>
+    <div class="metric"><div class="metric-label">Pending</div><div class="metric-val amber" id="m-pending">—</div></div>
+    <div class="metric"><div class="metric-label">Cancelled</div><div class="metric-val red" id="m-cancelled">—</div></div>
+    <div class="metric wide"><div class="metric-label">Total Revenue</div><div class="metric-val brown" id="m-revenue">—</div></div>
+  </div>
+
+  <div class="filters">
+    <input type="search" id="searchInput" placeholder="🔍  Search name or phone…">
+    <select id="statusFilter">
+      <option value="">All Statuses</option>
+      <option value="Order Confirmed">✅ Confirmed</option>
+      <option value="Pending">⏳ Pending</option>
+      <option value="Cancelled">❌ Cancelled</option>
+    </select>
+  </div>
+
+  <!-- Mobile Cards -->
+  <div id="cardList">
+    <div class="empty"><div class="empty-icon">🔄</div>Connecting to Firebase…</div>
+  </div>
+
+  <!-- Desktop Table -->
+  <div class="tbl-wrap" style="display:none;">
+    <table>
+      <colgroup>
+        <col style="width:13%"><col style="width:11%"><col style="width:18%">
+        <col style="width:9%"><col style="width:8%"><col style="width:6%">
+        <col style="width:7%"><col style="width:5%"><col style="width:9%"><col style="width:11%"><col style="width:13%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th data-col="name">Name ↕</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Country</th>
+          <th>Pincode</th>
+          <th data-col="qty">Qty ↕</th>
+          <th data-col="amount">Amount ↕</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTable">
+        <tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--text3);">Connecting…</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="row-count" id="rowCount"></div>
+</div>
+
+<!-- ═══════════════ EXPENSES TAB ═══════════════ -->
+<div class="panel" id="tab-expenses">
+
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Total Spent</div><div class="metric-val red" id="e-total">₹0</div></div>
+    <div class="metric"><div class="metric-label">This Month</div><div class="metric-val amber" id="e-month">₹0</div></div>
+    <div class="metric"><div class="metric-label">Today</div><div class="metric-val" id="e-today">₹0</div></div>
+    <div class="metric wide"><div class="metric-label">Net Profit (Revenue − Expenses)</div><div class="metric-val green" id="e-profit">₹0</div></div>
+  </div>
+
+  <!-- Add Expense Form -->
+  <div class="add-form">
+    <div class="add-form-header">➕ Add Expense</div>
+    <div class="add-form-body">
+      <div class="field" style="grid-column:span 2;">
+        <label>Description</label>
+        <input type="text" id="exp-desc" placeholder="e.g. DTDC Courier – Ravi Kumar">
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select id="exp-cat">
+          <option>Courier / Shipping</option>
+          <option>Packaging</option>
+          <option>Advertising</option>
+          <option>Raw Material</option>
+          <option>Salary</option>
+          <option>Software / Tools</option>
+          <option>Refund</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Amount (₹)</label>
+        <input type="number" id="exp-amount" placeholder="80">
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="exp-date">
+      </div>
+      <div class="field" style="grid-column:span 3;">
+        <label>Notes (optional)</label>
+        <input type="text" id="exp-notes" placeholder="e.g. Order #123, tracking AWB12345">
+      </div>
+      <button class="btn-add" onclick="addExpense()">Add Expense</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <input type="search" id="expSearch" placeholder="🔍  Search expenses…">
+    <select id="expCatFilter">
+      <option value="">All Categories</option>
+      <option>Courier / Shipping</option>
+      <option>Packaging</option>
+      <option>Advertising</option>
+      <option>Raw Material</option>
+      <option>Salary</option>
+      <option>Software / Tools</option>
+      <option>Refund</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div class="section-title">
+    Expense Entries
+    <span class="section-count" id="exp-count">0</span>
+  </div>
+  <div id="expList">
+    <div class="empty"><div class="empty-icon">💸</div>No expenses yet. Add one above!</div>
+  </div>
+</div>
+
+<!-- ═══════════════ CUSTOMERS TAB ═══════════════ -->
+<div class="panel" id="tab-customers">
+
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Total Customers</div><div class="metric-val brown" id="c-total">0</div></div>
+    <div class="metric"><div class="metric-label">Repeat Buyers</div><div class="metric-val blue" id="c-repeat">0</div></div>
+    <div class="metric wide"><div class="metric-label">Top Customer Revenue</div><div class="metric-val green" id="c-top">—</div></div>
+  </div>
+
+  <!-- Add Manual Customer -->
+  <div class="add-form">
+    <div class="add-form-header">➕ Add Offline Customer</div>
+    <div class="add-form-body">
+      <div class="field"><label>Name</label><input type="text" id="mc-name" placeholder="e.g. Ravi Kumar"></div>
+      <div class="field"><label>Phone</label><input type="text" id="mc-phone" placeholder="9876543210"></div>
+      <div class="field"><label>Amount Paid (₹)</label><input type="number" id="mc-amount" placeholder="0"></div>
+      <div class="field"><label>City</label><input type="text" id="mc-city" placeholder="Hyderabad"></div>
+      <div class="field"><label>State</label><input type="text" id="mc-state" placeholder="Telangana"></div>
+      <div class="field"><label>Pincode</label><input type="text" id="mc-pincode" placeholder="500001"></div>
+      <div class="field" style="grid-column:span 3"><label>Address</label><input type="text" id="mc-address" placeholder="Full address"></div>
+      <div class="field" style="grid-column:span 3"><label>Notes</label><input type="text" id="mc-notes" placeholder="e.g. WhatsApp order, COD, Instagram DM"></div>
+      <button class="btn-add" onclick="addManualCustomer()">Save Customer</button>
+    </div>
+  </div>
+
+  <div class="filters">
+    <input type="search" id="custSearch" placeholder="🔍  Search customer…">
+  </div>
+
+  <div class="section-title">
+    From Orders (Firebase)
+    <span class="section-count" id="cust-count">0</span>
+  </div>
+  <div id="custList">
+    <div class="empty"><div class="empty-icon">👥</div>Loading customer data…</div>
+  </div>
+
+  <div class="section-title" style="margin-top:16px">
+    Manually Added
+    <span class="section-count" id="mcust-count">0</span>
+  </div>
+  <div id="mcustList">
+    <div class="empty"><div class="empty-icon">📋</div>No manual customers yet.</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SUMMARY TAB ═══════════════ -->
+<div class="panel" id="tab-summary">
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Total Revenue</div><div class="metric-val brown" id="s-revenue">—</div></div>
+    <div class="metric"><div class="metric-label">Total Expenses</div><div class="metric-val red" id="s-expenses">₹0</div></div>
+    <div class="metric"><div class="metric-label">Net Profit</div><div class="metric-val green" id="s-profit">—</div></div>
+    <div class="metric"><div class="metric-label">Orders</div><div class="metric-val" id="s-orders">—</div></div>
+    <div class="metric wide"><div class="metric-label">Avg Order Value</div><div class="metric-val blue" id="s-avg">—</div></div>
+  </div>
+
+  <div class="section-title">Expenses by Category</div>
+  <div id="catBreakdown"></div>
+
+  <div class="section-title" style="margin-top:20px;">Top 5 Customers by Spend</div>
+  <div id="topCustomers"></div>
+
+  <div class="section-title" style="margin-top:20px;">Recent Expenses</div>
+  <div id="recentExp"></div>
+</div>
+
+</div><!-- /appShell -->
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+// ─── LOGIN ───
+const ADMIN_PASS = 'vanara2024';
+function checkLogin(){
+  const val = document.getElementById('loginPass').value;
+  if(val === ADMIN_PASS){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appShell').style.display='block';
+    sessionStorage.setItem('vanara_auth','1');
+  } else {
+    document.getElementById('loginErr').textContent='Wrong password. Try again.';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
+    setTimeout(()=>document.getElementById('loginErr').textContent='',2500);
+  }
+}
+// auto-login if already authenticated this session
+if(sessionStorage.getItem('vanara_auth')==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('appShell').style.display='block';
+}
+
+// ─── FIREBASE ───
+const firebaseConfig={
+  apiKey:"AIzaSyDuYbsb-wF11tPXtoXnExcMVEfNR5A1Bfw",
+  authDomain:"vanara-b0bf4.firebaseapp.com",
+  projectId:"vanara-b0bf4"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+
+// ─── STATE ───
+let allOrders=[];
+let expenses=[];
+let manualCustomers=JSON.parse(localStorage.getItem('vanara_mcustomers')||'[]');
+let sortCol='',sortDir=1;
+
+// ─── TABS ───
+function switchTab(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='customers') renderCustomers();
+  if(name==='summary') renderSummary();
+}
+
+// ─── DATE HELPERS ───
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function thisMonthStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function fmtDate(d){return d?new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';}
+function fmtTimestamp(ts){
+  if(!ts) return '';
+  const d=ts.toDate?ts.toDate():new Date(ts.seconds?ts.seconds*1000:ts);
+  return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})+' · '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+}
+function fmt(n){return '₹'+Math.round(n||0).toLocaleString('en-IN');}
+
+// set today on date inputs
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('input[type=date]').forEach(el=>el.value=todayStr());
+});
+document.getElementById('exp-date').value=todayStr();
+
+// ─── ORDERS: FIREBASE LISTENER ───
+db.collection("orders").orderBy("createdAt","desc").onSnapshot(snap=>{
+  allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
+  updateOrderMetrics(allOrders);
+  renderOrders();
+  const now=new Date();
+  document.getElementById('lastUpdated').textContent=
+    'Updated '+now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+},()=>{
+  document.getElementById('cardList').innerHTML='<div class="empty"><div class="empty-icon">⚠️</div>Connection failed.</div>';
+  document.getElementById('ordersTable').innerHTML='<tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--red);">Connection failed.</td></tr>';
+});
+
+function updateOrderMetrics(data){
+  document.getElementById('m-total').textContent=data.length;
+  document.getElementById('m-confirmed').textContent=data.filter(o=>o.status==='Order Confirmed').length;
+  document.getElementById('m-pending').textContent=data.filter(o=>o.status==='Pending').length;
+  document.getElementById('m-cancelled').textContent=data.filter(o=>o.status==='Cancelled').length;
+  const rev=data.reduce((s,o)=>s+(Number(o.amount)||0),0);
+  document.getElementById('m-revenue').textContent=fmt(rev);
+  updateSummaryMetrics();
+  updateExpenseMetrics();
+  updateCustomerMetrics();
+}
+
+function badgeClass(status){
+  if(status==='Order Confirmed') return 'confirmed';
+  if(status==='Pending') return 'pending';
+  return 'cancelled';
+}
+
+function renderOrders(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const sf=document.getElementById('statusFilter').value;
+  let data=allOrders.filter(o=>{
+    const mq=!q||(o.name||'').toLowerCase().includes(q)||(o.phone||'').toLowerCase().includes(q);
+    const ms=!sf||o.status===sf;
+    return mq&&ms;
+  });
+  if(sortCol){
+    data=[...data].sort((a,b)=>{
+      let av=a[sortCol],bv=b[sortCol];
+      if(sortCol==='amount'||sortCol==='qty'){av=Number(av)||0;bv=Number(bv)||0;}
+      else{av=(av||'').toString().toLowerCase();bv=(bv||'').toString().toLowerCase();}
+      return av<bv?-sortDir:av>bv?sortDir:0;
+    });
+  }
+  document.getElementById('rowCount').textContent=data.length?`Showing ${data.length} of ${allOrders.length} orders`:'';
+
+  if(!data.length){
+    document.getElementById('cardList').innerHTML='<div class="empty"><div class="empty-icon">📭</div>No orders found.</div>';
+    document.getElementById('ordersTable').innerHTML='<tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--text3);">No orders found.</td></tr>';
+    return;
+  }
+
+  // Mobile cards
+  document.getElementById('cardList').innerHTML=data.map(o=>{
+    const sc=badgeClass(o.status);
+    const addr=[o.address,o.city,o.state].filter(Boolean).join(', ');
+    return`<div class="order-card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">${o.name||'—'}</div>
+          <div class="card-phone">📞 ${o.phone||'—'}</div>
+        </div>
+        <span class="badge badge-${sc}">${o.status||'—'}</span>
+      </div>
+      <div class="card-body">
+        <div style="grid-column:span 2">
+          <div class="cf-label">Address</div>
+          <div class="cf-val" style="white-space:normal;font-size:12px">${addr||'—'}</div>
+        </div>
+        <div><div class="cf-label">Pincode</div><div class="cf-val">${o.pincode||'—'}</div></div>
+        <div><div class="cf-label">Country</div><div class="cf-val">${o.country||'—'}</div></div>
+        ${o.createdAt?`<div style="grid-column:span 2"><div class="cf-label">🕐 Order Time</div><div class="cf-val" style="font-size:12px;color:var(--text3)">${fmtTimestamp(o.createdAt)}</div></div>`:''}
+      </div>
+      <div class="card-bottom">
+        <div class="card-amount">${fmt(o.amount)}</div>
+        <div class="card-qty">Qty: <strong>${o.qty||'—'}</strong></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Desktop table
+  document.getElementById('ordersTable').innerHTML=data.map(o=>{
+    const sc=badgeClass(o.status);
+    return`<tr>
+      <td title="${o.name||''}">${o.name||'—'}</td>
+      <td>${o.phone||'—'}</td>
+      <td title="${o.address||''}">${o.address||'—'}</td>
+      <td>${o.city||'—'}</td>
+      <td>${o.state||'—'}</td>
+      <td>${o.country||'—'}</td>
+      <td>${o.pincode||'—'}</td>
+      <td>${o.qty||'—'}</td>
+      <td>${fmt(o.amount)}</td>
+      <td style="font-size:11px;color:var(--text3)">${fmtTimestamp(o.createdAt)}</td>
+      <td><span class="badge badge-${sc}">${o.status||'—'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+document.getElementById('searchInput').addEventListener('input',renderOrders);
+document.getElementById('statusFilter').addEventListener('change',renderOrders);
+document.querySelectorAll('th[data-col]').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const col=th.dataset.col;
+    if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
+    document.querySelectorAll('th[data-col]').forEach(t=>{
+      t.textContent=t.dataset.col.charAt(0).toUpperCase()+t.dataset.col.slice(1)+' ↕';
+    });
+    th.textContent=col.charAt(0).toUpperCase()+col.slice(1)+(sortDir===1?' ↑':' ↓');
+    renderOrders();
+  });
+});
+
+// ─── EXPENSES (Firebase) ───
+db.collection("expenses").orderBy("createdAt","desc").onSnapshot(snap=>{
+  expenses=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderExpenses();
+  updateExpenseMetrics();
+  updateSummaryMetrics();
+});
+
+function addExpense(){
+  const desc=document.getElementById('exp-desc').value.trim();
+  const cat=document.getElementById('exp-cat').value;
+  const amount=parseFloat(document.getElementById('exp-amount').value);
+  const date=document.getElementById('exp-date').value||todayStr();
+  const notes=document.getElementById('exp-notes').value.trim();
+  if(!desc||!amount){alert('Description and Amount required!');return;}
+  const btn=document.querySelector('.btn-add');
+  btn.textContent='Saving…';btn.disabled=true;
+  db.collection("expenses").add({desc,cat,amount,date,notes,createdAt:firebase.firestore.FieldValue.serverTimestamp()})
+    .then(()=>{
+      document.getElementById('exp-desc').value='';
+      document.getElementById('exp-amount').value='';
+      document.getElementById('exp-notes').value='';
+      btn.textContent='Add Expense';btn.disabled=false;
+    })
+    .catch(e=>{alert('Save failed: '+e.message);btn.textContent='Add Expense';btn.disabled=false;});
+}
+
+function delExpense(id){
+  if(!confirm('Delete this expense?'))return;
+  db.collection("expenses").doc(id).delete();
+}
+
+function updateExpenseMetrics(){
+  const total=expenses.reduce((s,e)=>s+e.amount,0);
+  const month=thisMonthStr();
+  const monthTotal=expenses.filter(e=>e.date&&e.date.startsWith(month)).reduce((s,e)=>s+e.amount,0);
+  const today=expenses.filter(e=>e.date===todayStr()).reduce((s,e)=>s+e.amount,0);
+  const rev=allOrders.reduce((s,o)=>s+(Number(o.amount)||0),0);
+  document.getElementById('e-total').textContent=fmt(total);
+  document.getElementById('e-month').textContent=fmt(monthTotal);
+  document.getElementById('e-today').textContent=fmt(today);
+  document.getElementById('e-profit').textContent=fmt(rev-total);
+}
+
+function renderExpenses(){
+  const q=document.getElementById('expSearch').value.toLowerCase();
+  const cf=document.getElementById('expCatFilter').value;
+  const data=expenses.filter(e=>{
+    const mq=!q||(e.desc||'').toLowerCase().includes(q)||(e.notes||'').toLowerCase().includes(q);
+    const mc=!cf||e.cat===cf;
+    return mq&&mc;
+  });
+  document.getElementById('exp-count').textContent=data.length;
+  if(!data.length){
+    document.getElementById('expList').innerHTML='<div class="empty"><div class="empty-icon">💸</div>No expenses found.</div>';
+    return;
+  }
+  document.getElementById('expList').innerHTML=data.map(e=>`
+    <div class="exp-card">
+      <div class="exp-top">
+        <div class="exp-info">
+          <div class="exp-desc">${e.desc}</div>
+          <div class="exp-meta">${fmtDate(e.date)} &nbsp;·&nbsp; <span class="badge badge-blue">${e.cat}</span>${e.notes?'&nbsp;·&nbsp;'+e.notes:''}</div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-amount">${fmt(e.amount)}</div>
+          <button class="del-btn" onclick="delExpense(${e.id})" title="Delete">🗑</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('expSearch').addEventListener('input',renderExpenses);
+document.getElementById('expCatFilter').addEventListener('change',renderExpenses);
+
+// ─── MANUAL CUSTOMERS ───
+function saveManualCustomers(){localStorage.setItem('vanara_mcustomers',JSON.stringify(manualCustomers));}
+
+function addManualCustomer(){
+  const name=document.getElementById('mc-name').value.trim();
+  const phone=document.getElementById('mc-phone').value.trim();
+  const amount=parseFloat(document.getElementById('mc-amount').value)||0;
+  const city=document.getElementById('mc-city').value.trim();
+  const state=document.getElementById('mc-state').value.trim();
+  const pincode=document.getElementById('mc-pincode').value.trim();
+  const address=document.getElementById('mc-address').value.trim();
+  const notes=document.getElementById('mc-notes').value.trim();
+  if(!name){alert('Name required!');return;}
+  manualCustomers.unshift({id:Date.now(),name,phone,amount,city,state,pincode,address,notes,addedOn:todayStr()});
+  saveManualCustomers();
+  ['mc-name','mc-phone','mc-amount','mc-city','mc-state','mc-pincode','mc-address','mc-notes'].forEach(id=>document.getElementById(id).value='');
+  renderManualCustomers();
+}
+
+function delManualCustomer(id){
+  if(!confirm('Delete this customer?'))return;
+  manualCustomers=manualCustomers.filter(c=>c.id!==id);
+  saveManualCustomers();
+  renderManualCustomers();
+}
+
+function renderManualCustomers(){
+  const q=document.getElementById('custSearch').value.toLowerCase();
+  const data=manualCustomers.filter(c=>
+    !q||(c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q)
+  );
+  document.getElementById('mcust-count').textContent=data.length;
+  if(!data.length){
+    document.getElementById('mcustList').innerHTML='<div class="empty"><div class="empty-icon">📋</div>No manual customers yet.</div>';
+    return;
+  }
+  document.getElementById('mcustList').innerHTML=data.map(c=>{
+    const initials=(c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const addr=[c.address,c.city,c.state,c.pincode].filter(Boolean).join(', ');
+    return`<div class="cust-card">
+      <div class="cust-top">
+        <div class="cust-avatar" style="background:var(--amber)">${initials}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="cust-name">${c.name}</div>
+            <span class="badge" style="background:#fef3c7;color:#92400e">Offline</span>
+          </div>
+          <div class="cust-phone">📞 ${c.phone||'—'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          ${c.amount?`<div style="font-size:15px;font-weight:700;color:var(--brown)">${fmt(c.amount)}</div>`:''}
+          <button class="del-btn" onclick="delManualCustomer(${c.id})">🗑</button>
+        </div>
+      </div>
+      ${addr||c.notes?`<div class="cust-body">
+        ${addr?`<div style="grid-column:span 2"><div class="cf-label">Address</div><div class="cf-val" style="white-space:normal;font-size:12px">${addr}</div></div>`:''}
+        ${c.notes?`<div style="grid-column:span 2"><div class="cf-label">Notes</div><div class="cf-val" style="font-size:12px">${c.notes}</div></div>`:''}
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ─── CUSTOMERS ───
+function updateCustomerMetrics(){
+  const map=buildCustomerMap();
+  const total=Object.keys(map).length;
+  const repeat=Object.values(map).filter(c=>c.orders.length>1).length;
+  document.getElementById('c-total').textContent=total;
+  document.getElementById('c-repeat').textContent=repeat;
+  if(total){
+    const top=Object.values(map).sort((a,b)=>b.totalSpent-a.totalSpent)[0];
+    document.getElementById('c-top').textContent=fmt(top.totalSpent)+' – '+top.name;
+  }
+}
+
+function buildCustomerMap(){
+  const map={};
+  allOrders.forEach(o=>{
+    const key=(o.phone||o.name||'unknown').trim();
+    if(!map[key]) map[key]={name:o.name||'—',phone:o.phone||'—',orders:[],totalSpent:0,address:o.address,city:o.city,state:o.state,pincode:o.pincode,country:o.country};
+    map[key].orders.push(o);
+    map[key].totalSpent+=Number(o.amount)||0;
+  });
+  return map;
+}
+
+function renderCustomers(){
+  const q=document.getElementById('custSearch').value.toLowerCase();
+  const map=buildCustomerMap();
+  let custs=Object.values(map).sort((a,b)=>b.totalSpent-a.totalSpent);
+  if(q) custs=custs.filter(c=>(c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q));
+  document.getElementById('cust-count').textContent=custs.length;
+  if(!custs.length){
+    document.getElementById('custList').innerHTML='<div class="empty"><div class="empty-icon">👥</div>No customers found.</div>';
+    return;
+  }
+  document.getElementById('custList').innerHTML=custs.map(c=>{
+    const initials=(c.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const isRepeat=c.orders.length>1;
+    const addr=[c.address,c.city,c.state,c.pincode,c.country].filter(Boolean).join(', ');
+    const orderRows=c.orders.slice(0,3).map(o=>`
+      <div class="cust-order-row">
+        <span>${o.status||'—'} &nbsp;·&nbsp; Qty ${o.qty||'—'}</span>
+        <span style="font-weight:600">${fmt(o.amount)}</span>
+      </div>`).join('');
+    return`<div class="cust-card">
+      <div class="cust-top">
+        <div class="cust-avatar">${initials}</div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="cust-name">${c.name}</div>
+            ${isRepeat?'<span class="badge badge-blue">Repeat</span>':''}
+          </div>
+          <div class="cust-phone">📞 ${c.phone}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:15px;font-weight:700;color:var(--brown)">${fmt(c.totalSpent)}</div>
+          <div style="font-size:11px;color:var(--text3)">${c.orders.length} order${c.orders.length>1?'s':''}</div>
+        </div>
+      </div>
+      <div class="cust-body">
+        <div style="grid-column:span 2"><div class="cf-label">Address</div><div class="cf-val" style="white-space:normal;font-size:12px">${addr||'—'}</div></div>
+      </div>
+      <div class="cust-orders">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;">Order History</div>
+        ${orderRows}
+        ${c.orders.length>3?`<div style="font-size:11px;color:var(--text3);padding-top:4px;">+${c.orders.length-3} more orders</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('custSearch').addEventListener('input',()=>{renderCustomers();renderManualCustomers();});
+renderManualCustomers();
+
+// ─── SUMMARY ───
+function updateSummaryMetrics(){
+  const rev=allOrders.reduce((s,o)=>s+(Number(o.amount)||0),0);
+  const expTotal=expenses.reduce((s,e)=>s+e.amount,0);
+  const profit=rev-expTotal;
+  const avg=allOrders.length?rev/allOrders.length:0;
+  document.getElementById('s-revenue').textContent=fmt(rev);
+  document.getElementById('s-expenses').textContent=fmt(expTotal);
+  document.getElementById('s-profit').textContent=fmt(profit);
+  document.getElementById('s-orders').textContent=allOrders.length;
+  document.getElementById('s-avg').textContent=fmt(avg);
+}
+
+function renderSummary(){
+  updateSummaryMetrics();
+
+  // Category breakdown
+  const cats={};
+  expenses.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount;});
+  const catRows=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+  const catTotal=expenses.reduce((s,e)=>s+e.amount,0);
+  document.getElementById('catBreakdown').innerHTML=catRows.length?catRows.map(([cat,amt])=>`
+    <div class="exp-card">
+      <div class="exp-top" style="padding:10px 14px">
+        <div class="exp-info">
+          <div class="exp-desc">${cat}</div>
+          <div class="exp-meta" style="margin-top:4px">
+            <div style="background:var(--border);border-radius:99px;height:4px;width:200px;max-width:100%;overflow:hidden">
+              <div style="background:var(--brown);height:4px;width:${catTotal?Math.round(amt/catTotal*100):0}%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-amount">${fmt(amt)}</div>
+      </div>
+    </div>`).join(''):'<div class="empty">No expenses yet.</div>';
+
+  // Top customers
+  const map=buildCustomerMap();
+  const top=Object.values(map).sort((a,b)=>b.totalSpent-a.totalSpent).slice(0,5);
+  document.getElementById('topCustomers').innerHTML=top.length?top.map((c,i)=>`
+    <div class="exp-card">
+      <div class="exp-top" style="padding:10px 14px">
+        <div class="exp-info">
+          <div class="exp-desc">${i+1}. ${c.name}</div>
+          <div class="exp-meta">📞 ${c.phone} &nbsp;·&nbsp; ${c.orders.length} order${c.orders.length>1?'s':''}</div>
+        </div>
+        <div style="font-size:15px;font-weight:700;color:var(--brown)">${fmt(c.totalSpent)}</div>
+      </div>
+    </div>`).join(''):'<div class="empty">No order data yet.</div>';
+
+  // Recent expenses
+  document.getElementById('recentExp').innerHTML=expenses.slice(0,5).map(e=>`
+    <div class="exp-card">
+      <div class="exp-top" style="padding:10px 14px">
+        <div class="exp-info">
+          <div class="exp-desc">${e.desc}</div>
+          <div class="exp-meta">${fmtDate(e.date)} · ${e.cat}</div>
+        </div>
+        <div class="exp-amount">${fmt(e.amount)}</div>
+      </div>
+    </div>`).join('')||'<div class="empty">No expenses yet.</div>';
+}
+</script>
+</body>
+</html>
