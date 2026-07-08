@@ -167,6 +167,110 @@ footer .footer-top{display:flex;justify-content:space-between;align-items:center
   #lab-certified .lab-inner{flex-direction:column;}
   #nutrition .serving-btns{gap:8px;}
 }
+/*================ INGREDIENTS SECTION ================*/
+
+.ingredients-section{
+padding:90px 8%;
+background:linear-gradient(135deg,#fffaf3,#f5ede0);
+text-align:center;
+}
+
+.ingredients-title{
+font-family:'Playfair Display',serif;
+font-size:clamp(2rem,4vw,3rem);
+font-weight:800;
+color:#4E342E;
+margin-bottom:15px;
+}
+
+.ingredients-sub{
+max-width:700px;
+margin:auto;
+color:#777;
+line-height:1.8;
+margin-bottom:45px;
+}
+
+.ingredients-image{
+max-width:1200px;
+margin:auto;
+border-radius:28px;
+overflow:hidden;
+box-shadow:0 25px 70px rgba(0,0,0,.12);
+transition:.4s;
+}
+
+.ingredients-image img{
+width:100%;
+display:block;
+transition:.5s;
+}
+
+.ingredients-image:hover img{
+transform:scale(1.05);
+}
+
+/*================ REVIEWS ================*/
+
+.reviews-section{
+padding:90px 8%;
+background:#fff;
+text-align:center;
+}
+
+.review-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:25px;
+margin-top:50px;
+}
+
+.review-card{
+background:white;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 15px 45px rgba(0,0,0,.08);
+transition:.3s;
+cursor:pointer;
+}
+
+.review-card:hover{
+transform:translateY(-8px);
+}
+
+.review-card img,
+.review-card video{
+width:100%;
+height:420px;
+object-fit:cover;
+display:block;
+}
+
+.review-rating{
+padding:15px;
+font-size:22px;
+color:#D4A853;
+}
+
+.review-name{
+font-weight:700;
+padding-bottom:20px;
+font-size:15px;
+}
+
+@media(max-width:768px){
+
+.ingredients-section,
+.reviews-section{
+padding:60px 5%;
+}
+
+.review-card img,
+.review-card video{
+height:300px;
+}
+
+}
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-R03DT4CTCQ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R03DT4CTCQ');</script>
@@ -312,6 +416,113 @@ footer .footer-top{display:flex;justify-content:space-between;align-items:center
     <div class="gallery-item"><img src="images/pack4.jpg" alt="VANARA Pack 4"><div class="gallery-overlay"></div></div>
   </div>
 </section>
+<section class="ingredients-section">
+
+<div class="section-tag">
+Natural Ingredients
+</div>
+
+<h2 class="ingredients-title">
+Made with 100% Natural Ingredients
+</h2>
+
+<p class="ingredients-sub">
+Every scoop of VANARA is crafted using premium natural ingredients selected for protein, energy, strength and overall wellness.
+</p>
+
+<div class="ingredients-image">
+
+<img src="images/ingredients.jpg" alt="Ingredients">
+
+</div>
+
+</section>
+<section class="reviews-section">
+
+<div class="section-tag">
+Customer Reviews
+</div>
+
+<h2 class="ingredients-title">
+Loved by Our Customers ❤️
+</h2>
+
+<p class="ingredients-sub">
+Real photos and videos shared by our happy customers.
+</p>
+
+<div class="review-grid">
+
+<div class="review-card">
+
+<img src="reviews/review1.jpg">
+
+<div class="review-rating">
+★★★★★
+</div>
+
+<div class="review-name">
+Happy Customer
+</div>
+
+</div>
+
+
+<div class="review-card">
+
+<video controls>
+
+<source src="reviews/review2.mp4" type="video/mp4">
+
+</video>
+
+<div class="review-rating">
+★★★★★
+</div>
+
+<div class="review-name">
+Verified Buyer
+</div>
+
+</div>
+
+
+<div class="review-card">
+
+<img src="reviews/review3.jpg">
+
+<div class="review-rating">
+★★★★★
+</div>
+
+<div class="review-name">
+Happy Customer
+</div>
+
+</div>
+
+
+<div class="review-card">
+
+<video controls>
+
+<source src="reviews/review4.mp4" type="video/mp4">
+
+</video>
+
+<div class="review-rating">
+★★★★★
+</div>
+
+<div class="review-name">
+Verified Buyer
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 <section id="lab-certified" class="section" style="background:#fff;">
   <span class="section-tag">Quality Assurance</span>
@@ -370,7 +581,6 @@ footer .footer-top{display:flex;justify-content:space-between;align-items:center
     </div>
   </div>
 </section>
-
 <section id="about" class="section">
   <span class="section-tag">Our Story</span>
   <h2>About VANARA</h2>
@@ -601,6 +811,3 @@ async function proceedToPayment(){
   };
   buildTable(20);
 })();
-</script>
-</body>
-</html>
