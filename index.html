@@ -240,10 +240,10 @@ transform:translateY(-8px);
 
 .review-card img,
 .review-card video{
-width:100%;
-height:420px;
-object-fit:cover;
-display:block;
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:18px;
 }
 
 .review-rating{
@@ -451,18 +451,16 @@ Loved by Our Customers ❤️
 Real photos and videos shared by our happy customers.
 </p>
 
-<div class="review-grid">
-
 <div class="review-card">
 
-<img src="reviews/review1.jpg">
+<video controls>
+
+<source src="reviews/review1.mp4" type="video/mp4">
+
+</video>
 
 <div class="review-rating">
 ★★★★★
-</div>
-
-<div class="review-name">
-Happy Customer
 </div>
 
 </div>
@@ -485,23 +483,6 @@ Verified Buyer
 </div>
 
 </div>
-
-
-<div class="review-card">
-
-<img src="reviews/review3.jpg">
-
-<div class="review-rating">
-★★★★★
-</div>
-
-<div class="review-name">
-Happy Customer
-</div>
-
-</div>
-
-
 <div class="review-card">
 
 <video controls>
@@ -811,3 +792,6 @@ async function proceedToPayment(){
   };
   buildTable(20);
 })();
+</script>
+</body>
+</html>
