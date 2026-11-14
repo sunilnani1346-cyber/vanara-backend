@@ -44,7 +44,12 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-const PRICE_PER_UNIT = 499;
+// ── PRODUCT PRICES (server lo ne decide avthundi — frontend nundi nammaddu) ──
+const PRODUCTS = {
+  "400g": { price: 599, label: "VANARA Mix 400 g" },
+  "200g": { price: 320, label: "VANARA Mix 200 g" }
+};
+const DEFAULT_PRODUCT = "400g"; // product pampakapothe (old cached page) idi vaadataru
 
 // Helper: idempotent order save — same payment_id never creates duplicates
 async function saveOrderToFirestore(data, source) {
@@ -52,6 +57,7 @@ async function saveOrderToFirestore(data, source) {
   if (!paymentId) throw new Error("Missing razorpay_payment_id, cannot save");
 
   await db.collection("orders").doc(paymentId).set({
+    product:             data.product || "",
     name:                data.name || "",
     phone:               data.phone || "",
     address:             data.address || "",
@@ -72,20 +78,22 @@ async function saveOrderToFirestore(data, source) {
   console.log(`✅ Order saved via [${source}] — payment_id: ${paymentId}`);
 }
 
-// CREATE ORDER — qty + delivery details తీసుకుని, notes లో attach చేస్తుంది
+// CREATE ORDER — product + qty + delivery details తీసుకుని, notes లో attach చేస్తుంది
 // (notes Razorpay order/payment తో పాటు webhook payload లో కూడా వస్తాయి —
 //  అదే మన safety net పని చేయడానికి కీలకం)
 app.post("/create-order", async (req, res) => {
   console.log("📥 /create-order hit:", JSON.stringify(req.body));
   try {
+    const productKey = PRODUCTS[req.body.product] ? req.body.product : DEFAULT_PRODUCT;
     const qty = Math.min(parseInt(req.body.qty) || 1, 20);
-    const amount = qty * PRICE_PER_UNIT;
+    const amount = qty * PRODUCTS[productKey].price;
 
     const order = await razorpay.orders.create({
       amount: amount * 100, // paise
       currency: "INR",
       receipt: "order_" + Date.now(),
       notes: {
+        product: productKey,
         name:    req.body.name    || "",
         phone:   req.body.phone   || "",
         address: req.body.address || "",
@@ -178,9 +186,19 @@ app.post("/razorpay-webhook", async (req, res) => {
       const payment = req.body.payload?.payment?.entity;
       const order   = req.body.payload?.order?.entity;
       const notes   = payment?.notes || order?.notes || {};
+            // 🎁 Sample order aite separate collection lo save chesi aagipo
+      if (notes.type === "sample" && payment && payment.id) {
+        await saveSampleOrder({
+          ...notes,
+          razorpay_order_id:   payment.order_id,
+          razorpay_payment_id: payment.id
+        }, "webhook");
+        return res.status(200).json({ status: "ok" });
+      }
 
       if (payment && payment.id) {
         await saveOrderToFirestore({
+          product:              notes.product,
           name:                notes.name,
           phone:                notes.phone,
           address:              notes.address,
@@ -202,6 +220,87 @@ app.post("/razorpay-webhook", async (req, res) => {
   } catch (err) {
     console.error("❌ razorpay-webhook error:", err);
     res.status(500).json({ error: "Webhook processing failed" });
+  }
+});
+/* ══════════ SAMPLE ORDERS (new) ══════════ */
+function sampleCharge(state){
+  // Hyderabad nundi distance batti: TG/AP ₹100 · nearby states ₹120 · migatha ₹140
+  const s = (state || "").trim().toLowerCase();
+  const NEAR = ["karnataka", "tamil nadu", "maharashtra", "odisha", "chhattisgarh", "kerala", "goa", "puducherry"];
+  if (s === "telangana" || s === "andhra pradesh") return 100;
+  if (NEAR.includes(s)) return 120;
+  return 140;
+}
+
+async function saveSampleOrder(data, source){
+  const paymentId = data.razorpay_payment_id;
+  if (!paymentId) throw new Error("Missing razorpay_payment_id");
+  await db.collection("sampleOrders").doc(paymentId).set({
+    name:    data.name    || "",
+    phone:   data.phone   || "",
+    address: data.address || "",
+    city:    data.city    || "",
+    state:   data.state   || "",
+    pincode: data.pincode || "",
+    charge:  sampleCharge(data.state),
+    razorpay_order_id:   data.razorpay_order_id || "",
+    razorpay_payment_id: paymentId,
+    status:   "paid",
+    savedVia: source,
+    createdAt: new Date().toISOString()
+  }, { merge: true });
+  console.log(`✅ Sample order saved via [${source}] — ${paymentId}`);
+}
+
+app.post("/create-sample-order", async (req, res) => {
+  try {
+    const b = req.body;
+    if (!b.state) return res.status(400).json({ error: "state required" });
+    const charge = sampleCharge(b.state);
+    const order = await razorpay.orders.create({
+      amount: charge * 100,
+      currency: "INR",
+      receipt: "sample_" + Date.now(),
+      notes: {
+        type: "sample",
+        name: b.name || "", phone: b.phone || "", address: b.address || "",
+        city: b.city || "", state: b.state || "", pincode: b.pincode || ""
+      }
+    });
+    res.json({ id: order.id, amount: order.amount, charge });
+  } catch (err) {
+    console.error("❌ create-sample-order error:", err);
+    res.status(500).json({ error: "failed" });
+  }
+});
+
+app.post("/save-sample-order", async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const expected = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(razorpay_order_id + "|" + razorpay_payment_id)
+      .digest("hex");
+    if (expected !== razorpay_signature)
+      return res.status(400).json({ status: "failed" });
+
+    await saveSampleOrder(req.body, "client");
+    res.json({ status: "success" });
+  } catch (err) {
+    console.error("❌ save-sample-order error:", err);
+    res.status(500).json({ status: "error" });
+  }
+});
+
+app.get("/sample-orders", async (req, res) => {
+  try {
+    if (!process.env.ADMIN_KEY || req.query.key !== process.env.ADMIN_KEY)
+      return res.status(401).json({ error: "wrong key" });
+    const snap = await db.collection("sampleOrders").orderBy("createdAt", "desc").get();
+    res.json(snap.docs.map(d => d.data()));
+  } catch (err) {
+    console.error("❌ sample-orders error:", err);
+    res.status(500).json({ error: "failed" });
   }
 });
 

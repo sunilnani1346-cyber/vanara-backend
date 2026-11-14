@@ -278,7 +278,7 @@ height:300px;
 <body>
 
 <div class="announce-bar">
-  🎉 Launching Offer — <span>20% OFF</span> on first order! Use code <span>VANARA20</span> &nbsp;|&nbsp; Free shipping above ₹499
+  🌿 <span>100% Natural High Protein</span> — No Chemicals, No Preservatives &nbsp;|&nbsp; Special Launch Price <span>from ₹320</span> &nbsp;|&nbsp; Free shipping above ₹499
 </div>
 
 <nav>
@@ -308,7 +308,7 @@ height:300px;
     <h1>Natural strength for <em>every generation</em></h1>
     <p>From Nature to Strength — Premium nutrition mix crafted with the finest natural ingredients for every generation.</p>
     <div class="hero-cta">
-      <button class="btn-hero-primary" onclick="openCheckout()">Buy Now — ₹499</button>
+      <button class="btn-hero-primary" onclick="openSample()">🎁 Order Sample</button>
       <a href="#products" class="btn-hero-secondary">Explore More</a>
     </div>
     <div class="hero-stats">
@@ -366,17 +366,17 @@ height:300px;
   <div class="product-layout">
     <div class="product-image-wrap">
       <div class="product-ring">
-        <img src="images/pack1.png" alt="VANARA Pack">
+        <img src="images/pack1.png" alt="VANARA Pack 400g">
         <div class="product-badge-off"><span>20%</span><span>OFF</span></div>
       </div>
     </div>
     <div class="product-info">
-      <h3>VANARA Natural Protein Nutrition Mix</h3>
+      <h3>VANARA Natural Protein Nutrition Mix — 400 g</h3>
       <p>A powerful blend of natural proteins and essential nutrients crafted to support your strength, stamina, and everyday health — for all generations.</p>
       <div class="price-row">
-        <span class="price-new">₹499</span>
+        <span class="price-new">₹599</span>
         <span class="price-old">₹699</span>
-        <span style="background:#dcfce7;color:#16a34a;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;">Save ₹200</span>
+        <span style="background:#dcfce7;color:#16a34a;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;">Save ₹100</span>
       </div>
       <ul class="product-features">
         <li>High protein per serving</li>
@@ -385,7 +385,32 @@ height:300px;
         <li>Mix with milk, oats or smoothies</li>
         <li>Suitable for all age groups</li>
       </ul>
-      <button class="buy-btn" onclick="openCheckout()">🛒 Buy Now — ₹499</button>
+      <button class="buy-btn" onclick="openCheckout('400g')">🛒 Buy Now — ₹599</button>
+    </div>
+  </div>
+  <div class="product-layout">
+    <div class="product-image-wrap">
+      <div class="product-ring">
+        <img src="images/pack2.png" alt="VANARA Pack 200g">
+        <div class="product-badge-off"><span>20%</span><span>OFF</span></div>
+      </div>
+    </div>
+    <div class="product-info">
+      <h3>VANARA Natural Protein Nutrition Mix — 200 g</h3>
+      <p>A powerful blend of natural proteins and essential nutrients crafted to support your strength, stamina, and everyday health — for all generations.</p>
+      <div class="price-row">
+        <span class="price-new">₹320</span>
+        <span class="price-old">₹399</span>
+        <span style="background:#dcfce7;color:#16a34a;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;">Save ₹79</span>
+      </div>
+      <ul class="product-features">
+        <li>High protein per serving</li>
+        <li>Zero chemicals &amp; preservatives</li>
+        <li>Gut-friendly natural formula</li>
+        <li>Mix with milk, oats or smoothies</li>
+        <li>Suitable for all age groups</li>
+      </ul>
+      <button class="buy-btn" onclick="openCheckout('200g')">🛒 Buy Now — ₹320</button>
     </div>
   </div>
 </section>
@@ -593,6 +618,64 @@ Verified Buyer
   </div>
   <div class="footer-bottom"><p>© 2026 VANARA · High Protein Nutrition Mix · Made with ❤️ from Nature</p></div>
 </footer>
+<div id="sampleModal" class="checkout-modal">
+  <div class="checkout-box">
+    <div class="checkout-header">
+      <h2>🎁 Order Sample</h2>
+      <button class="close-btn" onclick="closeSample()">✕</button>
+    </div>
+    <p style="background:#f0fdf4;color:#16a34a;border:1px solid rgba(22,163,74,0.2);border-radius:12px;padding:12px 14px;font-size:0.82rem;font-weight:600;margin-bottom:16px;line-height:1.5;">🎁 Sample Pack: 60 g — FREE! You pay only the delivery charges.</p>
+    <div class="order-summary">
+      <span>Delivery Charge</span>
+      <strong id="sample-charge">Select state</strong>
+    </div>
+    <input type="text" id="s-name" placeholder="Full Name">
+    <input type="tel" id="s-phone" placeholder="10 digit phone number" maxlength="10">
+    <input type="text" id="s-address" placeholder="Full Address">
+    <input type="text" id="s-city" placeholder="City">
+    <input type="text" id="s-pincode" placeholder="Pincode" maxlength="6">
+    <select id="s-state" onchange="sampleStateChange()" style="width:100%;padding:13px 16px;border-radius:12px;border:1.5px solid #e8e8e8;font-family:'DM Sans',sans-serif;font-size:0.9rem;margin-bottom:12px;background:white;">
+      <option value="">Select State</option>
+      <option value="Telangana">Telangana</option>
+      <option value="Andhra Pradesh">Andhra Pradesh</option>
+      <option value="Karnataka">Karnataka</option>
+      <option value="Tamil Nadu">Tamil Nadu</option>
+      <option value="Maharashtra">Maharashtra</option>
+      <option value="Odisha">Odisha</option>
+      <option value="Chhattisgarh">Chhattisgarh</option>
+      <option value="Kerala">Kerala</option>
+      <option value="Goa">Goa</option>
+      <option value="Puducherry">Puducherry</option>
+      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+      <option value="Assam">Assam</option>
+      <option value="Bihar">Bihar</option>
+      <option value="Gujarat">Gujarat</option>
+      <option value="Haryana">Haryana</option>
+      <option value="Himachal Pradesh">Himachal Pradesh</option>
+      <option value="Jharkhand">Jharkhand</option>
+      <option value="Madhya Pradesh">Madhya Pradesh</option>
+      <option value="Manipur">Manipur</option>
+      <option value="Meghalaya">Meghalaya</option>
+      <option value="Mizoram">Mizoram</option>
+      <option value="Nagaland">Nagaland</option>
+      <option value="Punjab">Punjab</option>
+      <option value="Rajasthan">Rajasthan</option>
+      <option value="Sikkim">Sikkim</option>
+      <option value="Tripura">Tripura</option>
+      <option value="Uttar Pradesh">Uttar Pradesh</option>
+      <option value="Uttarakhand">Uttarakhand</option>
+      <option value="West Bengal">West Bengal</option>
+      <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+      <option value="Chandigarh">Chandigarh</option>
+      <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+      <option value="Ladakh">Ladakh</option>
+      <option value="Lakshadweep">Lakshadweep</option>
+    </select>
+    <button class="pay-btn" id="s-pay-btn" onclick="submitSample()">🔒 Pay Delivery & Order Sample</button>
+  </div>
+</div>
 
 <div id="checkoutModal" class="checkout-modal">
   <div class="checkout-box">
@@ -601,16 +684,16 @@ Verified Buyer
       <button class="close-btn" onclick="closeCheckout()">✕</button>
     </div>
     <div class="order-summary">
-      <span>VANARA Nutrition Mix × <span id="qty-display">1</span></span>
-      <strong id="total-display">₹499</strong>
+      <span><span id="product-label">VANARA Nutrition Mix</span> × <span id="qty-display">1</span></span>
+      <strong id="total-display">₹599</strong>
     </div>
-    <input type="text" id="name" placeholder="Full Name">
-    <input type="tel" id="phone" placeholder="10 digit phone number" maxlength="10">
-    <input type="text" id="address" placeholder="Full Address">
-    <input type="text" id="city" placeholder="City">
-    <input type="text" id="pincode" placeholder="Pincode">
-    <input type="text" id="state" placeholder="State">
-    <input type="text" id="country" placeholder="Country" value="India">
+    <input type="text" id="name" placeholder="Full Name" autocomplete="name">
+    <input type="tel" id="phone" placeholder="10 digit phone number" maxlength="10" autocomplete="tel-national" inputmode="numeric">
+    <input type="text" id="address" placeholder="Full Address" autocomplete="street-address">
+    <input type="text" id="city" placeholder="City" autocomplete="address-level2">
+    <input type="text" id="pincode" placeholder="Pincode" maxlength="6" autocomplete="postal-code" inputmode="numeric" oninput="pincodeLookup()">
+    <input type="text" id="state" placeholder="State" autocomplete="address-level1">
+    <input type="text" id="country" placeholder="Country" value="India" autocomplete="country-name">
     <input type="number" id="qty" placeholder="Quantity" value="1" min="1" max="20" oninput="updateTotal()">
     <button class="pay-btn" onclick="proceedToPayment()">🔒 Confirm &amp; Pay</button>
   </div>
@@ -618,16 +701,59 @@ Verified Buyer
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-const PRICE_PER_UNIT = 499;
+const PRODUCTS = {
+  "400g": { price: 599, label: "VANARA Mix 400 g" },
+  "200g": { price: 320, label: "VANARA Mix 200 g" }
+};
+let selected = "400g";
 // ── మీ WhatsApp number (country code తో, no +) ──
 const OWNER_WA = "919866149830";
 
 function updateTotal(){
   const qty=Math.min(parseInt(document.getElementById("qty").value)||1,20);
   document.getElementById("qty-display").textContent=qty;
-  document.getElementById("total-display").textContent="₹"+(qty*PRICE_PER_UNIT);
+  document.getElementById("total-display").textContent="₹"+(qty*PRODUCTS[selected].price);
 }
-function openCheckout(){document.getElementById("checkoutModal").style.display="flex";}
+function openCheckout(key){
+  selected = PRODUCTS[key] ? key : "400g";
+  document.getElementById("product-label").textContent = PRODUCTS[selected].label;
+  loadCustomer();
+  updateTotal();
+  document.getElementById("checkoutModal").style.display="flex";
+}
+
+// ── ADDRESS AUTOFILL ──
+const CUST_FIELDS=["name","phone","address","city","pincode","state","country"];
+function saveCustomer(){
+  try{
+    const d={};
+    CUST_FIELDS.forEach(f=>{d[f]=document.getElementById(f).value.trim();});
+    localStorage.setItem("vanara_customer",JSON.stringify(d));
+  }catch(e){}
+}
+function loadCustomer(){
+  try{
+    const d=JSON.parse(localStorage.getItem("vanara_customer")||"null");
+    if(!d)return;
+    CUST_FIELDS.forEach(f=>{
+      const el=document.getElementById(f);
+      if(el&&!el.value.trim()&&d[f])el.value=d[f];
+    });
+  }catch(e){}
+}
+async function pincodeLookup(){
+  const p=document.getElementById("pincode").value.trim();
+  if(p.length!==6)return;
+  try{
+    const r=await fetch("https://api.postalpincode.in/pincode/"+p);
+    const j=await r.json();
+    if(j[0]&&j[0].Status==="Success"&&j[0].PostOffice&&j[0].PostOffice.length){
+      const po=j[0].PostOffice[0];
+      document.getElementById("city").value=po.District;
+      document.getElementById("state").value=po.State;
+    }
+  }catch(e){}
+}
 function closeCheckout(){document.getElementById("checkoutModal").style.display="none";}
 function toggleCart(){alert("Cart feature coming soon!");}
 window.onclick=function(e){const modal=document.getElementById("checkoutModal");if(e.target===modal)modal.style.display="none";}
@@ -676,7 +802,7 @@ function sendCustomerWhatsApp(customerPhone, name, qty, amount, paymentId){
 }
 
 async function proceedToPayment(){
-  const btn=document.querySelector(".pay-btn");
+  const btn=document.querySelector("#checkoutModal .pay-btn");
   btn.textContent="Processing...";
   const name    = document.getElementById("name").value.trim();
   const phone   = document.getElementById("phone").value.trim();
@@ -691,9 +817,10 @@ async function proceedToPayment(){
   const cleanedPhone=phone.replace(/\D/g,"");
   if(cleanedPhone.length!==10){alert("Enter valid 10 digit phone number");btn.textContent="🔒 Confirm & Pay";return;}
   try{
+    saveCustomer();
     const res=await fetch("https://vanara-backend.onrender.com/create-order",{
       method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({qty,name,phone:cleanedPhone,address,city,state,country,pincode})
+      body:JSON.stringify({product:selected,qty,name,phone:cleanedPhone,address,city,state,country,pincode})
     });
     const order=await res.json();
     if(!order.id){alert("Order creation failed");btn.textContent="🔒 Confirm & Pay";return;}
@@ -711,6 +838,7 @@ async function proceedToPayment(){
           const saveRes=await fetch("https://vanara-backend.onrender.com/save-order",{
             method:"POST",headers:{"Content-Type":"application/json"},
             body:JSON.stringify({
+              product:selected,
               name,phone:cleanedPhone,address,city,state,country,pincode,qty,
               amount:order.amount/100,
               razorpay_order_id:response.razorpay_order_id,
@@ -792,6 +920,71 @@ async function proceedToPayment(){
   };
   buildTable(20);
 })();
+/* ── SAMPLE ORDER ── */
+const API = "https://vanara-backend.onrender.com";
+function openSample(){document.getElementById("sampleModal").style.display="flex";}
+function closeSample(){document.getElementById("sampleModal").style.display="none";}
+
+function sampleStateChange(){
+  const s=document.getElementById("s-state").value;
+  // Hyderabad nundi distance batti: TG/AP ₹100 · nearby states ₹120 · migatha ₹140
+  const NEAR=["Karnataka","Tamil Nadu","Maharashtra","Odisha","Chhattisgarh","Kerala","Goa","Puducherry"];
+  const c = s==="" ? 0 : (s==="Telangana"||s==="Andhra Pradesh") ? 100 : NEAR.includes(s) ? 120 : 140;
+  document.getElementById("sample-charge").textContent = c ? "₹"+c : "Select state";
+}
+
+async function submitSample(){
+  const btn=document.getElementById("s-pay-btn");
+  const label="🔒 Pay Delivery & Order Sample";
+  const name=document.getElementById("s-name").value.trim();
+  const phone=document.getElementById("s-phone").value.replace(/\D/g,"");
+  const address=document.getElementById("s-address").value.trim();
+  const city=document.getElementById("s-city").value.trim();
+  const pincode=document.getElementById("s-pincode").value.trim();
+  const state=document.getElementById("s-state").value;
+
+  if(!name||!address||!city||!pincode||!state){alert("Please fill all details");return;}
+  if(phone.length!==10){alert("Enter valid 10 digit phone number");return;}
+  if(pincode.length!==6){alert("Enter valid 6 digit pincode");return;}
+
+  btn.textContent="Processing..."; btn.disabled=true;
+  const reset=()=>{btn.textContent=label;btn.disabled=false;};
+
+  try{
+    const res=await fetch(API+"/create-sample-order",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name,phone,address,city,state,pincode})
+    });
+    const order=await res.json();
+    if(!order.id){alert("Order creation failed");reset();return;}
+
+    const rzp=new Razorpay({
+      key:"rzp_live_T8zloCxFN81rDG",
+      amount:order.amount,currency:"INR",
+      name:"VANARA",description:"Sample Delivery Charge",order_id:order.id,
+      handler:async function(response){
+        try{
+          const saveRes=await fetch(API+"/save-sample-order",{
+            method:"POST",headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({name,phone,address,city,state,pincode,
+              razorpay_order_id:response.razorpay_order_id,
+              razorpay_payment_id:response.razorpay_payment_id,
+              razorpay_signature:response.razorpay_signature})
+          });
+          const r=await saveRes.json();
+          if(r.status!=="success"){alert("❌ Payment ayindi kani order save avvaledu. Call: 9866149830 (Payment ID: "+response.razorpay_payment_id+")");reset();return;}
+          alert("✅ Sample order placed! We will deliver soon.");
+          closeSample(); reset();
+        }catch(err){alert("❌ Server Error. Call 9866149830 (Payment ID: "+response.razorpay_payment_id+")");reset();}
+      },
+      prefill:{name:name,contact:phone},
+      theme:{color:"#4E342E"},
+      modal:{ondismiss:reset}
+    });
+    rzp.on('payment.failed',function(){alert("❌ Payment Failed. Try again!");reset();});
+    rzp.open();
+  }catch(err){console.error("Sample order error:",err);alert("❌ Server connect avvaledu. 30 seconds tarvata malli try cheyyandi, or call 9866149830");reset();}
+}
 </script>
 </body>
 </html>
