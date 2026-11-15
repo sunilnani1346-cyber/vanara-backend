@@ -433,6 +433,7 @@ body{
   <button class="tab-btn" onclick="switchTab('expenses',this)"><span class="tab-icon">💸</span> Expenses</button>
   <button class="tab-btn" onclick="switchTab('customers',this)"><span class="tab-icon">👥</span> Customers</button>
   <button class="tab-btn" onclick="switchTab('summary',this)"><span class="tab-icon">📊</span> Summary</button>
+  <button class="tab-btn" onclick="switchTab('samples',this)"><span class="tab-icon">🎁</span> Sample Orders</button>
 </div>
 
 <!-- ═══════════════ ORDERS TAB ═══════════════ -->
@@ -628,6 +629,16 @@ body{
   <div id="recentExp"></div>
 </div>
 
+<!-- ═══════════════ SAMPLE ORDERS TAB ═══════════════ -->
+<div class="panel" id="tab-samples">
+  <div class="section-title">
+    🎁 Sample Orders
+    <span class="section-count" id="sample-count">0</span>
+  </div>
+  <div class="filters"><button class="btn-add" style="width:auto" onclick="loadSamples(true)">🔄 Refresh</button></div>
+  <div id="sample-list"><div class="empty"><div class="empty-icon">🎁</div>Loading…</div></div>
+</div>
+
 </div><!-- /appShell -->
 
 <!-- FIREBASE -->
@@ -678,6 +689,7 @@ function switchTab(name,btn){
   btn.classList.add('active');
   if(name==='customers') renderCustomers();
   if(name==='summary') renderSummary();
+  if(name==='samples') loadSamples();
 }
 
 // ─── DATE HELPERS ───
@@ -1084,6 +1096,47 @@ function renderSummary(){
         <div class="exp-amount">${fmt(e.amount)}</div>
       </div>
     </div>`).join('')||'<div class="empty">No expenses yet.</div>';
+}
+/* ── SAMPLE ORDERS ── */
+const SAMPLE_API = "https://vanara-backend.onrender.com";
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function loadSamples(forcePrompt){
+  if(sessionStorage.getItem('vanara_auth')!=='1') return;
+  const list=document.getElementById("sample-list");
+  if(forcePrompt) sessionStorage.removeItem("sk");
+  let key=sessionStorage.getItem("sk")||prompt("Sample orders key (Render ADMIN_KEY):");
+  if(!key){list.innerHTML='<div class="empty"><div class="empty-icon">🔑</div>Key avasaram. Refresh click chey.</div>';return;}
+  list.innerHTML='<div class="empty"><div class="empty-icon">🔄</div>Loading… (server sleep lo unte 50 sec padochu)</div>';
+  try{
+    const res=await fetch(SAMPLE_API+"/sample-orders?key="+encodeURIComponent(key));
+    const data=await res.json();
+    if(data.error){sessionStorage.removeItem("sk");list.innerHTML='<div class="empty"><div class="empty-icon">❌</div>Wrong key. Refresh click chesi malli try chey.</div>';return;}
+    sessionStorage.setItem("sk",key);
+    document.getElementById("sample-count").textContent=data.length;
+    list.innerHTML=data.length?data.map(o=>`
+      <div class="order-card">
+        <div class="card-top">
+          <div>
+            <div class="card-name">${esc(o.name)}</div>
+            <div class="card-phone">📞 ${esc(o.phone)}</div>
+          </div>
+          <span class="badge badge-confirmed">${esc(o.status||'paid')}</span>
+        </div>
+        <div class="card-body">
+          <div style="grid-column:span 2"><div class="cf-label">Address</div><div class="cf-val" style="white-space:normal;font-size:12px">${esc([o.address,o.city,o.state].filter(Boolean).join(', '))} - ${esc(o.pincode)}</div></div>
+          <div style="grid-column:span 2"><div class="cf-label">🕐 Time</div><div class="cf-val" style="font-size:12px;color:var(--text3)">${o.createdAt?new Date(o.createdAt).toLocaleString("en-IN"):'—'}</div></div>
+          <div style="grid-column:span 2"><div class="cf-label">Payment ID</div><div class="cf-val" style="font-size:12px">${esc(o.razorpay_payment_id)}</div></div>
+        </div>
+        <div class="card-bottom">
+          <div class="card-amount">Paid ${fmt(o.charge)}</div>
+          <div style="display:flex;gap:8px;">
+            <a href="tel:${esc(o.phone)}" style="padding:7px 12px;border-radius:8px;background:var(--brown);color:#fff;text-decoration:none;font-size:12px;font-weight:600;">📞 Call</a>
+            <a href="https://wa.me/91${esc(o.phone)}" target="_blank" style="padding:7px 12px;border-radius:8px;background:#25D366;color:#fff;text-decoration:none;font-size:12px;font-weight:600;">WhatsApp</a>
+          </div>
+        </div>
+      </div>`).join(""):'<div class="empty"><div class="empty-icon">🎁</div>Inka sample orders levu.</div>';
+  }catch(e){list.innerHTML='<div class="empty"><div class="empty-icon">⚠️</div>Error loading sample orders. Malli Refresh click chey.</div>';}
 }
 </script>
 </body>
